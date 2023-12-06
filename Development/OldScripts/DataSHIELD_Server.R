@@ -19,7 +19,7 @@ CCP_Builder <- DSI::newDSLoginBuilder(.silent = FALSE)
 #                    password = "P@ssw0rd",
 #                    driver = "OpalDriver",
 #                    options = "list(ssl_verifyhost=0, ssl_verifypeer=0)")
-# 
+#
 # CCP_Builder$append(server = "server2",
 #                    url = "https://opal-demo.obiba.org",
 #                    user = "dsuser",
@@ -28,7 +28,7 @@ CCP_Builder <- DSI::newDSLoginBuilder(.silent = FALSE)
 #                    options = "list(ssl_verifyhost=0, ssl_verifypeer=0)")
 
 
-CCP_SiteA <- newDSLiteServer(tables = list(df_SDM_Patients = df_Patients_A))
+
 
 
 # Returns a data.frame of login data to different Sites

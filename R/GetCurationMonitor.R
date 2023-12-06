@@ -1,5 +1,0 @@
-
-GetCurationMonitor <- function()
-{
-    Call <- "CurateData()"
-}
