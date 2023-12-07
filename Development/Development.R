@@ -28,5 +28,6 @@ library(devtools)
 
 # Adding function script files
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# use_r("ds.CurationReport")
+# use_r("ds.CurateData.R")
+# use_r("ds.CurationReport.R")
 

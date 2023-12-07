@@ -2,10 +2,18 @@
 % Please edit documentation in R/ds.CurationReport.R
 \name{ds.CurationReport}
 \alias{ds.CurationReport}
-\title{ds.GetCurationMonitor}
+\title{ds.CurationReport}
 \usage{
-ds.CurationReport(DataSources = NULL)
+ds.CurationReport(Name_CurationOutput = "CurationOutput", DataSources = NULL)
+}
+\arguments{
+\item{Name_CurationOutput}{String | Name of object on server previously assigned by dsCCPhos::CurateData() | Default: 'CurationOutput'}
+
+\item{DataSources}{}
 }
 \description{
-ds.GetCurationMonitor
+What it does
+}
+\details{
+Linked to server-side AGGREGATE method CurationReportDS()
 }
