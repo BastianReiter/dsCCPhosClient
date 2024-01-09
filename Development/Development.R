@@ -2,7 +2,7 @@
 
 #===============================================================================
 #
-# CCPhos Package DEVELOPMENT TRACKER
+# dsCCPhosClient Package DEVELOPMENT TRACKER
 #
 #===============================================================================
 
@@ -14,6 +14,7 @@ library(devtools)
 # Set preferred license in description
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_ccby_license()
+
 
 # Define part of project that should not be distributed in the package
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,6 +29,8 @@ library(devtools)
 
 # Adding function script files
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# use_r("ds.AugmentData.R")
 # use_r("ds.CurateData.R")
 # use_r("ds.CurationReport.R")
+# use_r("ds.TestObjectExistence.R")
 

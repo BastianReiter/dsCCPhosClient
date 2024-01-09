@@ -1,9 +1,9 @@
 
-#' ds.CurateData
+#' ds.AugmentData
 #'
 #' What it does
 #'
-#' Linked to server-side ASSIGN method CurateDataDS()
+#' Linked to server-side ASSIGN method AugmentDataDS()
 #'
 #' @param Name_RawData String | Name of raw data object (list) on server | Default: 'RawData'
 #' @param Name_Output String | Name of assigned output object on server | Default: 'CurationOutput'
@@ -13,9 +13,9 @@
 #' @export
 #'
 #' @examples
-ds.CurateData <- function(Name_RawData = "RawData",
-                          Name_Output = "CurationOutput",
-                          DataSources = NULL)
+ds.AugmentData <- function(Name_CurationOutput = "CurationOutput",
+                           Name_Output = "AugmentationOutput",
+                           DataSources = NULL)
 {
     # Look for DS connections
     if (is.null(DataSources))
@@ -30,8 +30,8 @@ ds.CurateData <- function(Name_RawData = "RawData",
     }
 
 
-    # Construct the the server-side function call
-    ServerCall <- call("CurateDataDS", Name_RawData)
+    # Construct the server-side function call
+    ServerCall <- call("AugmentDataDS", Name_CurationOutput)
 
     # Execute the server-side function call
     DSI::datashield.assign(conns = DataSources,

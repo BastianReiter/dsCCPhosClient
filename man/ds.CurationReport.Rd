@@ -9,7 +9,7 @@ ds.CurationReport(Name_CurationOutput = "CurationOutput", DataSources = NULL)
 \arguments{
 \item{Name_CurationOutput}{String | Name of object on server previously assigned by dsCCPhos::CurateData() | Default: 'CurationOutput'}
 
-\item{DataSources}{}
+\item{DataSources}{List of DSConnection objects}
 }
 \description{
 What it does

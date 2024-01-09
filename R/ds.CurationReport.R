@@ -6,7 +6,7 @@
 #' Linked to server-side AGGREGATE method CurationReportDS()
 #'
 #' @param Name_CurationOutput String | Name of object on server previously assigned by dsCCPhos::CurateData() | Default: 'CurationOutput'
-#' @param DataSources
+#' @param DataSources List of DSConnection objects
 #'
 #' @return
 #' @export
