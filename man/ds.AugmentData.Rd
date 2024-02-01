@@ -11,17 +11,17 @@ ds.AugmentData(
 )
 }
 \arguments{
-\item{Name_Output}{String | Name of assigned output object on server | Default: 'CurationOutput'}
+\item{Name_CurationOutput}{String | Name of curation output object (list) on server | Default: 'CurationOutput'}
+
+\item{Name_Output}{String | Name of assigned output object on server | Default: 'AugmentationOutput'}
 
 \item{DataSources}{List of DSConnection objects}
-
-\item{Name_RawData}{String | Name of raw data object (list) on server | Default: 'RawData'}
 }
 \value{
 A list of variables containing messages about object assignment for monitoring purposes.
 }
 \description{
-What it does
+Transforms curated CCP core data set (CDM) into augmented data set (ADM)
 }
 \details{
 Linked to server-side ASSIGN method AugmentDataDS()

@@ -1,9 +1,9 @@
 
-#' ds.CurationReport
+#' ds.GetCurationReport
 #'
 #' What it does
 #'
-#' Linked to server-side AGGREGATE method CurationReportDS()
+#' Linked to server-side AGGREGATE method GetCurationReportDS()
 #'
 #' @param Name_CurationOutput String | Name of object on server previously assigned by dsCCPhos::CurateData() | Default: 'CurationOutput'
 #' @param DataSources List of DSConnection objects
@@ -12,15 +12,15 @@
 #' @export
 #'
 #' @examples
-ds.CurationReport <- function(Name_CurationOutput = "CurationOutput",
-                              DataSources = NULL)
+ds.GetCurationReport <- function(Name_CurationOutput = "CurationOutput",
+                                 DataSources = NULL)
 {
     if (is.null(DataSources))
     {
         DataSources <- DSI::datashield.connections_find()
     }
 
-    ServerCall <- call("CurationReportDS", Name_CurationOutput)
+    ServerCall <- call("GetCurationReportDS", Name_CurationOutput)
 
     Outgoing <- DSI::datashield.aggregate(conns = DataSources,
                                           expr = ServerCall)

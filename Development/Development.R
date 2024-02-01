@@ -25,12 +25,27 @@ library(devtools)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_package("dplyr")
 # use_package("DSI")
+# use_package("tibble")
 
 
-# Adding function script files
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Adding R script files
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# General / Auxiliary functions
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# use_r("ds.ConnectToCCP.R")
+# use_r("ds.CheckSiteRequirements.R")
+
+# Linked to dataSHIELD AGGREGATE functions
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# use_r("ds.GetCurationReport.R")
+# use_r("ds.GetObjectInfo.R")
+# use_r("ds.GetValidationReport_RawData.R")
+# use_r("ds.GetValidationReport_CuratedData.R")
+# use_r("ds.GetValidationReport_AugmentedData.R")
+
+# Linked to dataSHIELD ASSIGN functions
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_r("ds.AugmentData.R")
 # use_r("ds.CurateData.R")
-# use_r("ds.CurationReport.R")
-# use_r("ds.TestObjectExistence.R")
-

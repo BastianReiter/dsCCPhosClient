@@ -1,11 +1,11 @@
 
 #' ds.CurateData
 #'
-#' What it does
+#' Triggers transformation of Raw Data Set (RDS) into Curated Data Set (CDS) on server.
 #'
 #' Linked to server-side ASSIGN method CurateDataDS()
 #'
-#' @param Name_RawData String | Name of raw data object (list) on server | Default: 'RawData'
+#' @param Name_RawDataSet String | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'
 #' @param Name_Output String | Name of assigned output object on server | Default: 'CurationOutput'
 #' @param DataSources List of DSConnection objects
 #'
@@ -13,8 +13,10 @@
 #' @export
 #'
 #' @examples
-ds.CurateData <- function(Name_RawData = "RawData",
-                          Name_Output = "CurationOutput",
+ds.CurateData <- function(Name_Output = "CurationOutput",
+                          Name_RawDataSet = "RawDataSet",
+                          RuleProfile_DiagnosisAssociation = "Default",
+                          RuleProfile_DiagnosisRedundancy = "Default",
                           DataSources = NULL)
 {
     # Look for DS connections
@@ -31,7 +33,7 @@ ds.CurateData <- function(Name_RawData = "RawData",
 
 
     # Construct the the server-side function call
-    ServerCall <- call("CurateDataDS", Name_RawData)
+    ServerCall <- call("CurateDataDS", Name_RawDataSet)
 
     # Execute the server-side function call
     DSI::datashield.assign(conns = DataSources,

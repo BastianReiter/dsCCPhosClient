@@ -1,12 +1,12 @@
 
 #' ds.AugmentData
 #'
-#' What it does
+#' Transforms curated CCP core data set (CDM) into augmented data set (ADM)
 #'
 #' Linked to server-side ASSIGN method AugmentDataDS()
 #'
-#' @param Name_RawData String | Name of raw data object (list) on server | Default: 'RawData'
-#' @param Name_Output String | Name of assigned output object on server | Default: 'CurationOutput'
+#' @param Name_CurationOutput String | Name of curation output object (list) on server | Default: 'CurationOutput'
+#' @param Name_Output String | Name of assigned output object on server | Default: 'AugmentationOutput'
 #' @param DataSources List of DSConnection objects
 #'
 #' @return A list of variables containing messages about object assignment for monitoring purposes.

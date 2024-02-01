@@ -11,17 +11,17 @@ ds.CurateData(
 )
 }
 \arguments{
-\item{Name_RawData}{String | Name of raw data object (list) on server | Default: 'RawData'}
-
 \item{Name_Output}{String | Name of assigned output object on server | Default: 'CurationOutput'}
 
 \item{DataSources}{List of DSConnection objects}
+
+\item{Name_RawDataSet}{String | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'}
 }
 \value{
 A list of variables containing messages about object assignment for monitoring purposes.
 }
 \description{
-What it does
+Triggers transformation of Raw Data Set (RDS) into Curated Data Set (CDS) on server.
 }
 \details{
 Linked to server-side ASSIGN method CurateDataDS()
