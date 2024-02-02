@@ -4,7 +4,7 @@
 \alias{ds.CheckSiteRequirements}
 \title{ds.CheckSiteRequirements}
 \usage{
-ds.CheckSiteRequirements(DataSources)
+ds.CheckSiteRequirements(DataSources = NULL)
 }
 \arguments{
 \item{Name_CurationOutput}{data.frame or tibble | Data on CCP site credentials}

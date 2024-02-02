@@ -5,17 +5,19 @@
 \title{ds.CurateData}
 \usage{
 ds.CurateData(
-  Name_RawData = "RawData",
   Name_Output = "CurationOutput",
+  Name_RawDataSet = "RawDataSet",
+  RuleProfile_DiagnosisAssociation = "Default",
+  RuleProfile_DiagnosisRedundancy = "Default",
   DataSources = NULL
 )
 }
 \arguments{
 \item{Name_Output}{String | Name of assigned output object on server | Default: 'CurationOutput'}
 
-\item{DataSources}{List of DSConnection objects}
-
 \item{Name_RawDataSet}{String | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'}
+
+\item{DataSources}{List of DSConnection objects}
 }
 \value{
 A list of variables containing messages about object assignment for monitoring purposes.
