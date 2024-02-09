@@ -9,6 +9,7 @@
 #' @export
 #'
 #' @examples
+#' @author Bastian Reiter
 ds.ConnectToCCP <- function(CCPSiteCredentials)
 {
     require(DSI)

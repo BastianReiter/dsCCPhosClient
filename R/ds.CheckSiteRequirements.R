@@ -9,6 +9,7 @@
 #' @export
 #'
 #' @examples
+#' @author Bastian Reiter
 ds.CheckSiteRequirements <- function(DataSources = NULL)
 {
 

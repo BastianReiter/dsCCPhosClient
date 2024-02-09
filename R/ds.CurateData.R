@@ -13,6 +13,7 @@
 #' @export
 #'
 #' @examples
+#' @author Bastian Reiter
 ds.CurateData <- function(Name_Output = "CurationOutput",
                           Name_RawDataSet = "RawDataSet",
                           RuleProfile_DiagnosisAssociation = "Default",

@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @examples
+#' @author Bastian Reiter
 ds.GetObjectInfo <- function(ObjectName,
                              DataSources)
 {
