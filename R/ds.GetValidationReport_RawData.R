@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @examples
+#' @author Bastian Reiter
 ds.GetValidationReport_RawData <- function(Name_RawDataSet = "RawDataSet",
                                            DataSources = NULL)
 {

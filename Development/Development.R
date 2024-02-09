@@ -49,4 +49,6 @@ library(devtools)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_r("ds.AugmentData.R")
 # use_r("ds.CurateData.R")
+# use_r("ds.UnpackAugmentationOutput.R")
+# use_r("ds.UnpackCurationOutput.R")
 

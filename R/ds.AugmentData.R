@@ -13,6 +13,7 @@
 #' @export
 #'
 #' @examples
+#' @author Bastian Reiter
 ds.AugmentData <- function(Name_CurationOutput = "CurationOutput",
                            Name_Output = "AugmentationOutput",
                            DataSources = NULL)

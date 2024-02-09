@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @examples
+#' @author Bastian Reiter
 ds.GetValidationReport_CuratedData <- function(Name_CurationOutput = "CurationOutput",
                                                DataSources = NULL)
 {

@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @examples
+#' @author Bastian Reiter
 ds.GetValidationReport_AugmentedData <- function(Name_AugmentedDataSet = "AugmentedDataSet",
                                                  DataSources = NULL)
 {
