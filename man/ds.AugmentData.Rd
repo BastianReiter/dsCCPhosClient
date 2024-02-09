@@ -26,3 +26,6 @@ Transforms curated CCP core data set (CDM) into augmented data set (ADM)
 \details{
 Linked to server-side ASSIGN method AugmentDataDS()
 }
+\author{
+Bastian Reiter
+}

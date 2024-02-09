@@ -15,3 +15,6 @@ A list of DSConnection-objects
 \description{
 Takes credentials of CCP sites and returns a list of DSConnection-objects. Has to be executed from within a CCP bridgehead R server session.
 }
+\author{
+Bastian Reiter
+}

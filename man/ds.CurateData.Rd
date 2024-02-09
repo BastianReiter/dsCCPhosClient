@@ -28,3 +28,6 @@ Triggers transformation of Raw Data Set (RDS) into Curated Data Set (CDS) on ser
 \details{
 Linked to server-side ASSIGN method CurateDataDS()
 }
+\author{
+Bastian Reiter
+}
