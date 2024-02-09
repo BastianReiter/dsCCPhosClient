@@ -23,3 +23,6 @@ Triggers validation of Augmented Data Set on server and requests a report.
 \details{
 Linked to server-side AGGREGATE method GetValidationReportDS_AugmentedData()
 }
+\author{
+Bastian Reiter
+}

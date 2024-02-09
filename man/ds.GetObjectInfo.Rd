@@ -17,3 +17,6 @@ What it does
 \details{
 Linked to server-side AGGREGATE method GetObjectInfoDS()
 }
+\author{
+Bastian Reiter
+}

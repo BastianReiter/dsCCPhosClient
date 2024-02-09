@@ -12,3 +12,6 @@ ds.CheckSiteRequirements(DataSources = NULL)
 \description{
 Check if technical requirements are met by every participating CCP site.
 }
+\author{
+Bastian Reiter
+}

@@ -23,3 +23,6 @@ Triggers validation of Curated Data Set on server and requests a report.
 \details{
 Linked to server-side AGGREGATE method GetValidationReportDS_CuratedData()
 }
+\author{
+Bastian Reiter
+}

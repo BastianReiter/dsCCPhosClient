@@ -15,11 +15,14 @@ ds.UnpackCuratedDataSet(
 \item{DataSources}{List of DSConnection objects}
 }
 \value{
-A list of messages about object assignment for monitoring purposes.
+A list of messages about object assignment for monitoring purposes
 }
 \description{
 Make tables within Curated Data Set (which lives as a list within Curation Output) directly addressable in R server sessions
 }
 \details{
 Linked to server-side ASSIGN method UnpackCuratedDataSetDS()
+}
+\author{
+Bastian Reiter
 }
