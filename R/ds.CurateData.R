@@ -3,7 +3,7 @@
 #'
 #' Triggers transformation of Raw Data Set (RDS) into Curated Data Set (CDS) on server.
 #'
-#' Linked to server-side ASSIGN method CurateDataDS()
+#' Linked to server-side ASSIGN method dsCCPhos::CurateDataDS()
 #'
 #' @param Name_RawDataSet String | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'
 #' @param Name_Output String | Name of assigned output object on server | Default: 'CurationOutput'

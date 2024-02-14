@@ -25,7 +25,11 @@ library(devtools)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_package("dplyr")
 # use_package("DSI")
+# use_package("ggplot2", type = "Suggests")
+# use_package("scales", type = "Suggests")
+# use_package("sysfonts", type = "Suggests")
 # use_package("tibble")
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,14 +45,20 @@ library(devtools)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_r("ds.GetCurationReport.R")
 # use_r("ds.GetObjectInfo.R")
+# use_r("ds.GetSampleStatistics.R")
 # use_r("ds.GetValidationReport_RawData.R")
 # use_r("ds.GetValidationReport_CuratedData.R")
 # use_r("ds.GetValidationReport_AugmentedData.R")
 
 # Linked to dataSHIELD ASSIGN functions
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_r("ds.AugmentData.R")
 # use_r("ds.CurateData.R")
 # use_r("ds.UnpackAugmentationOutput.R")
 # use_r("ds.UnpackCurationOutput.R")
+
+# Data visualization
+#~~~~~~~~~~~~~~~~~~~
+# use_r("MakeBoxPlot.R")
+use_r("ggTheme_CCP")
 
