@@ -26,7 +26,7 @@ A list of variables containing messages about object assignment for monitoring p
 Triggers transformation of Raw Data Set (RDS) into Curated Data Set (CDS) on server.
 }
 \details{
-Linked to server-side ASSIGN method CurateDataDS()
+Linked to server-side ASSIGN method dsCCPhos::CurateDataDS()
 }
 \author{
 Bastian Reiter

@@ -7,7 +7,7 @@
 #'
 #' @param TableName String | Name of the table containing the metric feature of concern
 #' @param MetricFeatureName String | Name of metric feature
-#' @param GroupingFeatureName String | Name of optional grouping feature in the same table
+#' @param GroupingFeatureName String | Name of optional grouping feature from the same table
 #' @param DataSources List of DSConnection objects
 #'
 #' @return
@@ -40,6 +40,9 @@ ds.GetSampleStatistics <- function(TableName,
     # TableName <- "ADS_Patients"
     # MetricFeatureName <- "PatientAgeAtDiagnosis"
     # DataSources <- CCPConnections
+
+
+    # --- TO DO --- : Implement grouping on server and execute functions below on grouped vectors
 
 
     ls_ParametricStatistics <- ds.meanSdGp(x = paste0(TableName, "$", MetricFeatureName),

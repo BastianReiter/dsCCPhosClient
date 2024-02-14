@@ -250,10 +250,10 @@ SampleStatistics <- ds.GetSampleStatistics(TableName = "ADS_Patients",
 
 TestPlot <- MakeBoxPlot(SampleStatistics = SampleStatistics,
                         AxisTitle_y = "Patient age at diagnosis",
-                        FillPalette = c(Colors$BlueNice,
-                                        Colors$Primary,
-                                        Colors$Secondary,
-                                        Colors$Tertiary))
+                        FillPalette = c("All" = Colors$MediumGrey,
+                                        "SiteA" = Colors$Primary,
+                                        "SiteB" = Colors$Secondary,
+                                        "SiteC" = Colors$Tertiary))
 
 
 
