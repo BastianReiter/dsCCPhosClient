@@ -1,0 +1,123 @@
+---
+title: "Curation Report"
+author: "dsCCPhos"
+format: html
+params:
+    PathToCurationReportData: "CurationReport.rds"
+    
+---
+
+
+```{r}
+#| label: Setup
+#| echo: false
+#| include: false
+
+knitr::opts_chunk$set(echo = FALSE)
+
+require(dplyr)
+require(dsCCPhosClient)
+require(gt)
+require(gtExtras)
+require(purrr)
+
+theme_gt_CDSG <- function(gtObject,
+                          ShowNAs = FALSE,
+                          TableWidth = NULL,
+                          TableAlign = "center",
+                          ...)
+{
+  gtObject %>%
+    tab_options(table.width = TableWidth,
+                table.align = TableAlign,
+                table.font.names = c("Karla", default_fonts()),
+                table.font.size = "80%",
+                heading.align = "center",
+                table.border.top.width = NULL,
+                column_labels.background.color = "#05499650",
+                column_labels.border.top.width = NULL,
+                column_labels.border.bottom.width = 3,
+                column_labels.border.bottom.color = "#054996",
+                row_group.background.color = "#E0E0E0") %>%
+    #--- Style column label text ---
+    tab_style(locations = cells_column_labels(),
+              style = "vertical-align: middle;
+                       text-transform: uppercase;
+                       font-weight: bold;
+                       color: #054996") %>%
+    #--- Format column label text (Replace "_" with " ")
+    text_replace(locations = cells_column_labels(),
+                 pattern = "[_]",
+                 replacement = " ") %>%
+    #--- Style row group label ---
+    tab_style(locations = cells_row_groups(),
+              style = "font-weight: bold;
+                       color: #054996") %>%
+    { if (ShowNAs == FALSE)
+      { sub_missing(., missing_text = "") }
+      else {.}
+    }
+}
+
+
+```
+
+\
+
+### Data Transformation Monitors
+
+```{r}
+#| label: TransformationMonitors
+#| warning: false
+
+# Get temporarily saved curation report data
+TransformationMonitors <- readRDS(file = params$PathToCurationReportData)
+
+TransformationMonitors <- TransformationMonitors$SiteA
+
+
+ls_Tables <- map(TransformationMonitors,
+                 function(MonitorDF)
+                 {
+                     if (!is.null(MonitorDF))
+                     {
+                         MonitorDF %>%
+                             gt(groupname_col = "Feature") %>%
+                             theme_gt_CDSG(TableAlign = "left", ShowNAs = TRUE, TableWidth = "80%") %>%
+                             #dsCCPhosClient::gtTheme_CCP(TableAlign = "left", ShowNAs = TRUE, TableWidth = "80%") %>%
+                             tab_style(locations = cells_body(rows = (Value != "NA" & IsValueEligible == TRUE & Final > 0)),
+                                       style = cell_fill(color = "green")) %>%
+                             tab_style(locations = cells_body(rows = (Value != "NA" & IsValueEligible == TRUE & Final == 0)),
+                                       style = cell_fill(color = "lightgreen")) %>%
+                             tab_style(locations = cells_body(rows = (Value == "NA" | is.na(Value))),
+                                       style = cell_fill(color = "gray")) %>%
+                             tab_style(locations = cells_body(columns = c(Value, IsValueEligible, Transformed),
+                                                              rows = (Value != "NA" & IsValueEligible == FALSE & Transformed > 0 & Final == 0)),
+                                       style = cell_fill(color = "red")) %>%
+                             tab_style(locations = cells_body(columns = c(Value, IsValueEligible, Raw, Transformed),
+                                                              rows = (Value != "NA" & IsValueEligible == FALSE & Raw > 0 & Transformed == 0)),
+                                       style = cell_fill(color = "orange"))
+                     }
+                 })
+
+ls_Tables[[1]]
+
+ls_Tables[[2]]
+
+ls_Tables[[3]]
+
+ls_Tables[[4]]
+
+ls_Tables[[5]]
+
+ls_Tables[[6]]
+
+ls_Tables[[7]]
+
+ls_Tables[[8]]
+
+ls_Tables[[9]]
+
+
+```
+

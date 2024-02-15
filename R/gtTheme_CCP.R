@@ -24,6 +24,7 @@ gtTheme_CCP <- function(gtObject,
                         ...)
 {
     require(gt)
+    require(gtExtras)
     require(sysfonts)
 
     # Add google font "Karla"

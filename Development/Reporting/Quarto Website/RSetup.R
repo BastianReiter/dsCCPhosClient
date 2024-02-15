@@ -6,24 +6,16 @@
 ################################################################################
 
 
-#devtools::install_github("rchaput/knitrdrawio")
-
 #install.packages("pacman")
 pacman::p_load( dplyr,
                 ggplot2,
                 gt,
                 gtExtras,
+                here,
                 purrr,
                 readr,
                 readxl,
                 showtext)
-
-
-source("./Scripts/Preferences.R")
-
-source("./Scripts/Auxiliary.R")
-
-
 
 
 theme_gt_CDSG <- function(inp_gtObject,

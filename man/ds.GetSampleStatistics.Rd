@@ -16,7 +16,7 @@ ds.GetSampleStatistics(
 
 \item{MetricFeatureName}{String | Name of metric feature}
 
-\item{GroupingFeatureName}{String | Name of optional grouping feature in the same table}
+\item{GroupingFeatureName}{String | Name of optional grouping feature from the same table}
 
 \item{DataSources}{List of DSConnection objects}
 }
