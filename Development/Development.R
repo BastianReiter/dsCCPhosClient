@@ -23,12 +23,17 @@ library(devtools)
 
 # Adding package dependencies using usethis::use_package()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# use_dev_package("CCPhosApp", type = "Suggests", remote = "devtools::BastianReiter/CCPhosApp")
 # use_package("dplyr")
 # use_package("DSI")
 # use_package("ggplot2", type = "Suggests")
+# use_package("gt", type = "Suggests")
+# use_package("quarto", type = "Suggests")
+# use_package("rmarkdown", type = "Suggests")
 # use_package("scales", type = "Suggests")
 # use_package("sysfonts", type = "Suggests")
 # use_package("tibble")
+# use_package("utils", type = "Suggests")
 
 
 
@@ -59,6 +64,11 @@ library(devtools)
 
 # Data visualization
 #~~~~~~~~~~~~~~~~~~~
-# use_r("MakeBoxPlot.R")
-use_r("ggTheme_CCP")
+# use_r("ExportPlot")
+# use_r("ggTheme_CCP")
+# use_r("gtTheme_CCP")
+# use_r("MakeBoxPlot")
+# use_r("MakeColumnPlot")
+# use_r("MakeCurationReport")
+
 

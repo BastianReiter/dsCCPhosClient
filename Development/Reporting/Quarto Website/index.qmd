@@ -1,0 +1,17 @@
+---
+title: "About This Documentation"
+editor: source
+---
+
+```{r}
+#| label: setup
+#| echo: false
+
+knitr::opts_chunk$set(echo = TRUE)
+
+#source("RSetup.R", local = knitr::knit_global())
+```
+
+\
+
+MONITOR

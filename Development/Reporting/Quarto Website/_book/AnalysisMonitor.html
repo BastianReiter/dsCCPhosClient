@@ -1,0 +1,4813 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>dsCCPhos: Data curation report - Analysis Monitor</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./AnalysisReport.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script type="application/json" class="js-hypothesis-config">
+{
+  "theme": "clean",
+  "openSidebar": false
+}
+</script><script async="" src="https://hypothes.is/embed.js"></script>
+</head>
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./AnalysisMonitor.html">Analysis Monitor</a></li><li class="breadcrumb-item"><a href="./AnalysisMonitor.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Analysis Monitor</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">dsCCPhos: Data curation report</a> 
+        <div class="sidebar-tools-main">
+    <a href="./dsCCPhos--Data-curation-report.pdf" rel="" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">About This Documentation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Analysis Monitor</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AnalysisMonitor.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Analysis Monitor</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Analysis Site Report</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./AnalysisReport.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Analysis Report</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#harmonization-monitors" id="toc-harmonization-monitors" class="nav-link active" data-scroll-target="#harmonization-monitors">Harmonization Monitors</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Analysis Monitor</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header><p><br></p>
+<section id="harmonization-monitors" class="level3"><h3 class="anchored" data-anchor-id="harmonization-monitors">Harmonization Monitors</h3>
+<div class="cell">
+<div class="cell-output-display">
+
+<div id="mvoijjxivi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mvoijjxivi table {
+  font-family: Karla, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#mvoijjxivi thead, #mvoijjxivi tbody, #mvoijjxivi tfoot, #mvoijjxivi tr, #mvoijjxivi td, #mvoijjxivi th {
+  border-style: none;
+}
+
+#mvoijjxivi p {
+  margin: 0;
+  padding: 0;
+}
+
+#mvoijjxivi .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: 0;
+  margin-right: auto;
+  color: #333333;
+  font-size: 80%;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 80%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mvoijjxivi .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#mvoijjxivi .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mvoijjxivi .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mvoijjxivi .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mvoijjxivi .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mvoijjxivi .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mvoijjxivi .gt_col_heading {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mvoijjxivi .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mvoijjxivi .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mvoijjxivi .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mvoijjxivi .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mvoijjxivi .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#mvoijjxivi .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#mvoijjxivi .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mvoijjxivi .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mvoijjxivi .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mvoijjxivi .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mvoijjxivi .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mvoijjxivi .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#mvoijjxivi .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#mvoijjxivi .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#mvoijjxivi .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mvoijjxivi .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#mvoijjxivi .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#mvoijjxivi .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mvoijjxivi .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mvoijjxivi .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mvoijjxivi .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mvoijjxivi .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mvoijjxivi .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mvoijjxivi .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mvoijjxivi .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mvoijjxivi .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mvoijjxivi .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mvoijjxivi .gt_left {
+  text-align: left;
+}
+
+#mvoijjxivi .gt_center {
+  text-align: center;
+}
+
+#mvoijjxivi .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mvoijjxivi .gt_font_normal {
+  font-weight: normal;
+}
+
+#mvoijjxivi .gt_font_bold {
+  font-weight: bold;
+}
+
+#mvoijjxivi .gt_font_italic {
+  font-style: italic;
+}
+
+#mvoijjxivi .gt_super {
+  font-size: 65%;
+}
+
+#mvoijjxivi .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#mvoijjxivi .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#mvoijjxivi .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#mvoijjxivi .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#mvoijjxivi .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#mvoijjxivi .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#mvoijjxivi .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Value">Value</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="IsValueEligible">IsValueEligible</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Raw">Raw</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Transformed">Transformed</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Final">Final</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="SampleAliquot">SampleAliquot</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="SampleAliquot  Value" class="gt_row gt_left" style="background-color: #FF0000;">false</td>
+<td headers="SampleAliquot  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="SampleAliquot  Raw" class="gt_row gt_right">0</td>
+<td headers="SampleAliquot  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">51</td>
+<td headers="SampleAliquot  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="SampleAliquot  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="SampleAliquot  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="SampleAliquot  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="SampleAliquot  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="SampleAliquot  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">51</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="SampleType">SampleType</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="SampleType  Value" class="gt_row gt_left" style="background-color: #FF0000;">tissue-ffpe</td>
+<td headers="SampleType  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="SampleType  Raw" class="gt_row gt_right">0</td>
+<td headers="SampleType  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">19</td>
+<td headers="SampleType  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="SampleType  Value" class="gt_row gt_left" style="background-color: #FF0000;">tissue-frozen</td>
+<td headers="SampleType  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="SampleType  Raw" class="gt_row gt_right">0</td>
+<td headers="SampleType  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">28</td>
+<td headers="SampleType  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="SampleType  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="SampleType  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="SampleType  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="SampleType  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">4</td>
+<td headers="SampleType  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">51</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell-output-display">
+
+<div id="oresteazaq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#oresteazaq table {
+  font-family: Karla, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#oresteazaq thead, #oresteazaq tbody, #oresteazaq tfoot, #oresteazaq tr, #oresteazaq td, #oresteazaq th {
+  border-style: none;
+}
+
+#oresteazaq p {
+  margin: 0;
+  padding: 0;
+}
+
+#oresteazaq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: 0;
+  margin-right: auto;
+  color: #333333;
+  font-size: 80%;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 80%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#oresteazaq .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#oresteazaq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#oresteazaq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#oresteazaq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#oresteazaq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#oresteazaq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#oresteazaq .gt_col_heading {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#oresteazaq .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#oresteazaq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#oresteazaq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#oresteazaq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#oresteazaq .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#oresteazaq .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#oresteazaq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#oresteazaq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#oresteazaq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#oresteazaq .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#oresteazaq .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#oresteazaq .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#oresteazaq .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#oresteazaq .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#oresteazaq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#oresteazaq .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#oresteazaq .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#oresteazaq .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#oresteazaq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#oresteazaq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#oresteazaq .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#oresteazaq .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#oresteazaq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#oresteazaq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#oresteazaq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#oresteazaq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#oresteazaq .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#oresteazaq .gt_left {
+  text-align: left;
+}
+
+#oresteazaq .gt_center {
+  text-align: center;
+}
+
+#oresteazaq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#oresteazaq .gt_font_normal {
+  font-weight: normal;
+}
+
+#oresteazaq .gt_font_bold {
+  font-weight: bold;
+}
+
+#oresteazaq .gt_font_italic {
+  font-style: italic;
+}
+
+#oresteazaq .gt_super {
+  font-size: 65%;
+}
+
+#oresteazaq .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#oresteazaq .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#oresteazaq .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#oresteazaq .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#oresteazaq .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#oresteazaq .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#oresteazaq .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Value">Value</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="IsValueEligible">IsValueEligible</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Raw">Raw</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Transformed">Transformed</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Final">Final</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="ICD10Version">ICD10Version</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="ICD10Version  Value" class="gt_row gt_right">2014</td>
+<td headers="ICD10Version  IsValueEligible" class="gt_row gt_center">NA</td>
+<td headers="ICD10Version  Raw" class="gt_row gt_right">5</td>
+<td headers="ICD10Version  Transformed" class="gt_row gt_right">5</td>
+<td headers="ICD10Version  Final" class="gt_row gt_right">5</td>
+</tr>
+<tr>
+<td headers="ICD10Version  Value" class="gt_row gt_right">2015</td>
+<td headers="ICD10Version  IsValueEligible" class="gt_row gt_center">NA</td>
+<td headers="ICD10Version  Raw" class="gt_row gt_right">23</td>
+<td headers="ICD10Version  Transformed" class="gt_row gt_right">23</td>
+<td headers="ICD10Version  Final" class="gt_row gt_right">23</td>
+</tr>
+<tr>
+<td headers="ICD10Version  Value" class="gt_row gt_right" style="background-color: #BEBEBE;">NA</td>
+<td headers="ICD10Version  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">NA</td>
+<td headers="ICD10Version  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="ICD10Version  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="ICD10Version  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="LocalizationSide">LocalizationSide</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="LocalizationSide  Value" class="gt_row gt_right" style="background-color: #BEBEBE;">NA</td>
+<td headers="LocalizationSide  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="LocalizationSide  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">28</td>
+<td headers="LocalizationSide  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">28</td>
+<td headers="LocalizationSide  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">28</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell-output-display">
+
+<div id="uqgemmnxkd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#uqgemmnxkd table {
+  font-family: Karla, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#uqgemmnxkd thead, #uqgemmnxkd tbody, #uqgemmnxkd tfoot, #uqgemmnxkd tr, #uqgemmnxkd td, #uqgemmnxkd th {
+  border-style: none;
+}
+
+#uqgemmnxkd p {
+  margin: 0;
+  padding: 0;
+}
+
+#uqgemmnxkd .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: 0;
+  margin-right: auto;
+  color: #333333;
+  font-size: 80%;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 80%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#uqgemmnxkd .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#uqgemmnxkd .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#uqgemmnxkd .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#uqgemmnxkd .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#uqgemmnxkd .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#uqgemmnxkd .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#uqgemmnxkd .gt_col_heading {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#uqgemmnxkd .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#uqgemmnxkd .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#uqgemmnxkd .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#uqgemmnxkd .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#uqgemmnxkd .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#uqgemmnxkd .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#uqgemmnxkd .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#uqgemmnxkd .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#uqgemmnxkd .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#uqgemmnxkd .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#uqgemmnxkd .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uqgemmnxkd .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#uqgemmnxkd .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#uqgemmnxkd .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#uqgemmnxkd .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uqgemmnxkd .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#uqgemmnxkd .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#uqgemmnxkd .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#uqgemmnxkd .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uqgemmnxkd .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#uqgemmnxkd .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#uqgemmnxkd .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#uqgemmnxkd .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#uqgemmnxkd .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#uqgemmnxkd .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uqgemmnxkd .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#uqgemmnxkd .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uqgemmnxkd .gt_left {
+  text-align: left;
+}
+
+#uqgemmnxkd .gt_center {
+  text-align: center;
+}
+
+#uqgemmnxkd .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#uqgemmnxkd .gt_font_normal {
+  font-weight: normal;
+}
+
+#uqgemmnxkd .gt_font_bold {
+  font-weight: bold;
+}
+
+#uqgemmnxkd .gt_font_italic {
+  font-style: italic;
+}
+
+#uqgemmnxkd .gt_super {
+  font-size: 65%;
+}
+
+#uqgemmnxkd .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#uqgemmnxkd .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#uqgemmnxkd .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#uqgemmnxkd .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#uqgemmnxkd .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#uqgemmnxkd .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#uqgemmnxkd .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Value">Value</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="IsValueEligible">IsValueEligible</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Raw">Raw</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Transformed">Transformed</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Final">Final</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="Grading">Grading</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="Grading  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="Grading  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="Grading  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">28</td>
+<td headers="Grading  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">27</td>
+<td headers="Grading  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">27</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell-output-display">
+
+<div id="qmlbxsylgt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#qmlbxsylgt table {
+  font-family: Karla, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#qmlbxsylgt thead, #qmlbxsylgt tbody, #qmlbxsylgt tfoot, #qmlbxsylgt tr, #qmlbxsylgt td, #qmlbxsylgt th {
+  border-style: none;
+}
+
+#qmlbxsylgt p {
+  margin: 0;
+  padding: 0;
+}
+
+#qmlbxsylgt .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: 0;
+  margin-right: auto;
+  color: #333333;
+  font-size: 80%;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 80%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#qmlbxsylgt .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#qmlbxsylgt .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#qmlbxsylgt .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#qmlbxsylgt .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#qmlbxsylgt .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qmlbxsylgt .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#qmlbxsylgt .gt_col_heading {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#qmlbxsylgt .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#qmlbxsylgt .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#qmlbxsylgt .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#qmlbxsylgt .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#qmlbxsylgt .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#qmlbxsylgt .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#qmlbxsylgt .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#qmlbxsylgt .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#qmlbxsylgt .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#qmlbxsylgt .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#qmlbxsylgt .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qmlbxsylgt .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#qmlbxsylgt .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#qmlbxsylgt .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#qmlbxsylgt .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qmlbxsylgt .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#qmlbxsylgt .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#qmlbxsylgt .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qmlbxsylgt .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qmlbxsylgt .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#qmlbxsylgt .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qmlbxsylgt .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#qmlbxsylgt .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qmlbxsylgt .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#qmlbxsylgt .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qmlbxsylgt .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#qmlbxsylgt .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qmlbxsylgt .gt_left {
+  text-align: left;
+}
+
+#qmlbxsylgt .gt_center {
+  text-align: center;
+}
+
+#qmlbxsylgt .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#qmlbxsylgt .gt_font_normal {
+  font-weight: normal;
+}
+
+#qmlbxsylgt .gt_font_bold {
+  font-weight: bold;
+}
+
+#qmlbxsylgt .gt_font_italic {
+  font-style: italic;
+}
+
+#qmlbxsylgt .gt_super {
+  font-size: 65%;
+}
+
+#qmlbxsylgt .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#qmlbxsylgt .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#qmlbxsylgt .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#qmlbxsylgt .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#qmlbxsylgt .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#qmlbxsylgt .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#qmlbxsylgt .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Value">Value</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="IsValueEligible">IsValueEligible</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Raw">Raw</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Transformed">Transformed</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Final">Final</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="MetastasisLocalization">MetastasisLocalization</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="MetastasisLocalization  Value" class="gt_row gt_left" style="background-color: #00FF00;">BRA</td>
+<td headers="MetastasisLocalization  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="MetastasisLocalization  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="MetastasisLocalization  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="MetastasisLocalization  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="MetastasisLocalization  Value" class="gt_row gt_left" style="background-color: #00FF00;">OSS</td>
+<td headers="MetastasisLocalization  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="MetastasisLocalization  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="MetastasisLocalization  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+<td headers="MetastasisLocalization  Final" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+</tr>
+<tr>
+<td headers="MetastasisLocalization  Value" class="gt_row gt_left" style="background-color: #00FF00;">PLE</td>
+<td headers="MetastasisLocalization  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="MetastasisLocalization  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="MetastasisLocalization  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="MetastasisLocalization  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="MetastasisLocalization  Value" class="gt_row gt_left" style="background-color: #00FF00;">PUL</td>
+<td headers="MetastasisLocalization  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="MetastasisLocalization  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="MetastasisLocalization  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+<td headers="MetastasisLocalization  Final" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+</tr>
+<tr>
+<td headers="MetastasisLocalization  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="MetastasisLocalization  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="MetastasisLocalization  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="MetastasisLocalization  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="MetastasisLocalization  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+<div class="cell-output-display">
+
+<div id="feqpusiktd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#feqpusiktd table {
+  font-family: Karla, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#feqpusiktd thead, #feqpusiktd tbody, #feqpusiktd tfoot, #feqpusiktd tr, #feqpusiktd td, #feqpusiktd th {
+  border-style: none;
+}
+
+#feqpusiktd p {
+  margin: 0;
+  padding: 0;
+}
+
+#feqpusiktd .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: 0;
+  margin-right: auto;
+  color: #333333;
+  font-size: 80%;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 80%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#feqpusiktd .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#feqpusiktd .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#feqpusiktd .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#feqpusiktd .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#feqpusiktd .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#feqpusiktd .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#feqpusiktd .gt_col_heading {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#feqpusiktd .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#feqpusiktd .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#feqpusiktd .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#feqpusiktd .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#feqpusiktd .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#feqpusiktd .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#feqpusiktd .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#feqpusiktd .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#feqpusiktd .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#feqpusiktd .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#feqpusiktd .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#feqpusiktd .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#feqpusiktd .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#feqpusiktd .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#feqpusiktd .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#feqpusiktd .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#feqpusiktd .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#feqpusiktd .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#feqpusiktd .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#feqpusiktd .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#feqpusiktd .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#feqpusiktd .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#feqpusiktd .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#feqpusiktd .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#feqpusiktd .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#feqpusiktd .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#feqpusiktd .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#feqpusiktd .gt_left {
+  text-align: left;
+}
+
+#feqpusiktd .gt_center {
+  text-align: center;
+}
+
+#feqpusiktd .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#feqpusiktd .gt_font_normal {
+  font-weight: normal;
+}
+
+#feqpusiktd .gt_font_bold {
+  font-weight: bold;
+}
+
+#feqpusiktd .gt_font_italic {
+  font-style: italic;
+}
+
+#feqpusiktd .gt_super {
+  font-size: 65%;
+}
+
+#feqpusiktd .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#feqpusiktd .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#feqpusiktd .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#feqpusiktd .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#feqpusiktd .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#feqpusiktd .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#feqpusiktd .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Value">Value</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="IsValueEligible">IsValueEligible</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Raw">Raw</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Transformed">Transformed</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Final">Final</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="Gender">Gender</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="Gender  Value" class="gt_row gt_left" style="background-color: #FF0000;">FEMALE</td>
+<td headers="Gender  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="Gender  Raw" class="gt_row gt_right">0</td>
+<td headers="Gender  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">8</td>
+<td headers="Gender  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="Gender  Value" class="gt_row gt_left" style="background-color: #FF0000;">MALE</td>
+<td headers="Gender  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="Gender  Raw" class="gt_row gt_right">0</td>
+<td headers="Gender  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">15</td>
+<td headers="Gender  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="Gender  Value" class="gt_row gt_left" style="background-color: #FF0000;">UNKNOWN</td>
+<td headers="Gender  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="Gender  Raw" class="gt_row gt_right">0</td>
+<td headers="Gender  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">1</td>
+<td headers="Gender  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="Gender  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="Gender  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="Gender  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="Gender  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="Gender  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">24</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="LastVitalStatus">LastVitalStatus</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="LastVitalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">Alive</td>
+<td headers="LastVitalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="LastVitalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="LastVitalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">22</td>
+<td headers="LastVitalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">22</td>
+</tr>
+<tr>
+<td headers="LastVitalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">Deceased</td>
+<td headers="LastVitalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="LastVitalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="LastVitalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+<td headers="LastVitalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+</tr>
+<tr>
+<td headers="LastVitalStatus  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="LastVitalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="LastVitalStatus  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="LastVitalStatus  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="LastVitalStatus  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell-output-display">
+
+<div id="gibxuxqktg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gibxuxqktg table {
+  font-family: Karla, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#gibxuxqktg thead, #gibxuxqktg tbody, #gibxuxqktg tfoot, #gibxuxqktg tr, #gibxuxqktg td, #gibxuxqktg th {
+  border-style: none;
+}
+
+#gibxuxqktg p {
+  margin: 0;
+  padding: 0;
+}
+
+#gibxuxqktg .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: 0;
+  margin-right: auto;
+  color: #333333;
+  font-size: 80%;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 80%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#gibxuxqktg .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#gibxuxqktg .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#gibxuxqktg .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#gibxuxqktg .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#gibxuxqktg .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gibxuxqktg .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#gibxuxqktg .gt_col_heading {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#gibxuxqktg .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#gibxuxqktg .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#gibxuxqktg .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#gibxuxqktg .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#gibxuxqktg .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#gibxuxqktg .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#gibxuxqktg .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#gibxuxqktg .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#gibxuxqktg .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#gibxuxqktg .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#gibxuxqktg .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gibxuxqktg .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#gibxuxqktg .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#gibxuxqktg .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#gibxuxqktg .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gibxuxqktg .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#gibxuxqktg .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#gibxuxqktg .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gibxuxqktg .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gibxuxqktg .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#gibxuxqktg .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gibxuxqktg .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#gibxuxqktg .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gibxuxqktg .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#gibxuxqktg .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gibxuxqktg .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#gibxuxqktg .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gibxuxqktg .gt_left {
+  text-align: left;
+}
+
+#gibxuxqktg .gt_center {
+  text-align: center;
+}
+
+#gibxuxqktg .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#gibxuxqktg .gt_font_normal {
+  font-weight: normal;
+}
+
+#gibxuxqktg .gt_font_bold {
+  font-weight: bold;
+}
+
+#gibxuxqktg .gt_font_italic {
+  font-style: italic;
+}
+
+#gibxuxqktg .gt_super {
+  font-size: 65%;
+}
+
+#gibxuxqktg .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#gibxuxqktg .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#gibxuxqktg .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#gibxuxqktg .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#gibxuxqktg .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#gibxuxqktg .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#gibxuxqktg .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Value">Value</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="IsValueEligible">IsValueEligible</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Raw">Raw</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Transformed">Transformed</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Final">Final</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="GlobalStatus">GlobalStatus</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="GlobalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">CR</td>
+<td headers="GlobalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="GlobalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="GlobalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+<td headers="GlobalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+</tr>
+<tr>
+<td headers="GlobalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">CRr</td>
+<td headers="GlobalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="GlobalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="GlobalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="GlobalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="GlobalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">ENP</td>
+<td headers="GlobalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="GlobalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="GlobalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+<td headers="GlobalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+</tr>
+<tr>
+<td headers="GlobalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">MR</td>
+<td headers="GlobalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="GlobalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="GlobalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+<td headers="GlobalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+</tr>
+<tr>
+<td headers="GlobalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">NC</td>
+<td headers="GlobalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="GlobalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="GlobalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">8</td>
+<td headers="GlobalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">8</td>
+</tr>
+<tr>
+<td headers="GlobalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">P</td>
+<td headers="GlobalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="GlobalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="GlobalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">9</td>
+<td headers="GlobalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">9</td>
+</tr>
+<tr>
+<td headers="GlobalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">PR</td>
+<td headers="GlobalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="GlobalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="GlobalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+<td headers="GlobalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+</tr>
+<tr>
+<td headers="GlobalStatus  Value" class="gt_row gt_left" style="background-color: #FF0000;">E</td>
+<td headers="GlobalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="GlobalStatus  Raw" class="gt_row gt_right">0</td>
+<td headers="GlobalStatus  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">10</td>
+<td headers="GlobalStatus  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="GlobalStatus  Value" class="gt_row gt_left" style="background-color: #FF0000;">O</td>
+<td headers="GlobalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="GlobalStatus  Raw" class="gt_row gt_right">0</td>
+<td headers="GlobalStatus  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">9</td>
+<td headers="GlobalStatus  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="GlobalStatus  Value" class="gt_row gt_left" style="background-color: #FF0000;">X</td>
+<td headers="GlobalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="GlobalStatus  Raw" class="gt_row gt_right">0</td>
+<td headers="GlobalStatus  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">34</td>
+<td headers="GlobalStatus  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="GlobalStatus  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="GlobalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="GlobalStatus  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="GlobalStatus  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="GlobalStatus  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">53</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="LocalStatus">LocalStatus</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="LocalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">F</td>
+<td headers="LocalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="LocalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="LocalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+<td headers="LocalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+</tr>
+<tr>
+<td headers="LocalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">N</td>
+<td headers="LocalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="LocalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="LocalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">19</td>
+<td headers="LocalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">19</td>
+</tr>
+<tr>
+<td headers="LocalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">R</td>
+<td headers="LocalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="LocalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="LocalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+<td headers="LocalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+</tr>
+<tr>
+<td headers="LocalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">rT</td>
+<td headers="LocalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="LocalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="LocalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">8</td>
+<td headers="LocalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">8</td>
+</tr>
+<tr>
+<td headers="LocalStatus  Value" class="gt_row gt_left" style="background-color: #FF0000;">E</td>
+<td headers="LocalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="LocalStatus  Raw" class="gt_row gt_right">0</td>
+<td headers="LocalStatus  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">1</td>
+<td headers="LocalStatus  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="LocalStatus  Value" class="gt_row gt_left" style="background-color: #FF0000;">X</td>
+<td headers="LocalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="LocalStatus  Raw" class="gt_row gt_right">0</td>
+<td headers="LocalStatus  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">46</td>
+<td headers="LocalStatus  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="LocalStatus  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="LocalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="LocalStatus  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="LocalStatus  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">2</td>
+<td headers="LocalStatus  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">49</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="LymphnodalStatus">LymphnodalStatus</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="LymphnodalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">N</td>
+<td headers="LymphnodalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="LymphnodalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="LymphnodalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">21</td>
+<td headers="LymphnodalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">21</td>
+</tr>
+<tr>
+<td headers="LymphnodalStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">rL</td>
+<td headers="LymphnodalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="LymphnodalStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="LymphnodalStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="LymphnodalStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="LymphnodalStatus  Value" class="gt_row gt_left" style="background-color: #FF0000;">X</td>
+<td headers="LymphnodalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="LymphnodalStatus  Raw" class="gt_row gt_right">0</td>
+<td headers="LymphnodalStatus  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">51</td>
+<td headers="LymphnodalStatus  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="LymphnodalStatus  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="LymphnodalStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="LymphnodalStatus  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="LymphnodalStatus  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">8</td>
+<td headers="LymphnodalStatus  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">59</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="MetastasisStatus">MetastasisStatus</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="MetastasisStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">F</td>
+<td headers="MetastasisStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="MetastasisStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="MetastasisStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+<td headers="MetastasisStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+</tr>
+<tr>
+<td headers="MetastasisStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">N</td>
+<td headers="MetastasisStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="MetastasisStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="MetastasisStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">20</td>
+<td headers="MetastasisStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">20</td>
+</tr>
+<tr>
+<td headers="MetastasisStatus  Value" class="gt_row gt_left" style="background-color: #00FF00;">kM</td>
+<td headers="MetastasisStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="MetastasisStatus  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="MetastasisStatus  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">17</td>
+<td headers="MetastasisStatus  Final" class="gt_row gt_right" style="background-color: #00FF00;">17</td>
+</tr>
+<tr>
+<td headers="MetastasisStatus  Value" class="gt_row gt_left" style="background-color: #FF0000;">B</td>
+<td headers="MetastasisStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="MetastasisStatus  Raw" class="gt_row gt_right">0</td>
+<td headers="MetastasisStatus  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">1</td>
+<td headers="MetastasisStatus  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="MetastasisStatus  Value" class="gt_row gt_left" style="background-color: #FF0000;">X</td>
+<td headers="MetastasisStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="MetastasisStatus  Raw" class="gt_row gt_right">0</td>
+<td headers="MetastasisStatus  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">40</td>
+<td headers="MetastasisStatus  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="MetastasisStatus  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="MetastasisStatus  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="MetastasisStatus  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="MetastasisStatus  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="MetastasisStatus  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">41</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell-output-display">
+
+<div id="diymujymzl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#diymujymzl table {
+  font-family: Karla, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#diymujymzl thead, #diymujymzl tbody, #diymujymzl tfoot, #diymujymzl tr, #diymujymzl td, #diymujymzl th {
+  border-style: none;
+}
+
+#diymujymzl p {
+  margin: 0;
+  padding: 0;
+}
+
+#diymujymzl .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: 0;
+  margin-right: auto;
+  color: #333333;
+  font-size: 80%;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 80%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#diymujymzl .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#diymujymzl .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#diymujymzl .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#diymujymzl .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#diymujymzl .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#diymujymzl .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#diymujymzl .gt_col_heading {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#diymujymzl .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#diymujymzl .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#diymujymzl .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#diymujymzl .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#diymujymzl .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#diymujymzl .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#diymujymzl .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#diymujymzl .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#diymujymzl .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#diymujymzl .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#diymujymzl .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#diymujymzl .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#diymujymzl .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#diymujymzl .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#diymujymzl .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#diymujymzl .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#diymujymzl .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#diymujymzl .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#diymujymzl .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#diymujymzl .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#diymujymzl .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#diymujymzl .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#diymujymzl .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#diymujymzl .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#diymujymzl .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#diymujymzl .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#diymujymzl .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#diymujymzl .gt_left {
+  text-align: left;
+}
+
+#diymujymzl .gt_center {
+  text-align: center;
+}
+
+#diymujymzl .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#diymujymzl .gt_font_normal {
+  font-weight: normal;
+}
+
+#diymujymzl .gt_font_bold {
+  font-weight: bold;
+}
+
+#diymujymzl .gt_font_italic {
+  font-style: italic;
+}
+
+#diymujymzl .gt_super {
+  font-size: 65%;
+}
+
+#diymujymzl .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#diymujymzl .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#diymujymzl .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#diymujymzl .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#diymujymzl .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#diymujymzl .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#diymujymzl .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Value">Value</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="IsValueEligible">IsValueEligible</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Raw">Raw</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Transformed">Transformed</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Final">Final</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="RadiationTherapyIntention">RadiationTherapyIntention</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="RadiationTherapyIntention  Value" class="gt_row gt_left" style="background-color: #00FF00;">C</td>
+<td headers="RadiationTherapyIntention  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="RadiationTherapyIntention  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="RadiationTherapyIntention  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+<td headers="RadiationTherapyIntention  Final" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+</tr>
+<tr>
+<td headers="RadiationTherapyIntention  Value" class="gt_row gt_left" style="background-color: #00FF00;">P</td>
+<td headers="RadiationTherapyIntention  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="RadiationTherapyIntention  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="RadiationTherapyIntention  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">5</td>
+<td headers="RadiationTherapyIntention  Final" class="gt_row gt_right" style="background-color: #00FF00;">5</td>
+</tr>
+<tr>
+<td headers="RadiationTherapyIntention  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="RadiationTherapyIntention  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="RadiationTherapyIntention  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="RadiationTherapyIntention  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="RadiationTherapyIntention  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="RadiationTherapyRelationToSurgery">RadiationTherapyRelationToSurgery</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="RadiationTherapyRelationToSurgery  Value" class="gt_row gt_left" style="background-color: #00FF00;">N</td>
+<td headers="RadiationTherapyRelationToSurgery  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="RadiationTherapyRelationToSurgery  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="RadiationTherapyRelationToSurgery  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="RadiationTherapyRelationToSurgery  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="RadiationTherapyRelationToSurgery  Value" class="gt_row gt_left" style="background-color: #FF0000;">R</td>
+<td headers="RadiationTherapyRelationToSurgery  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="RadiationTherapyRelationToSurgery  Raw" class="gt_row gt_right">0</td>
+<td headers="RadiationTherapyRelationToSurgery  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">7</td>
+<td headers="RadiationTherapyRelationToSurgery  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="RadiationTherapyRelationToSurgery  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="RadiationTherapyRelationToSurgery  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="RadiationTherapyRelationToSurgery  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="RadiationTherapyRelationToSurgery  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="RadiationTherapyRelationToSurgery  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell-output-display">
+
+<div id="kafyoxeamx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kafyoxeamx table {
+  font-family: Karla, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#kafyoxeamx thead, #kafyoxeamx tbody, #kafyoxeamx tfoot, #kafyoxeamx tr, #kafyoxeamx td, #kafyoxeamx th {
+  border-style: none;
+}
+
+#kafyoxeamx p {
+  margin: 0;
+  padding: 0;
+}
+
+#kafyoxeamx .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: 0;
+  margin-right: auto;
+  color: #333333;
+  font-size: 80%;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 80%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#kafyoxeamx .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#kafyoxeamx .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#kafyoxeamx .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#kafyoxeamx .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kafyoxeamx .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kafyoxeamx .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kafyoxeamx .gt_col_heading {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#kafyoxeamx .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: rgba(5, 73, 150, 0.31);
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#kafyoxeamx .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#kafyoxeamx .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#kafyoxeamx .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #054996;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#kafyoxeamx .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#kafyoxeamx .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#kafyoxeamx .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #E0E0E0;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#kafyoxeamx .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#kafyoxeamx .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#kafyoxeamx .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#kafyoxeamx .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kafyoxeamx .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#kafyoxeamx .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#kafyoxeamx .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#kafyoxeamx .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kafyoxeamx .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#kafyoxeamx .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#kafyoxeamx .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kafyoxeamx .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kafyoxeamx .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#kafyoxeamx .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kafyoxeamx .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#kafyoxeamx .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kafyoxeamx .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kafyoxeamx .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kafyoxeamx .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kafyoxeamx .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kafyoxeamx .gt_left {
+  text-align: left;
+}
+
+#kafyoxeamx .gt_center {
+  text-align: center;
+}
+
+#kafyoxeamx .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#kafyoxeamx .gt_font_normal {
+  font-weight: normal;
+}
+
+#kafyoxeamx .gt_font_bold {
+  font-weight: bold;
+}
+
+#kafyoxeamx .gt_font_italic {
+  font-style: italic;
+}
+
+#kafyoxeamx .gt_super {
+  font-size: 65%;
+}
+
+#kafyoxeamx .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#kafyoxeamx .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#kafyoxeamx .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#kafyoxeamx .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#kafyoxeamx .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#kafyoxeamx .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#kafyoxeamx .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Value">Value</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="IsValueEligible">IsValueEligible</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Raw">Raw</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Transformed">Transformed</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="vertical-align: middle;                        text-transform: uppercase;                        font-weight: bold;                        color: #054996" scope="col" id="Final">Final</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="TNM_M">TNM_M</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="TNM_M  Value" class="gt_row gt_left" style="background-color: #00FF00;">0</td>
+<td headers="TNM_M  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_M  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_M  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">16</td>
+<td headers="TNM_M  Final" class="gt_row gt_right" style="background-color: #00FF00;">16</td>
+</tr>
+<tr>
+<td headers="TNM_M  Value" class="gt_row gt_left" style="background-color: #00FF00;">1b</td>
+<td headers="TNM_M  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_M  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_M  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">4</td>
+<td headers="TNM_M  Final" class="gt_row gt_right" style="background-color: #00FF00;">4</td>
+</tr>
+<tr>
+<td headers="TNM_M  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="TNM_M  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="TNM_M  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="TNM_M  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">1</td>
+<td headers="TNM_M  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">1</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="TNM_M_Prefix">TNM_M_Prefix</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="TNM_M_Prefix  Value" class="gt_row gt_left" style="background-color: #00FF00;">c</td>
+<td headers="TNM_M_Prefix  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_M_Prefix  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_M_Prefix  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">9</td>
+<td headers="TNM_M_Prefix  Final" class="gt_row gt_right" style="background-color: #00FF00;">9</td>
+</tr>
+<tr>
+<td headers="TNM_M_Prefix  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="TNM_M_Prefix  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="TNM_M_Prefix  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="TNM_M_Prefix  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">12</td>
+<td headers="TNM_M_Prefix  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">12</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="TNM_N">TNM_N</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="TNM_N  Value" class="gt_row gt_left" style="background-color: #00FF00;">0</td>
+<td headers="TNM_N  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_N  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_N  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">10</td>
+<td headers="TNM_N  Final" class="gt_row gt_right" style="background-color: #00FF00;">10</td>
+</tr>
+<tr>
+<td headers="TNM_N  Value" class="gt_row gt_left" style="background-color: #00FF00;">1</td>
+<td headers="TNM_N  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_N  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_N  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+<td headers="TNM_N  Final" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+</tr>
+<tr>
+<td headers="TNM_N  Value" class="gt_row gt_left" style="background-color: #00FF00;">2</td>
+<td headers="TNM_N  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_N  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_N  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">5</td>
+<td headers="TNM_N  Final" class="gt_row gt_right" style="background-color: #00FF00;">5</td>
+</tr>
+<tr>
+<td headers="TNM_N  Value" class="gt_row gt_left" style="background-color: #00FF00;">3</td>
+<td headers="TNM_N  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_N  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_N  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="TNM_N  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="TNM_N  Value" class="gt_row gt_left" style="background-color: #00FF00;">X</td>
+<td headers="TNM_N  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_N  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_N  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="TNM_N  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="TNM_N  Value" class="gt_row gt_left" style="background-color: #FF0000;">1a(4/19)</td>
+<td headers="TNM_N  IsValueEligible" class="gt_row gt_center" style="background-color: #FF0000;">FALSE</td>
+<td headers="TNM_N  Raw" class="gt_row gt_right">0</td>
+<td headers="TNM_N  Transformed" class="gt_row gt_right" style="background-color: #FF0000;">1</td>
+<td headers="TNM_N  Final" class="gt_row gt_right">0</td>
+</tr>
+<tr>
+<td headers="TNM_N  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="TNM_N  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="TNM_N  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="TNM_N  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="TNM_N  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">1</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="TNM_N_Prefix">TNM_N_Prefix</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="TNM_N_Prefix  Value" class="gt_row gt_left" style="background-color: #00FF00;">c</td>
+<td headers="TNM_N_Prefix  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_N_Prefix  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_N_Prefix  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">7</td>
+<td headers="TNM_N_Prefix  Final" class="gt_row gt_right" style="background-color: #00FF00;">7</td>
+</tr>
+<tr>
+<td headers="TNM_N_Prefix  Value" class="gt_row gt_left" style="background-color: #00FF00;">p</td>
+<td headers="TNM_N_Prefix  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_N_Prefix  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_N_Prefix  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">4</td>
+<td headers="TNM_N_Prefix  Final" class="gt_row gt_right" style="background-color: #00FF00;">4</td>
+</tr>
+<tr>
+<td headers="TNM_N_Prefix  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="TNM_N_Prefix  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="TNM_N_Prefix  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="TNM_N_Prefix  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">10</td>
+<td headers="TNM_N_Prefix  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">10</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="TNM_T">TNM_T</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="TNM_T  Value" class="gt_row gt_left" style="background-color: #00FF00;">1</td>
+<td headers="TNM_T  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_T  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_T  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">4</td>
+<td headers="TNM_T  Final" class="gt_row gt_right" style="background-color: #00FF00;">4</td>
+</tr>
+<tr>
+<td headers="TNM_T  Value" class="gt_row gt_left" style="background-color: #00FF00;">2</td>
+<td headers="TNM_T  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_T  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_T  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+<td headers="TNM_T  Final" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+</tr>
+<tr>
+<td headers="TNM_T  Value" class="gt_row gt_left" style="background-color: #00FF00;">2a</td>
+<td headers="TNM_T  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_T  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_T  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="TNM_T  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="TNM_T  Value" class="gt_row gt_left" style="background-color: #00FF00;">2b</td>
+<td headers="TNM_T  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_T  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_T  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="TNM_T  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="TNM_T  Value" class="gt_row gt_left" style="background-color: #00FF00;">2c</td>
+<td headers="TNM_T  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_T  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_T  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+<td headers="TNM_T  Final" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+</tr>
+<tr>
+<td headers="TNM_T  Value" class="gt_row gt_left" style="background-color: #00FF00;">3</td>
+<td headers="TNM_T  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_T  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_T  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">5</td>
+<td headers="TNM_T  Final" class="gt_row gt_right" style="background-color: #00FF00;">5</td>
+</tr>
+<tr>
+<td headers="TNM_T  Value" class="gt_row gt_left" style="background-color: #00FF00;">3a</td>
+<td headers="TNM_T  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_T  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_T  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="TNM_T  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="TNM_T  Value" class="gt_row gt_left" style="background-color: #00FF00;">4</td>
+<td headers="TNM_T  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_T  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_T  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="TNM_T  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="TNM_T  Value" class="gt_row gt_left" style="background-color: #00FF00;">4a</td>
+<td headers="TNM_T  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_T  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_T  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+<td headers="TNM_T  Final" class="gt_row gt_right" style="background-color: #00FF00;">3</td>
+</tr>
+<tr>
+<td headers="TNM_T  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="TNM_T  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="TNM_T  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="TNM_T  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="TNM_T  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="TNM_T_Prefix">TNM_T_Prefix</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="TNM_T_Prefix  Value" class="gt_row gt_left" style="background-color: #00FF00;">c</td>
+<td headers="TNM_T_Prefix  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_T_Prefix  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_T_Prefix  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">8</td>
+<td headers="TNM_T_Prefix  Final" class="gt_row gt_right" style="background-color: #00FF00;">8</td>
+</tr>
+<tr>
+<td headers="TNM_T_Prefix  Value" class="gt_row gt_left" style="background-color: #00FF00;">p</td>
+<td headers="TNM_T_Prefix  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_T_Prefix  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_T_Prefix  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">6</td>
+<td headers="TNM_T_Prefix  Final" class="gt_row gt_right" style="background-color: #00FF00;">6</td>
+</tr>
+<tr>
+<td headers="TNM_T_Prefix  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="TNM_T_Prefix  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="TNM_T_Prefix  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="TNM_T_Prefix  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">7</td>
+<td headers="TNM_T_Prefix  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">7</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="TNM_mSymbol">TNM_mSymbol</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="TNM_mSymbol  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="TNM_mSymbol  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">NA</td>
+<td headers="TNM_mSymbol  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="TNM_mSymbol  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">21</td>
+<td headers="TNM_mSymbol  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">21</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="TNM_rSymbol">TNM_rSymbol</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="TNM_rSymbol  Value" class="gt_row gt_left" style="background-color: #00FF00;">r</td>
+<td headers="TNM_rSymbol  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_rSymbol  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_rSymbol  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="TNM_rSymbol  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="TNM_rSymbol  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="TNM_rSymbol  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="TNM_rSymbol  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="TNM_rSymbol  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">20</td>
+<td headers="TNM_rSymbol  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">20</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="TNM_ySymbol">TNM_ySymbol</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="TNM_ySymbol  Value" class="gt_row gt_left" style="background-color: #00FF00;">y</td>
+<td headers="TNM_ySymbol  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="TNM_ySymbol  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="TNM_ySymbol  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="TNM_ySymbol  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="TNM_ySymbol  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="TNM_ySymbol  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="TNM_ySymbol  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="TNM_ySymbol  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">20</td>
+<td headers="TNM_ySymbol  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">20</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="5" class="gt_group_heading" style="font-weight: bold;                        color: #054996" scope="colgroup" id="UICCStage">UICCStage</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="UICCStage  Value" class="gt_row gt_left" style="background-color: #00FF00;">I</td>
+<td headers="UICCStage  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="UICCStage  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="UICCStage  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">4</td>
+<td headers="UICCStage  Final" class="gt_row gt_right" style="background-color: #00FF00;">4</td>
+</tr>
+<tr>
+<td headers="UICCStage  Value" class="gt_row gt_left" style="background-color: #00FF00;">II</td>
+<td headers="UICCStage  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="UICCStage  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="UICCStage  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+<td headers="UICCStage  Final" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+</tr>
+<tr>
+<td headers="UICCStage  Value" class="gt_row gt_left" style="background-color: #00FF00;">IIA</td>
+<td headers="UICCStage  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="UICCStage  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="UICCStage  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+<td headers="UICCStage  Final" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+</tr>
+<tr>
+<td headers="UICCStage  Value" class="gt_row gt_left" style="background-color: #00FF00;">IIB</td>
+<td headers="UICCStage  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="UICCStage  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="UICCStage  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+<td headers="UICCStage  Final" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+</tr>
+<tr>
+<td headers="UICCStage  Value" class="gt_row gt_left" style="background-color: #00FF00;">III</td>
+<td headers="UICCStage  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="UICCStage  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="UICCStage  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+<td headers="UICCStage  Final" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+</tr>
+<tr>
+<td headers="UICCStage  Value" class="gt_row gt_left" style="background-color: #00FF00;">IIIA</td>
+<td headers="UICCStage  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="UICCStage  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="UICCStage  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+<td headers="UICCStage  Final" class="gt_row gt_right" style="background-color: #00FF00;">1</td>
+</tr>
+<tr>
+<td headers="UICCStage  Value" class="gt_row gt_left" style="background-color: #00FF00;">IIIB</td>
+<td headers="UICCStage  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="UICCStage  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="UICCStage  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+<td headers="UICCStage  Final" class="gt_row gt_right" style="background-color: #00FF00;">2</td>
+</tr>
+<tr>
+<td headers="UICCStage  Value" class="gt_row gt_left" style="background-color: #00FF00;">IV</td>
+<td headers="UICCStage  IsValueEligible" class="gt_row gt_center" style="background-color: #00FF00;">TRUE</td>
+<td headers="UICCStage  Raw" class="gt_row gt_right" style="background-color: #00FF00;">0</td>
+<td headers="UICCStage  Transformed" class="gt_row gt_right" style="background-color: #00FF00;">5</td>
+<td headers="UICCStage  Final" class="gt_row gt_right" style="background-color: #00FF00;">5</td>
+</tr>
+<tr>
+<td headers="UICCStage  Value" class="gt_row gt_left" style="background-color: #BEBEBE;">NA</td>
+<td headers="UICCStage  IsValueEligible" class="gt_row gt_center" style="background-color: #BEBEBE;">FALSE</td>
+<td headers="UICCStage  Raw" class="gt_row gt_right" style="background-color: #BEBEBE;">0</td>
+<td headers="UICCStage  Transformed" class="gt_row gt_right" style="background-color: #BEBEBE;">1</td>
+<td headers="UICCStage  Final" class="gt_row gt_right" style="background-color: #BEBEBE;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">About This Documentation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./AnalysisReport.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-title">Analysis Report</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

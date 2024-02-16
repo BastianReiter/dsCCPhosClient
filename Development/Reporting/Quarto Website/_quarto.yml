@@ -1,0 +1,44 @@
+project:
+  type: book
+  pre-render: RSetup.R
+
+book:
+  title: "dsCCPhos: Data curation report"
+  subtitle: "Data transformation"
+  author: "Bastian Reiter"
+  date: last-modified
+  search: true
+  downloads: [pdf]
+  sidebar:
+    style: docked
+    background: light
+  chapters:
+    - index.qmd
+    - part: "Analysis Monitor"
+      chapters:
+        - AnalysisMonitor.qmd
+    - part: "Analysis Site Report"
+      chapters:
+        - AnalysisReport.qmd
+  comments:
+    hypothesis:
+      theme: clean
+      openSidebar: false
+
+format:
+
+  html:
+    code-link: true
+    code-fold: true
+    default-image-extension: svg
+    grid:
+      sidebar-width: 400px
+    number-sections: false
+    theme:
+      - cosmo
+      - theme.scss
+    reference-location: margin
+
+
+editor: source
+

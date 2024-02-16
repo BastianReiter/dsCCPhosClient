@@ -198,11 +198,24 @@ dsCCPhosClient::ds.CurateData(Name_RawDataSet = "RawDataSet",
 
 
 # Get Curation reports
-CurationReports <- dsCCPhosClient::ds.GetCurationReport(Name_CurationOutput = "CurationOutput",
+CurationReport <- dsCCPhosClient::ds.GetCurationReport(Name_CurationOutput = "CurationOutput",
                                                         DataSources = CCPConnections)
 
 # Exemplary look at a curation report table
-View(CurationReports$SiteA$Monitor_Staging)
+View(CurationReports$SiteA$Monitor_Diagnosis)
+
+# Make html file displaying tables from curation report
+dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReport,
+                                   PathToReportTemplate = "./Development/Reporting/CurationReport.qmd")
+
+# # Save for easier testing of CCPhosApp
+# saveRDS(object = CurationReport,
+#         file = "CurationReport.rds")
+
+
+# Use CCPhosApp to display curation reports
+CCPhosApp::StartCCPhosApp(CCPhosData = CurationReport)
+
 
 
 # Make tables from Curated Data Set directly addressable by unpacking them into R server session
@@ -250,10 +263,10 @@ SampleStatistics <- ds.GetSampleStatistics(TableName = "ADS_Patients",
 
 TestPlot <- MakeBoxPlot(SampleStatistics = SampleStatistics,
                         AxisTitle_y = "Patient age at diagnosis",
-                        FillPalette = c(Colors$BlueNice,
-                                        Colors$Primary,
-                                        Colors$Secondary,
-                                        Colors$Tertiary))
+                        FillPalette = c("All" = Colors$MediumGrey,
+                                        "SiteA" = Colors$Primary,
+                                        "SiteB" = Colors$Secondary,
+                                        "SiteC" = Colors$Tertiary))
 
 
 
