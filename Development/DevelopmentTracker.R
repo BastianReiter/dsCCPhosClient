@@ -43,8 +43,9 @@ library(devtools)
 
 # General / Auxiliary functions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# use_r("ds.ConnectToCCP.R")
-# use_r("ds.CheckSiteRequirements.R")
+# use_r("ConnectToCCP.R")
+# use_r("ConnectToVirtualCCP.R")
+# use_r("CheckServerRequirements.R")
 
 # Linked to dataSHIELD AGGREGATE functions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

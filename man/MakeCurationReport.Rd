@@ -4,10 +4,12 @@
 \alias{MakeCurationReport}
 \title{MakeCurationReport}
 \usage{
-MakeCurationReport(ReportTemplatePath)
+MakeCurationReport(CurationReportData, PathToReportTemplate)
 }
 \arguments{
-\item{ReportTemplatePath}{String | Path to a qmd-file serving as template for a Quarto document to be rendered}
+\item{CurationReportData}{List | Curation output object supplied by \code{\link{GetCurationReport}}}
+
+\item{PathToReportTemplate}{String | Path to a qmd-file serving as template for a Quarto document to be rendered}
 }
 \description{
 Create html output based on curation report objects supplied by \code{\link{GetCurationReport}}. Requires Quarto.
