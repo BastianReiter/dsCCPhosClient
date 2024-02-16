@@ -36,3 +36,16 @@
 #' @source Own preferences after researching a lot of color palette stuff
 #' @author Bastian Reiter
 "Colors"
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Meta_ServerRequirements.rda
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#' For evaluation of CCP server requirements
+#'
+#' List containing defined server requirements concerning package and function availability
+#'
+#' @author Bastian Reiter
+"Meta_ServerRequirements"

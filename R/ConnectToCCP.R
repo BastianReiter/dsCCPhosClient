@@ -1,16 +1,16 @@
 
-#' ds.ConnectToCCP
+#' ConnectToCCP
 #'
 #' Takes credentials of CCP sites and returns a list of DSConnection-objects. Has to be executed from within a CCP bridgehead R server session.
 #'
-#' @param CCPSiteCredentials data.frame or tibble | Data on CCP site credentials
+#' @param CCPSiteCredentials Data frame or tibble | Data on CCP site credentials
 #'
 #' @return A list of DSConnection-objects
 #' @export
 #'
 #' @examples
 #' @author Bastian Reiter
-ds.ConnectToCCP <- function(CCPSiteCredentials)
+ConnectToCCP <- function(CCPSiteCredentials)
 {
     require(DSI)
     require(DSOpal)

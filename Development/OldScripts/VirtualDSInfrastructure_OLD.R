@@ -29,15 +29,83 @@ library(DSLite)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Establish Connections to virtual servers using dsCCPhosClient::ConnectToVirtualCCP()
+# Load test data in local environment
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-load("../dsCCPhos/Development/Data/TestData/CCPTestData_Total.RData")
+#load("../dsCCPhos/Development/Data/TestData/CCPTestData_Total.RData")
+
+CCPTestData_A <- CCPTestData_Small_A
+CCPTestData_B <- CCPTestData_Small_B
+CCPTestData_C <- CCPTestData_Small_C
+
+Test <- ConnectToVirtualCCP(CCPTestData = CCPTestData_Total,
+                    NumberOfSites = 3)
+
+#load("./Development/Data/RealData/CCPTestData_Total.RData")
+#load("./Development/Data/RealData/CCPTestData_A.RData")
+#load("./Development/Data/RealData/CCPTestData_B.RData")
+#load("./Development/Data/RealData/CCPTestData_C.RData")
 
 
-CCPConnections <- ConnectToVirtualCCP(CCPTestData = CCPTestData_Total,
-                                      NumberOfSites = 3,
-                                      NumberOfPatientsPerSite = 300)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Setting up virtual servers with included test data
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Server_SiteTotal <- newDSLiteServer(tables = CCPTestData_Total,
+#                                     config = DSLite::defaultDSConfiguration(include = c("dsBase",
+#                                                                                         "dsCCPhos")))
+
+Server_SiteA <- newDSLiteServer(tables = CCPTestData_A,
+                                config = DSLite::defaultDSConfiguration(include = c("dsBase",
+                                                                                    "dsCCPhos")))
+
+Server_SiteB <- newDSLiteServer(tables = CCPTestData_B,
+                                config = DSLite::defaultDSConfiguration(include = c("dsBase",
+                                                                                    "dsCCPhos")))
+
+Server_SiteC <- newDSLiteServer(tables = CCPTestData_C,
+                                config = DSLite::defaultDSConfiguration(include = c("dsBase",
+                                                                                    "dsCCPhos")))
+
+# Check out some server properties
+# Server_SiteA$config()
+# Server_SiteA$profile()
+# Server_SiteA$assignMethods()
+# Server_SiteA$aggregateMethods()
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Establish connection to virtual servers
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Returns an environment
+LoginBuilder <- DSI::newDSLoginBuilder(.silent = FALSE)
+
+
+# LoginBuilder$append(server = "SiteTotal",
+#                     url = "Server_SiteTotal",
+#                     driver = "DSLiteDriver")
+
+LoginBuilder$append(server = "SiteA",
+                    url = "Server_SiteA",
+                    driver = "DSLiteDriver")
+
+LoginBuilder$append(server = "SiteB",
+                    url = "Server_SiteB",
+                    driver = "DSLiteDriver")
+
+LoginBuilder$append(server = "SiteC",
+                    url = "Server_SiteC",
+                    driver = "DSLiteDriver")
+
+# Returns a data frame of login data to servers
+LoginData <- LoginBuilder$build()
+
+# Get list of DSConnection objects of all servers
+CCPConnections <- DSI::datashield.login(logins = LoginData,
+                                        assign = TRUE)
 
 
 
