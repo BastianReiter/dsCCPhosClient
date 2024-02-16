@@ -31,11 +31,11 @@ MakeCurationReport <- function(CurationReportData,
                 CompletedSuccessfully <- TRUE
                 cat("Report created successfully!\n")
              },
-             error = function(e)
+             error = function(Error)
              {
                 PathToRenderedReport <- NULL
                 CompletedSuccessfully <- FALSE
-                cat("Error rendering Quarto document:", conditionMessage(e), "\n")
+                cat("Error rendering Quarto document:", conditionMessage(Error), "\n")
              })
 
     if (CompletedSuccessfully == TRUE)

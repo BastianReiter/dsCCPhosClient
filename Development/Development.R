@@ -23,6 +23,7 @@ library(devtools)
 
 # Adding package dependencies using usethis::use_package()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# use_dev_package("CCPhosApp", type = "Suggests", remote = "devtools::BastianReiter/CCPhosApp")
 # use_package("dplyr")
 # use_package("DSI")
 # use_package("ggplot2", type = "Suggests")

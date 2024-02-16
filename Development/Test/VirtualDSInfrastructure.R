@@ -201,17 +201,21 @@ dsCCPhosClient::ds.CurateData(Name_RawDataSet = "RawDataSet",
 CurationReport <- dsCCPhosClient::ds.GetCurationReport(Name_CurationOutput = "CurationOutput",
                                                         DataSources = CCPConnections)
 
-dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReport,
-                                   PathToReportTemplate = "./Development/Reporting/CurationReport.qmd")
-
 # Exemplary look at a curation report table
 View(CurationReports$SiteA$Monitor_Diagnosis)
 
+# Make html file displaying tables from curation report
+dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReport,
+                                   PathToReportTemplate = "./Development/Reporting/CurationReport.qmd")
 
-# For testing purposes
-TransformationMonitor <- CurationReports$SiteA
-save(TransformationMonitor,
-     file = "./Development/Reporting/TransformationMonitor.rda")
+# # Save for easier testing of CCPhosApp
+# saveRDS(object = CurationReport,
+#         file = "CurationReport.rds")
+
+
+# Use CCPhosApp to display curation reports
+CCPhosApp::StartCCPhosApp(CCPhosData = CurationReport)
+
 
 
 # Make tables from Curated Data Set directly addressable by unpacking them into R server session
