@@ -44,9 +44,9 @@ CheckServerRequirements <- function(DataSources = NULL,
                                         left_join(PackageAvailability, by = join_by(PackageName)) %>%
                                         rowwise() %>%
                                         mutate(across(ServerNames, ~ ifelse(is.na(.), FALSE, .)),      # Replace NA values with FALSE. NAs are introduced when a required package is not listed in 'PackageAvailability'.
-                                               IsAvailableEverywhere = all(c_across(ServerNames) == TRUE),
+                                               IsAvailableEverywhere = all(c_across(all_of(ServerNames)) == TRUE),
                                                NotAvailableAt = ifelse(IsAvailableEverywhere == FALSE,
-                                                                       paste0(ServerNames[c_across(ServerNames) == FALSE], collapse = ", "),
+                                                                       paste0(ServerNames[c_across(all_of(ServerNames)) == FALSE], collapse = ", "),
                                                                        NA)) %>%
                                         ungroup()
 
@@ -54,11 +54,11 @@ CheckServerRequirements <- function(DataSources = NULL,
     for (i in 1:nrow(RequiredPackageAvailability))
     {
         Row <- RequiredPackageAvailability[i, ]
-        Message <- paste0("Package ",
+        Message <- paste0("Package '",
                           Row$PackageName,
                           ifelse(Row$IsAvailableEverywhere == TRUE,
-                                 " is available on all servers!",
-                                 paste0(" is not available on ", Row$NotAvailableAt)))
+                                 "' is available on all servers!",
+                                 paste0("' is not available on ", Row$NotAvailableAt)))
         Messages$PackageAvailability <- c(Messages$PackageAvailability,
                                           Message)
     }
@@ -105,9 +105,9 @@ CheckServerRequirements <- function(DataSources = NULL,
                                         left_join(FunctionAvailability, by = join_by(FunctionName == name, FunctionType == type)) %>%
                                         rowwise() %>%
                                         mutate(across(ServerNames, ~ ifelse(is.na(.), FALSE, .)),      # Replace NA values with FALSE. NAs are introduced when a required function is not listed in 'FunctionAvailability'.
-                                               IsAvailableEverywhere = all(c_across(ServerNames) == TRUE),
+                                               IsAvailableEverywhere = all(c_across(all_of(ServerNames)) == TRUE),
                                                NotAvailableAt = ifelse(IsAvailableEverywhere == FALSE,
-                                                                       paste0(ServerNames[c_across(ServerNames) == FALSE], collapse = ", "),
+                                                                       paste0(ServerNames[c_across(all_of(ServerNames)) == FALSE], collapse = ", "),
                                                                        NA)) %>%
                                         ungroup()
 
@@ -115,11 +115,11 @@ CheckServerRequirements <- function(DataSources = NULL,
     for (i in 1:nrow(RequiredFunctionAvailability))
     {
         Row <- RequiredFunctionAvailability[i, ]
-        Message <- paste0("Function ",
+        Message <- paste0("Function '",
                           Row$FunctionName,
                           ifelse(Row$IsAvailableEverywhere == TRUE,
-                                 " is available on all servers!",
-                                 paste0(" is not available on ", Row$NotAvailableAt)))
+                                 "' is available on all servers!",
+                                 paste0("' is not available on ", Row$NotAvailableAt)))
         Messages$FunctionAvailability <- c(Messages$FunctionAvailability,
                                            Message)
     }

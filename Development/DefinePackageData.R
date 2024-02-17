@@ -43,6 +43,25 @@ use_data(Colors, overwrite = TRUE)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Meta Data transported from dsCCPhos package
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Meta_TableNames <- dsCCPhos::Meta_TableNames
+Meta_FeatureNames <- dsCCPhos::Meta_FeatureNames
+Meta_ValueSets <- dsCCPhos::Meta_ValueSets
+RuleSet_RawDataTransformation <- dsCCPhos::RuleSet_RawDataTransformation
+RuleSet_DiagnosisRedundancy <- dsCCPhos::RuleSet_DiagnosisRedundancy
+RuleSet_DiagnosisAssociation <- dsCCPhos::RuleSet_DiagnosisAssociation
+
+use_data(Meta_TableNames, overwrite = TRUE)
+use_data(Meta_FeatureNames, overwrite = TRUE)
+use_data(Meta_ValueSets, overwrite = TRUE)
+use_data(RuleSet_RawDataTransformation, overwrite = TRUE)
+use_data(RuleSet_DiagnosisRedundancy, overwrite = TRUE)
+use_data(RuleSet_DiagnosisAssociation, overwrite = TRUE)
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Meta Data: Define server requirements that are checked before running of CCPhos functions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
