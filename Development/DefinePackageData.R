@@ -1,4 +1,5 @@
 
+library(dplyr)
 library(readxl)
 library(usethis)
 
@@ -72,11 +73,10 @@ Meta_ServerRequirements <- list(#--- Data frame containing names of required pac
                                 #--- Data frame containing names and types of required functions ---
                                 RequiredFunctions = data.frame(FunctionName = character(),
                                                                FunctionType = character()) %>%
-                                                        add_row(FunctionName = "GetCurationReportDS", FunctionType = "aggregate") %>%
+                                                        add_row(FunctionName = "GetReportingObjectDS", FunctionType = "aggregate") %>%
                                                         add_row(FunctionName = "AugmentDataDS", FunctionType = "assign") %>%
                                                         add_row(FunctionName = "CurateDataDS", FunctionType = "assign") %>%
-                                                        add_row(FunctionName = "UnpackAugmentedDataSetDS", FunctionType = "assign") %>%
-                                                        add_row(FunctionName = "UnpackCuratedDataSetDS", FunctionType = "assign"))
+                                                        add_row(FunctionName = "ExtractFromListDS", FunctionType = "assign"))
 
 # Save data in .rda-file and make it part of package
 use_data(Meta_ServerRequirements, overwrite = TRUE)

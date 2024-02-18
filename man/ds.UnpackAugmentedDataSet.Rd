@@ -5,12 +5,12 @@
 \title{ds.UnpackAugmentedDataSet}
 \usage{
 ds.UnpackAugmentedDataSet(
-  Name_AugmentationOutput = "AugmentationOutput",
+  AugmentedDataSetName = "AugmentedDataSet",
   DataSources = NULL
 )
 }
 \arguments{
-\item{Name_AugmentationOutput}{String | Name of Augmentation Output object (list) on server | Default: 'AugmentationOutput'}
+\item{AugmentedDataSetName}{String | Name of Augmented Data Set object (list) on server | Default: 'AugmentedDataSet'}
 
 \item{DataSources}{List of DSConnection objects}
 }
@@ -18,10 +18,10 @@ ds.UnpackAugmentedDataSet(
 A list of messages about object assignment for monitoring purposes
 }
 \description{
-Make tables within Augmented Data Set (which lives as a list within Augmentation Output) directly addressable in R server sessions
+Make tables within Augmented Data Set (list object) directly addressable in R server sessions
 }
 \details{
-Linked to server-side ASSIGN method UnpackAugmentedDataSetDS()
+Linked to server-side ASSIGN method ExtractFromListDS()
 }
 \author{
 Bastian Reiter

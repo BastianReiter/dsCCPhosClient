@@ -3,22 +3,30 @@
 #'
 #' Triggers transformation of Raw Data Set (RDS) into Curated Data Set (CDS) on server.
 #'
-#' Linked to server-side ASSIGN method dsCCPhos::CurateDataDS()
+#' Linked to server-side ASSIGN methods dsCCPhos::CurateDataDS() and dsCCPhos::ExtractFromListDS()
 #'
-#' @param Name_RawDataSet String | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'
-#' @param Name_Output String | Name of assigned output object on server | Default: 'CurationOutput'
+#' @param RawDataSetName String | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'
+#' @param OutputName String | Name of output object to be assigned on server | Default: 'CurationOutput'
+#' @param RuleProfile_RawDataTransformation String | Profile name defining rule set to be used for data transformation. Profile name must be stated in \code{\link{RuleSet_RawDataTransformation}. | Default: 'Default'
+#' @param RuleProfile_DiagnosisRedundancy String | Profile name defining rule set to be used for classification of diagnosis redundancies. Profile name must be stated in \code{\link{RuleSet_DiagnosisRedundancy}. | Default: 'Default'
+#' @param RuleProfile_DiagnosisAssociation String | Profile name defining rule set to be used for classification of diagnosis associations. Profile name must be stated in \code{\link{RuleSet_DiagnosisAssociation}. | Default: 'Default'
 #' @param DataSources List of DSConnection objects
 #'
-#' @return A list of variables containing messages about object assignment for monitoring purposes.
+#' @return Info messages concerning assignment of the following objects on server:
+#'         \itemize{\item CuratedDataSet (list)
+#'                  \item CurationReport (list)
+#'                  \item CurationMessages (list)}
 #' @export
 #'
 #' @examples
 #' @author Bastian Reiter
-ds.CurateData <- function(Name_Output = "CurationOutput",
-                          Name_RawDataSet = "RawDataSet",
-                          RuleProfile_DiagnosisAssociation = "Default",
+ds.CurateData <- function(RawDataSetName = "RawDataSet",
+                          OutputName = "CurationOutput",
+                          RuleProfile_RawDataTransformation = "Default",
                           RuleProfile_DiagnosisRedundancy = "Default",
+                          RuleProfile_DiagnosisAssociation = "Default",
                           DataSources = NULL)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
     # Look for DS connections
     if (is.null(DataSources))
@@ -33,17 +41,57 @@ ds.CurateData <- function(Name_Output = "CurationOutput",
     }
 
 
+    AssignmentInfo <- list()
+
+
+    # 1) Trigger dsCCPhos::CurateDataDS()
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     # Construct the the server-side function call
-    ServerCall <- call("CurateDataDS", Name_RawDataSet)
+    ServerCall <- call("CurateDataDS",
+                       RawDataSetName.S = RawDataSetName,
+                       RuleProfile_RawDataTransformation.S = RuleProfile_RawDataTransformation,
+                       RuleProfile_DiagnosisRedundancy.S = RuleProfile_DiagnosisRedundancy,
+                       RuleProfile_DiagnosisAssociation.S = RuleProfile_DiagnosisAssociation)
 
     # Execute the server-side function call
     DSI::datashield.assign(conns = DataSources,
-                           symbol = Name_Output,
+                           symbol = OutputName,
                            value = ServerCall)
 
     # Call helper function to check if object assignment succeeded
-    AssignmentInfo <- ds.GetObjectInfo(ObjectName = Name_Output,
-                                       DataSources = DataSources)
+    AssignmentInfo <- c(AssignmentInfo,
+                        ds.GetObjectInfo(ObjectName = OutputName,
+                                         DataSources = DataSources))
 
+
+    # 2) Extract objects from list returned by CurateDataDS() and assign them to R server sessions
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    CurationOutputObjects <- c("CuratedDataSet",
+                               "CurationReport",
+                               "CurationMessages")
+
+    for(i in 1:length(CurationOutputObjects))
+    {
+        # Construct the server-side function call
+        ServerCall <- call("ExtractFromListDS",
+                           ListName.S = OutputName,
+                           ObjectName.S = CurationOutputObjects[i])
+
+        # Execute server-side assign function
+        DSI::datashield.assign(conns = DataSources,
+                               symbol = CurationOutputObjects[i],
+                               value = ServerCall)
+
+        # Call helper function to check if object assignment succeeded
+        AssignmentInfo <- c(AssignmentInfo,
+                            ds.GetObjectInfo(ObjectName = CurationOutputObjects[i],
+                                             DataSources = DataSources))
+    }
+
+
+    # Return AssignmentInfo
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     return(AssignmentInfo)
 }

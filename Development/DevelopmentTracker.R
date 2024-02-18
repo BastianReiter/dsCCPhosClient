@@ -35,6 +35,7 @@ library(devtools)
 # use_package("scales", type = "Suggests")
 # use_package("sysfonts", type = "Suggests")
 # use_package("tibble")
+# use_package("tidyr")
 # use_package("utils", type = "Suggests")
 
 
@@ -55,6 +56,7 @@ library(devtools)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_r("ds.GetCurationReport.R")
 # use_r("ds.GetObjectInfo.R")
+# use_r("ds.GetReportingObject.R")
 # use_r("ds.GetSampleStatistics.R")
 # use_r("ds.GetValidationReport_RawData.R")
 # use_r("ds.GetValidationReport_CuratedData.R")
@@ -64,6 +66,7 @@ library(devtools)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_r("ds.AugmentData.R")
 # use_r("ds.CurateData.R")
+# use_r("ds.ExtractFromList.R")
 # use_r("ds.UnpackAugmentationOutput.R")
 # use_r("ds.UnpackCurationOutput.R")
 

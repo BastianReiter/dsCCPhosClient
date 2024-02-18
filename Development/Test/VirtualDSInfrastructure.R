@@ -24,11 +24,8 @@
 # Load required packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-library(dsBase)
 library(dsBaseClient)
-library(dsCCPhos)
 library(dsCCPhosClient)
-library(DSLite)
 
 
 
@@ -36,9 +33,9 @@ library(DSLite)
 # Establish Connections to virtual servers using dsCCPhosClient::ConnectToVirtualCCP()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-load("../dsCCPhos/Development/Data/TestData/CCPTestData_Total.RData")
+TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 
-CCPConnections <- ConnectToVirtualCCP(CCPTestData = CCPTestData_Total,
+CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
                                       NumberOfPatientsPerSite = 300)
 
@@ -73,17 +70,15 @@ CCPhosApp::StartCCPhosApp(CCPConnections = CCPConnections,
 
 
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS)
-dsCCPhosClient::ds.CurateData(Name_RawDataSet = "RawDataSet",
-                              Name_Output = "CurationOutput",
+dsCCPhosClient::ds.CurateData(RawDataSetName = "RawDataSet",
+                              OutputName = "CurationOutput",
                               DataSources = CCPConnections)
 
-
 # Get Curation reports
-CurationReport <- dsCCPhosClient::ds.GetCurationReport(Name_CurationOutput = "CurationOutput",
-                                                       DataSources = CCPConnections)
+CurationReports <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
 
 # Exemplary look at a curation report table
-View(CurationReports$SiteA$Monitor_Diagnosis)
+View(CurationReports$SiteA$Diagnosis)
 
 # Make html file displaying tables from curation report
 dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReport,
@@ -100,7 +95,7 @@ CCPhosApp::StartCCPhosApp(CCPhosData = CurationReport)
 
 
 # Make tables from Curated Data Set directly addressable by unpacking them into R server session
-dsCCPhosClient::ds.UnpackCuratedDataSet(Name_CurationOutput = "CurationOutput",
+dsCCPhosClient::ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
                                         DataSources = CCPConnections)
 
 

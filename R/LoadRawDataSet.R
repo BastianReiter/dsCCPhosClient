@@ -18,10 +18,10 @@ LoadRawDataSet <- function(DataSources,
     require(DSI)
     require(tidyr)
 
-
     # For testing purposes
-    DataSources <- CCPConnections
-    ProjectName <- "Virtual"
+    # DataSources <- CCPConnections
+    # ProjectName <- "Virtual"
+
 
     # Initiate output messaging objects
     Messages <- list()
@@ -78,12 +78,20 @@ LoadRawDataSet <- function(DataSources,
     # Assign tables from Opal DB to object symbols in R session
     for(i in 1:length(CCPTableNames_Raw))
     {
-      datashield.assign(conns = CCPConnections,
-                        symbol = paste0("RDS_", CCPTableNames_Curated[i]),
-                        value = ifelse(ProjectName == "Virtual",
-                                       CCPTableNames_Raw[i],
-                                       paste0(ProjectName, ".", CCPTableNames_Raw[i])),
-                        id.name = "_id")
+        datashield.assign(conns = CCPConnections,
+                          symbol = paste0("RDS_", CCPTableNames_Curated[i]),
+                          value = ifelse(ProjectName == "Virtual",
+                                         CCPTableNames_Raw[i],
+                                         paste0(ProjectName, ".", CCPTableNames_Raw[i])),
+                          id.name = "_id")
+
+        # Make sure assignment was successful on all servers
+        ObjectInfo_Table <- ds.GetObjectInfo(ObjectName = paste0("RDS_", CCPTableNames_Curated[i]),
+                                             DataSources = CCPConnections)
+
+        # Add info about table assignment to Messages
+        Messages$Assignment <- c(Messages$Assignment,
+                                 paste0(unlist(ObjectInfo_Table), collapse = "\n"))
     }
 
 
@@ -92,10 +100,11 @@ LoadRawDataSet <- function(DataSources,
             newobj = "RawDataSet",
             datasources = CCPConnections)
 
-    # Make sure assignment was successful on all servers
+    # Make sure assignment of RawDataSet was successful on all servers
     ObjectInfo_RawDataSet <- ds.GetObjectInfo(ObjectName = "RawDataSet",
                                               DataSources = CCPConnections)
 
+    # Add info about RawDataSet assignment to Messages
     Messages$Assignment <- c(Messages$Assignment,
                              paste0(unlist(ObjectInfo_RawDataSet), collapse = "\n"))
 

@@ -5,28 +5,32 @@
 \title{ds.CurateData}
 \usage{
 ds.CurateData(
-  Name_Output = "CurationOutput",
-  Name_RawDataSet = "RawDataSet",
-  RuleProfile_DiagnosisAssociation = "Default",
+  RawDataSetName = "RawDataSet",
+  OutputName = "CurationOutput",
+  RuleProfile_RawDataTransformation = "Default",
   RuleProfile_DiagnosisRedundancy = "Default",
+  RuleProfile_DiagnosisAssociation = "Default",
   DataSources = NULL
 )
 }
 \arguments{
-\item{Name_Output}{String | Name of assigned output object on server | Default: 'CurationOutput'}
+\item{RawDataSetName}{String | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'}
 
-\item{Name_RawDataSet}{String | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'}
+\item{OutputName}{String | Name of output object to be assigned on server | Default: 'CurationOutput'}
 
 \item{DataSources}{List of DSConnection objects}
 }
 \value{
-A list of variables containing messages about object assignment for monitoring purposes.
+Info messages concerning assignment of the following objects on server:
+\itemize{\item CuratedDataSet (list)
+\item CurationReport (list)
+\item CurationMessages (list)}
 }
 \description{
 Triggers transformation of Raw Data Set (RDS) into Curated Data Set (CDS) on server.
 }
 \details{
-Linked to server-side ASSIGN method dsCCPhos::CurateDataDS()
+Linked to server-side ASSIGN methods dsCCPhos::CurateDataDS() and dsCCPhos::ExtractFromListDS()
 }
 \author{
 Bastian Reiter
