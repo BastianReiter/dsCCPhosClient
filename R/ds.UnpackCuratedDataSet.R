@@ -1,11 +1,11 @@
 
 #' ds.UnpackCuratedDataSet
 #'
-#' Make tables within Curated Data Set (which lives as a list within Curation Output) directly addressable in R server sessions
+#' Make tables within Curated Data Set (list object) directly addressable in R server sessions
 #'
-#' Linked to server-side ASSIGN method UnpackCuratedDataSetDS()
+#' Linked to server-side ASSIGN method ExtractFromListDS()
 #'
-#' @param Name_CurationOutput String | Name of curation output object (list) on server | Default: 'CurationOutput'
+#' @param CuratedDataSetName String | Name of Curated Data Set object (list) on server | Default: 'CuratedDataSet'
 #' @param DataSources List of DSConnection objects
 #'
 #' @return A list of messages about object assignment for monitoring purposes
@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' @author Bastian Reiter
-ds.UnpackCuratedDataSet <- function(Name_CurationOutput = "CurationOutput",
+ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
                                     DataSources = NULL)
 {
     # Look for DS connections
@@ -28,25 +28,25 @@ ds.UnpackCuratedDataSet <- function(Name_CurationOutput = "CurationOutput",
         stop("'DataSources' were expected to be a list of DSConnection-class objects", call. = FALSE)
     }
 
-    CCPTableNames_Curated <- dsCCPhos::Meta_TableNames$TableName_Curated
+    CCPTableNames_CDS <- dsCCPhos::Meta_TableNames$TableName_Curated
 
     AssignmentInfo <- list()
 
-    for(i in 1:length(CCPTableNames_Curated))
+    for(i in 1:length(CCPTableNames_CDS))
     {
         # Construct the server-side function call
-        ServerCall <- call("UnpackCuratedDataSetDS",
-                           Name_CurationOutput,
-                           TableName = CCPTableNames_Curated[i])
+        ServerCall <- call("ExtractFromListDS",
+                           .ListName = CuratedDataSetName,
+                           .ObjectName = CCPTableNames_CDS[i])
 
         # Execute server-side assign function
         DSI::datashield.assign(conns = DataSources,
-                               symbol = paste0("CDS_", CCPTableNames_Curated[i]),      # E.g. 'CDS_Metastasis'
+                               symbol = paste0("CDS_", CCPTableNames_CDS[i]),      # E.g. 'CDS_Metastasis'
                                value = ServerCall)
 
         # Call helper function to check if object assignment succeeded
         AssignmentInfo <- c(AssignmentInfo,
-                            ds.GetObjectInfo(ObjectName = paste0("CDS_", CCPTableNames_Curated[i]),
+                            ds.GetObjectInfo(ObjectName = paste0("CDS_", CCPTableNames_CDS[i]),
                                              DataSources = DataSources))
     }
 

@@ -34,7 +34,8 @@ ds.GetObjectInfo <- function(ObjectName,
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Construct server-side function call
-    ServerCall <- call("GetObjectInfoDS", ObjectName)
+    ServerCall <- call("GetObjectInfoDS",
+                       ObjectName.S = ObjectName)
 
     # Get object info from every server
     ObjectInfo <- DSI::datashield.aggregate(conns = DataSources,
@@ -63,12 +64,12 @@ ds.GetObjectInfo <- function(ObjectName,
     }
 
     # Return message in case non-null object has been created on all servers
-    ReturnMessage <- paste0("A data object <", ObjectName, "> has been created in all specified data sources.")
+    ReturnMessage <- paste0("The object '", ObjectName, "' has been created on all specified servers.")
 
     # ...and in case object creation did not succeed on all servers
     if (!(ObjectExistsEverywhere && ObjectNotNullEverywhere))
     {
-        ReturnMessage <- list(paste0("Error: A valid data object <", ObjectName, "> does NOT exist in ALL specified data sources."),
+        ReturnMessage <- list(paste0("Error: A valid data object '", ObjectName, "' does NOT exist on ALL specified servers."),
                               paste0("It is either ABSENT and/or has no valid content/class, see return.info above."),
                               paste0("Please use ds.ls() to identify where missing."))
     }
@@ -97,7 +98,7 @@ ds.GetObjectInfo <- function(ObjectName,
 
     if (NoErrors == TRUE)
     {
-        ValidityCheck <- paste0("<", ObjectName, "> appears valid in all sources")
+        ValidityCheck <- paste0("'", ObjectName, "' appears valid in all sources")
 
         return(list(ObjectCreated = ReturnMessage,
     	              ObjectValidity = ValidityCheck))
@@ -105,7 +106,7 @@ ds.GetObjectInfo <- function(ObjectName,
 
     if (NoErrors == FALSE)
     {
-    	  ValidityCheck <- paste0("<",ObjectName,"> invalid in at least one source.")
+    	  ValidityCheck <- paste0("'",ObjectName,"' is invalid in at least one source.")
 
     	  return(list(ObjectCreated = ReturnMessage,
     	              ObjectValidity = ValidityCheck,

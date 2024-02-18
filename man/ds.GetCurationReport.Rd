@@ -4,21 +4,19 @@
 \alias{ds.GetCurationReport}
 \title{ds.GetCurationReport}
 \usage{
-ds.GetCurationReport(
-  Name_CurationOutput = "CurationOutput",
-  DataSources = NULL
-)
+ds.GetCurationReport(DataSources = NULL)
 }
 \arguments{
-\item{Name_CurationOutput}{String | Name of object on server previously assigned by dsCCPhos::CurateData() | Default: 'CurationOutput'}
-
 \item{DataSources}{List of DSConnection objects}
 }
+\value{
+A list of Curation Reports
+}
 \description{
-What it does
+Receive Curation Reports from servers.
 }
 \details{
-Linked to server-side AGGREGATE method GetCurationReportDS()
+Linked to server-side AGGREGATE method GetReportingObjectDS()
 }
 \author{
 Bastian Reiter

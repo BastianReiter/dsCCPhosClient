@@ -5,12 +5,12 @@
 \title{ds.UnpackCuratedDataSet}
 \usage{
 ds.UnpackCuratedDataSet(
-  Name_CurationOutput = "CurationOutput",
+  CuratedDataSetName = "CuratedDataSet",
   DataSources = NULL
 )
 }
 \arguments{
-\item{Name_CurationOutput}{String | Name of curation output object (list) on server | Default: 'CurationOutput'}
+\item{CuratedDataSetName}{String | Name of Curated Data Set object (list) on server | Default: 'CuratedDataSet'}
 
 \item{DataSources}{List of DSConnection objects}
 }
@@ -18,10 +18,10 @@ ds.UnpackCuratedDataSet(
 A list of messages about object assignment for monitoring purposes
 }
 \description{
-Make tables within Curated Data Set (which lives as a list within Curation Output) directly addressable in R server sessions
+Make tables within Curated Data Set (list object) directly addressable in R server sessions
 }
 \details{
-Linked to server-side ASSIGN method UnpackCuratedDataSetDS()
+Linked to server-side ASSIGN method ExtractFromListDS()
 }
 \author{
 Bastian Reiter

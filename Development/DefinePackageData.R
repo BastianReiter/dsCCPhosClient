@@ -1,4 +1,5 @@
 
+library(dplyr)
 library(readxl)
 library(usethis)
 
@@ -43,6 +44,25 @@ use_data(Colors, overwrite = TRUE)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Meta Data transported from dsCCPhos package
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Meta_TableNames <- dsCCPhos::Meta_TableNames
+Meta_FeatureNames <- dsCCPhos::Meta_FeatureNames
+Meta_ValueSets <- dsCCPhos::Meta_ValueSets
+RuleSet_RawDataTransformation <- dsCCPhos::RuleSet_RawDataTransformation
+RuleSet_DiagnosisRedundancy <- dsCCPhos::RuleSet_DiagnosisRedundancy
+RuleSet_DiagnosisAssociation <- dsCCPhos::RuleSet_DiagnosisAssociation
+
+use_data(Meta_TableNames, overwrite = TRUE)
+use_data(Meta_FeatureNames, overwrite = TRUE)
+use_data(Meta_ValueSets, overwrite = TRUE)
+use_data(RuleSet_RawDataTransformation, overwrite = TRUE)
+use_data(RuleSet_DiagnosisRedundancy, overwrite = TRUE)
+use_data(RuleSet_DiagnosisAssociation, overwrite = TRUE)
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Meta Data: Define server requirements that are checked before running of CCPhos functions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -53,11 +73,10 @@ Meta_ServerRequirements <- list(#--- Data frame containing names of required pac
                                 #--- Data frame containing names and types of required functions ---
                                 RequiredFunctions = data.frame(FunctionName = character(),
                                                                FunctionType = character()) %>%
-                                                        add_row(FunctionName = "GetCurationReportDS", FunctionType = "aggregate") %>%
+                                                        add_row(FunctionName = "GetReportingObjectDS", FunctionType = "aggregate") %>%
                                                         add_row(FunctionName = "AugmentDataDS", FunctionType = "assign") %>%
                                                         add_row(FunctionName = "CurateDataDS", FunctionType = "assign") %>%
-                                                        add_row(FunctionName = "UnpackAugmentedDataSetDS", FunctionType = "assign") %>%
-                                                        add_row(FunctionName = "UnpackCuratedDataSetDS", FunctionType = "assign"))
+                                                        add_row(FunctionName = "ExtractFromListDS", FunctionType = "assign"))
 
 # Save data in .rda-file and make it part of package
 use_data(Meta_ServerRequirements, overwrite = TRUE)

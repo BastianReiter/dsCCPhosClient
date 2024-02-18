@@ -1,11 +1,11 @@
 
 #' ds.UnpackAugmentedDataSet
 #'
-#' Make tables within Augmented Data Set (which lives as a list within Augmentation Output) directly addressable in R server sessions
+#' Make tables within Augmented Data Set (list object) directly addressable in R server sessions
 #'
-#' Linked to server-side ASSIGN method UnpackAugmentedDataSetDS()
+#' Linked to server-side ASSIGN method ExtractFromListDS()
 #'
-#' @param Name_AugmentationOutput String | Name of Augmentation Output object (list) on server | Default: 'AugmentationOutput'
+#' @param AugmentedDataSetName String | Name of Augmented Data Set object (list) on server | Default: 'AugmentedDataSet'
 #' @param DataSources List of DSConnection objects
 #'
 #' @return A list of messages about object assignment for monitoring purposes
@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' @author Bastian Reiter
-ds.UnpackAugmentedDataSet <- function(Name_AugmentationOutput = "AugmentationOutput",
+ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
                                       DataSources = NULL)
 {
     # Look for DS connections
@@ -35,8 +35,8 @@ ds.UnpackAugmentedDataSet <- function(Name_AugmentationOutput = "AugmentationOut
     for(i in 1:length(CCPTableNames_ADS))
     {
         # Construct the server-side function call
-        ServerCall <- call("UnpackAugmentedDataSetDS",
-                           Name_AugmentationOutput,
+        ServerCall <- call("ExtractFromListDS",
+                           ListName = AugmentedDataSetName,
                            TableName = CCPTableNames_ADS[i])
 
         # Execute server-side assign function

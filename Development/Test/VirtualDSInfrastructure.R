@@ -19,12 +19,13 @@
 #devtools::install_github("neelsoumya/dsSurvivalClient")
 
 
-# Load needed packages
-library(dsBase)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Load required packages
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 library(dsBaseClient)
-library(dsCCPhos)
 library(dsCCPhosClient)
-library(DSLite)
 
 
 
@@ -32,89 +33,31 @@ library(DSLite)
 # Establish Connections to virtual servers using dsCCPhosClient::ConnectToVirtualCCP()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-load("../dsCCPhos/Development/Data/TestData/CCPTestData_Total.RData")
+TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 
-
-CCPConnections <- ConnectToVirtualCCP(CCPTestData = CCPTestData_Total,
+CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
                                       NumberOfPatientsPerSite = 300)
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Explore server configurations
+# Check server requirements using dsCCPhosClient::CheckServerRequirements()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# List all available dataSHIELD methods on servers
-DSI::datashield.methods(conns = CCPConnections)
-
-# Alternatively use DSI::datashield.method_status() to get more comparable overview
-# AGGREGATE functions
-DSI::datashield.method_status(conns = CCPConnections,
-                              type = "aggregate")
-
-# ASSIGN functions
-DSI::datashield.method_status(conns = CCPConnections,
-                              type = "assign")
-
-# Get info about installed packages on servers
-DSI::datashield.pkg_status(conns = CCPConnections)
-
+Messages_ServerRequirements <- CheckServerRequirements(DataSources = CCPConnections)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Prepare data objects in server R sessions
+# Load Raw Data Set (RDS) from Opal data base to R sessions on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Goal: Assignment of list object "RawDataSet" on all R server sessions
-#-------------------------------------------------------------------------------
 
-# Get overview of accessible tables on servers
-DSI::datashield.tables(conns = CCPConnections)
-
-# Get table names of CCP core data set
-CCPTableNames_Raw <- dsCCPhos::Meta_TableNames$TableName_Raw
-CCPTableNames_Curated <- dsCCPhos::Meta_TableNames$TableName_Curated
-
-# Check if all tables are accessible on all servers
-ls_TableCheck <- purrr::map(as.list(CCPTableNames_Curated),
-                            function(tbl)
-                            {
-                              datashield.table_status(conns = CCPConnections,
-                                                      table = tbl)
-                            })
-
-# Turn list into data.frame
-df_TableCheck <- do.call(rbind, ls_TableCheck)
-
-
-# Make tables from data repository accessible in R session
-for(i in 1:length(CCPTableNames_Curated))
-{
-  datashield.assign(conns = CCPConnections,
-                    symbol = CCPTableNames_Curated[i],
-                    value = CCPTableNames_Curated[i],
-                    id.name = "_id")
-}
-
-# Consolidate all raw data tables in one list object called "RawDataSet"
-ds.list(x = CCPTableNames_Curated,
-        newobj = "RawDataSet",
-        datasources = CCPConnections)
-
-# Make sure assignment was successful on all servers
-ds.GetObjectInfo(ObjectName = "RawDataSet",
-                 DataSources = CCPConnections)
-
+Messages_Loading <- LoadRawDataSet(DataSources = CCPConnections,
+                                   ProjectName = "Virtual")
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Ready for working with dsCCPhos
+# Applying dsCCPhos functionality
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# First test with dsBase-function
-# Test <- ds.mean(x = "Metastasis$datum_fernmetastasen",
-#                 type = "both",
-#                 datasources = CCPConnections)
 
 
 # Get validation report of Raw Data Set (RDS)
@@ -127,17 +70,15 @@ CCPhosApp::StartCCPhosApp(CCPConnections = CCPConnections,
 
 
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS)
-dsCCPhosClient::ds.CurateData(Name_RawDataSet = "RawDataSet",
-                              Name_Output = "CurationOutput",
+dsCCPhosClient::ds.CurateData(RawDataSetName = "RawDataSet",
+                              OutputName = "CurationOutput",
                               DataSources = CCPConnections)
 
-
 # Get Curation reports
-CurationReport <- dsCCPhosClient::ds.GetCurationReport(Name_CurationOutput = "CurationOutput",
-                                                       DataSources = CCPConnections)
+CurationReports <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
 
 # Exemplary look at a curation report table
-View(CurationReports$SiteA$Monitor_Diagnosis)
+View(CurationReports$SiteA$Diagnosis)
 
 # Make html file displaying tables from curation report
 dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReport,
@@ -154,7 +95,7 @@ CCPhosApp::StartCCPhosApp(CCPhosData = CurationReport)
 
 
 # Make tables from Curated Data Set directly addressable by unpacking them into R server session
-dsCCPhosClient::ds.UnpackCuratedDataSet(Name_CurationOutput = "CurationOutput",
+dsCCPhosClient::ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
                                         DataSources = CCPConnections)
 
 

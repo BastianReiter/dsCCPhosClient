@@ -5,17 +5,17 @@
 \title{ds.AugmentData}
 \usage{
 ds.AugmentData(
-  Name_CurationOutput = "CurationOutput",
-  Name_Output = "AugmentationOutput",
+  CurationOutputName = "CurationOutput",
+  OutputName = "AugmentationOutput",
   DataSources = NULL
 )
 }
 \arguments{
-\item{Name_CurationOutput}{String | Name of curation output object (list) on server | Default: 'CurationOutput'}
-
-\item{Name_Output}{String | Name of assigned output object on server | Default: 'AugmentationOutput'}
+\item{OutputName}{String | Name of output object to be assigned on server | Default: 'AugmentationOutput'}
 
 \item{DataSources}{List of DSConnection objects}
+
+\item{CuratedDataSetName}{String | Name of the Curated Data Set object on server | Default: 'CuratedDataSet'}
 }
 \value{
 A list of variables containing messages about object assignment for monitoring purposes.

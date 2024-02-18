@@ -22,7 +22,7 @@ ConnectToVirtualCCP <- function(CCPTestData,
     require(DSOpal)
 
     # For testing purposes
-    # CCPTestData <- CCPTestData_Total
+    # CCPTestData <- TestData
     # NumberOfSites <- 3
     # NumberOfPatientsPerSite <- 300
 
@@ -36,7 +36,7 @@ ConnectToVirtualCCP <- function(CCPTestData,
     LoginBuilder <- DSI::newDSLoginBuilder(.silent = FALSE)
 
     # Calculate auxiliary variables
-    AllPatientIDs <- CCPTestData$Patient$"_id"
+    AllPatientIDs <- CCPTestData$patient$"_id"
     CountTotalPatients <- n_distinct(AllPatientIDs)
     PatientsPerSite <- floor(CountTotalPatients / NumberOfSites)
 
@@ -58,20 +58,22 @@ ConnectToVirtualCCP <- function(CCPTestData,
         #~~~~~~~~~~~~~~~~~~~~~~
 
         # Get a random sample of PatientIDs
-        SitePatientIDs <- sample(AllPatientIDs, PatientsPerSite)
+        SitePatientIDs <- sample(AllPatientIDs,
+                                 size = PatientsPerSite)
 
-        # Get data subsets that relate to samples PatientIDs
-        SiteTestData <- list(BioSampling = as.data.frame(filter(CCPTestData$BioSampling, CCPTestData$BioSampling$"patient-id" %in% SitePatientIDs)),
-                             Diagnosis = as.data.frame(filter(CCPTestData$Diagnosis, CCPTestData$Diagnosis$"patient-id" %in% SitePatientIDs)),
-                             Histology = as.data.frame(filter(CCPTestData$Histology, CCPTestData$Histology$"patient-id" %in% SitePatientIDs)),
-                             Metastasis = as.data.frame(filter(CCPTestData$Metastasis, CCPTestData$Metastasis$"patient-id" %in% SitePatientIDs)),
-                             MolecularDiagnostics = as.data.frame(filter(CCPTestData$MolecularDiagnostics, CCPTestData$MolecularDiagnostics$"patient-id" %in% SitePatientIDs)),
-                             Patient = as.data.frame(filter(CCPTestData$Patient, CCPTestData$Patient$"_id" %in% SitePatientIDs)),
-                             Progress = as.data.frame(filter(CCPTestData$Progress, CCPTestData$Progress$"patient-id" %in% SitePatientIDs)),
-                             RadiationTherapy = as.data.frame(filter(CCPTestData$RadiationTherapy, CCPTestData$RadiationTherapy$"patient-id" %in% SitePatientIDs)),
-                             Staging = as.data.frame(filter(CCPTestData$Staging, CCPTestData$Staging$"patient-id" %in% SitePatientIDs)),
-                             Surgery = as.data.frame(filter(CCPTestData$Surgery, CCPTestData$Surgery$"patient-id" %in% SitePatientIDs)),
-                             SystemicTherapy = as.data.frame(filter(CCPTestData$SystemicTherapy, CCPTestData$SystemicTherapy$"patient-id" %in% SitePatientIDs)))
+        # Get data subsets that relate to sampled PatientIDs
+        SiteTestData <- list(sample = as.data.frame(filter(CCPTestData$sample, CCPTestData$sample$"patient-id" %in% SitePatientIDs)),
+                             diagnosis = as.data.frame(filter(CCPTestData$diagnosis, CCPTestData$diagnosis$"patient-id" %in% SitePatientIDs)),
+                             histology = as.data.frame(filter(CCPTestData$histology, CCPTestData$histology$"patient-id" %in% SitePatientIDs)),
+                             metastasis = as.data.frame(filter(CCPTestData$metastasis, CCPTestData$metastasis$"patient-id" %in% SitePatientIDs)),
+                             "molecular-marker" = as.data.frame(filter(CCPTestData$"molecular-marker", CCPTestData$"molecular-marker"$"patient-id" %in% SitePatientIDs)),
+                             patient = as.data.frame(filter(CCPTestData$patient, CCPTestData$patient$"_id" %in% SitePatientIDs)),
+                             progress = as.data.frame(filter(CCPTestData$progress, CCPTestData$progress$"patient-id" %in% SitePatientIDs)),
+                             "radiation-therapy" = as.data.frame(filter(CCPTestData$"radiation-therapy", CCPTestData$"radiation-therapy"$"patient-id" %in% SitePatientIDs)),
+                             tnm = as.data.frame(filter(CCPTestData$tnm, CCPTestData$tnm$"patient-id" %in% SitePatientIDs)),
+                             surgery = as.data.frame(filter(CCPTestData$surgery, CCPTestData$surgery$"patient-id" %in% SitePatientIDs)),
+                             "system-therapy" = as.data.frame(filter(CCPTestData$"system-therapy", CCPTestData$"system-therapy"$"patient-id" %in% SitePatientIDs)))
+
 
         # 2) Build virtual server in global environment
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
