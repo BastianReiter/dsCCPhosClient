@@ -10,7 +10,7 @@
 #'
 #' @author Bastian Reiter
 MakeCurationReport <- function(CurationReportData,
-                               PathToReportTemplate)
+                               PathToReportTemplate = "./Development/Reporting/CurationReport.qmd")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
     require(quarto)
@@ -18,11 +18,11 @@ MakeCurationReport <- function(CurationReportData,
     require(utils)
 
     # For testing purposes
-    # CurationReport <- CurationReport
+    # CurationReportData <- CurationReports$SiteA
     # PathToReportTemplate <- "./Development/Reporting/CurationReport.qmd"
 
     # Temporarily save R object containing curation report data to make it accessible to the Quarto background R sesssion
-    saveRDS(object = CurationReport,
+    saveRDS(object = CurationReportData,
             file = "./Development/Reporting/CurationReport.rds")
 
     tryCatch({

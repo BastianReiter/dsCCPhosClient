@@ -4,7 +4,10 @@
 \alias{MakeCurationReport}
 \title{MakeCurationReport}
 \usage{
-MakeCurationReport(CurationReportData, PathToReportTemplate)
+MakeCurationReport(
+  CurationReportData,
+  PathToReportTemplate = "./Development/Reporting/CurationReport.qmd"
+)
 }
 \arguments{
 \item{CurationReportData}{List | Curation output object supplied by \code{\link{GetCurationReport}}}

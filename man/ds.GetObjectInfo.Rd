@@ -12,7 +12,7 @@ ds.GetObjectInfo(ObjectName, DataSources)
 \item{DataSources}{List of DSConnection objects}
 }
 \description{
-What it does
+Checks if an object exists on every server in a valid form and returns appropriate messages.
 }
 \details{
 Linked to server-side AGGREGATE method GetObjectInfoDS()

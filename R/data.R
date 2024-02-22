@@ -1,13 +1,13 @@
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# AlphaPalettes.rda
+# CCPhosAlphaPalettes.rda
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#' Alpha palettes by Tinkerbelly
+#' Alpha palettes used in CCPhos packages
 #'
 #' A list of named vectors containing alpha values
 #'
-#' @format ## `AlphaPalettes`
+#' @format ## `CCPhosAlphaPalettes`
 #' A list of named vectors
 #' \describe{
 #'   \item{name}{Palette name}
@@ -15,19 +15,19 @@
 #' }
 #' @source Own preferences
 #' @author Bastian Reiter
-"AlphaPalettes"
+"CCPhosAlphaPalettes"
 
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Colors.rda
+# CCPhosColors.rda
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#' Preferred colors by Tinkerbelly
+#' Preferred colors in CCPhos packages
 #'
 #' A list of named hexadecimal RGB codes
 #'
-#' @format ## `Colors`
+#' @format ## `CCPhosColors`
 #' A list of named strings (hexadecimal RGB codes)
 #' \describe{
 #'   \item{name}{Color name}
@@ -35,7 +35,7 @@
 #' }
 #' @source Own preferences after researching a lot of color palette stuff
 #' @author Bastian Reiter
-"Colors"
+"CCPhosColors"
 
 
 

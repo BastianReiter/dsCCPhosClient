@@ -33,9 +33,6 @@ require(purrr)
 # Get temporarily saved curation report data
 TransformationMonitors <- readRDS(file = params$PathToCurationReportData)
 
-TransformationMonitors <- TransformationMonitors$SiteA
-
-
 ls_Tables <- map(TransformationMonitors,
                  function(MonitorDF)
                  {

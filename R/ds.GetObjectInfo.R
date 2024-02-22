@@ -1,7 +1,7 @@
 
 #' ds.GetObjectInfo
 #'
-#' What it does
+#' Checks if an object exists on every server in a valid form and returns appropriate messages.
 #'
 #' Linked to server-side AGGREGATE method GetObjectInfoDS()
 #'
@@ -46,6 +46,11 @@ ds.GetObjectInfo <- function(ObjectName,
 # Inspect object info and return message
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    # Initiate output messaging objects
+    Messages <- list()
+    Messages$ObjectValidity <- character()
+
+
     CountSources <- length(ObjectInfo)
 
     ObjectExistsEverywhere <- TRUE
@@ -64,15 +69,23 @@ ds.GetObjectInfo <- function(ObjectName,
     }
 
     # Return message in case non-null object has been created on all servers
-    ReturnMessage <- paste0("The object '", ObjectName, "' has been created on all specified servers.")
+    MessageExistence <- MakeFunctionMessage(Text = paste0("The object '", ObjectName, "' has been created on all specified servers."),
+                                            IsClassSuccess = TRUE)
 
     # ...and in case object creation did not succeed on all servers
     if (!(ObjectExistsEverywhere && ObjectNotNullEverywhere))
     {
-        ReturnMessage <- list(paste0("Error: A valid data object '", ObjectName, "' does NOT exist on ALL specified servers."),
-                              paste0("It is either ABSENT and/or has no valid content/class, see return.info above."),
-                              paste0("Please use ds.ls() to identify where missing."))
+        MessageExistence <- MakeFunctionMessage(Text = paste0("Error: A valid data object '", ObjectName, "' does NOT exist on ALL specified servers.",
+                                                              "\n",
+                                                              "It is either ABSENT and/or has no valid content/class, see return.info above.",
+                                                              "\n",
+                                                              "Please use ds.ls() to identify servers where the object is missing."),
+                                                IsClassWarning = TRUE)
     }
+
+    # Add message to list
+    Messages$ObjectValidity <- c(Messages$ObjectValidity,
+                                 MessageExistence)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -98,18 +111,25 @@ ds.GetObjectInfo <- function(ObjectName,
 
     if (NoErrors == TRUE)
     {
-        ValidityCheck <- paste0("'", ObjectName, "' appears valid in all sources")
+        ValidityMessage <- MakeFunctionMessage(Text = paste0("'", ObjectName, "' appears valid on all servers."),
+                                               IsClassSuccess = TRUE)
 
-        return(list(ObjectCreated = ReturnMessage,
-    	              ObjectValidity = ValidityCheck))
+        Messages$ObjectValidity <- c(Messages$ObjectValidity,
+                                     ValidityMessage)
+
+        return(Messages)
     }
 
     if (NoErrors == FALSE)
     {
-    	  ValidityCheck <- paste0("'",ObjectName,"' is invalid in at least one source.")
+    	  ValidityMessage <- MakeFunctionMessage(Text = paste0("'",ObjectName,"' seems to be invalid in at least one source."),
+    	                                         IsClassWarning = TRUE)
 
-    	  return(list(ObjectCreated = ReturnMessage,
-    	              ObjectValidity = ValidityCheck,
-    	              ObjectMessage = ServerMessage))
+    	  Messages$ObjectValidity <- c(Messages$ObjectValidity,
+                                     ValidityMessage)
+
+    	  Messages$ServerMessage <- ServerMessage
+
+    	  return(Messages)
     }
 }

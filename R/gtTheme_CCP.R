@@ -36,24 +36,24 @@ gtTheme_CCP <- function(gtObject,
                                 table.font.size = BaseFontSize,
                                 heading.align = "center",
                                 table.border.top.width = NULL,
-                                column_labels.background.color = dsCCPhosClient::Colors$PrimaryLight,
+                                column_labels.background.color = CCPhosColors$PrimaryLight,
                                 column_labels.border.top.width = NULL,
                                 column_labels.border.bottom.width = 3,
-                                column_labels.border.bottom.color = dsCCPhosClient::Colors$Primary,
-                                row_group.background.color = dsCCPhosClient::Colors$LightGrey) %>%
+                                column_labels.border.bottom.color = CCPhosColors$Primary,
+                                row_group.background.color = CCPhosColors$LightGrey) %>%
                     #--- Style column label text ---
                     tab_style(locations = cells_column_labels(),
                               style = paste0("vertical-align: middle;
                                               text-transform: uppercase;
                                               font-weight: bold;
-                                              color: ", dsCCPhosClient::Colors$Primary)) %>%
+                                              color: ", CCPhosColors$Primary)) %>%
                     #--- Format column label text (Replace "_" with " ")
                     text_replace(locations = cells_column_labels(),
                                  pattern = "[_]",
                                  replacement = " ") %>%
                     #--- Style row group label ---
                     tab_style(locations = cells_row_groups(),
-                              style = paste0("font-weight: bold; color: ", dsCCPhosClient::Colors$Primary)) %>%
+                              style = paste0("font-weight: bold; color: ", CCPhosColors$Primary)) %>%
                     { if (ShowNAs == FALSE)
                     { sub_missing(., missing_text = "") }
                       else {.}
