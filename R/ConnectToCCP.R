@@ -15,9 +15,9 @@ ConnectToCCP <- function(CCPSiteCredentials)
     require(DSI)
     require(DSOpal)
 
-    # Beam settings
-    pkgconfig::set_config_in(Options = httr::use_proxy(url = "http://beam-connect", port = 8062), .in = parent.frame())
-    pkgconfig::set_config_in(Options = httr::config(ssl_verifyhost = 0L, ssl_verifypeer = 0L), .in = parent.frame())
+    # Beam settings (have to be set in global environment / parent frame)
+    pkgconfig::set_config_in(Options = httr::use_proxy(url = "http://beam-connect", port = 8062), .in = .GlobalEnv)
+    pkgconfig::set_config_in(Options = httr::config(ssl_verifyhost = 0L, ssl_verifypeer = 0L), .in = .GlobalEnv)
 
     # Create an environment
     LoginBuilder <- DSI::newDSLoginBuilder(.silent = FALSE)
