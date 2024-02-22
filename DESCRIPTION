@@ -31,5 +31,5 @@ Depends:
     R (>= 2.10)
 LazyData: true
 Remotes: 
-    devtools::BastianReiter/CCPhosApp,
-    devtools::datashield/dsBaseClient
+    BastianReiter/CCPhosApp,
+    datashield/dsBaseClient
