@@ -54,27 +54,27 @@ ggTheme_CCP <- function(...,
                        panel.border = element_blank(),      # No panel border
                        panel.grid.minor = element_blank(),      # Do not display minor grid lines
                        panel.grid.major.x = element_blank(),      # Do not display major grid lines of x axis
-                       panel.grid.major.y =  element_line(color = dsCCPhosClient::Colors$MediumGrey),      # Color of y axis major grid lines
+                       panel.grid.major.y =  element_line(color = CCPhosColors$MediumGrey),      # Color of y axis major grid lines
                        #--- Axis parameters -----------------------------------------------
-                       axis.text = element_text(face = "bold", color = dsCCPhosClient::Colors$DarkGrey),      # Axis tick labels
+                       axis.text = element_text(face = "bold", color = CCPhosColors$DarkGrey),      # Axis tick labels
                        axis.text.x = element_text(size = rel(SizeFactorTickLabels_x)),      # x Axis tick label size
                        axis.text.y = element_text(size = rel(SizeFactorTickLabels_y)),      # y Axis tick label size
-                       axis.title = element_text(face = "bold", color = dsCCPhosClient::Colors$DarkGrey, size = rel(SizeFactorAxisLabels)),      # Axis title labels
+                       axis.title = element_text(face = "bold", color = CCPhosColors$DarkGrey, size = rel(SizeFactorAxisLabels)),      # Axis title labels
                        axis.title.x = element_text(margin = margin(0.5, 0, 0, 0, unit = "cm")),
                        axis.title.y = element_text(margin = margin(0, 0.5, 0, 0, unit = "cm"), angle =90),
                        axis.ticks = element_blank(),      # No axis tick marks
                        #axis.line.y = element_line(arrow = grid::arrow(length = unit(0.3, "cm"), ends = "last", type = "open")),      # Arrow at top end of y-axis
                        axis.line.y = element_line(),
                        #--- Parameters regarding facet ------------------------------------
-                       strip.background = element_rect(fill = dsCCPhosClient::Colors$LightGrey, color = "white"),      # No strip background
+                       strip.background = element_rect(fill = CCPhosColors$LightGrey, color = "white"),      # No strip background
                        strip.text = element_text(size = rel(SizeFactorFacetLabels), face = "bold", margin = margin(5, 0, 5, 0)),      # Facet label text settings, including margin to plot area
                        panel.spacing = unit(0.4, "cm"),      # Spacing between facet panels
                        #--- Parameters regarding legend -----------------------------------
                        legend.position = LegendPosition,
                        legend.background = element_rect(fill = "transparent", color = NA),      # Transparent legend background, no border
                        legend.box.background = element_rect(fill = "transparent", color = NA),      # Transparent legend box background (with multiple legends), no border
-                       legend.title = element_text(color = dsCCPhosClient::Colors$DarkGrey, size = rel(SizeFactorLegendLabels), face = "bold"),
-                       legend.text = element_text(color = dsCCPhosClient::Colors$DarkGrey, size = rel(SizeFactorLegendLabels), face = "bold"),
+                       legend.title = element_text(color = CCPhosColors$DarkGrey, size = rel(SizeFactorLegendLabels), face = "bold"),
+                       legend.text = element_text(color = CCPhosColors$DarkGrey, size = rel(SizeFactorLegendLabels), face = "bold"),
                        legend.key.size = unit(1, "cm"),      # Size of legend symbols
                        #--- All other parameters ------------------------------------------
                        ...

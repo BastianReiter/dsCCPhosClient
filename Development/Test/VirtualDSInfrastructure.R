@@ -24,7 +24,7 @@
 # Load required packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-library(dsBaseClient)
+#library(dsBaseClient)
 library(dsCCPhosClient)
 
 
@@ -33,7 +33,7 @@ library(dsCCPhosClient)
 # Establish Connections to virtual servers using dsCCPhosClient::ConnectToVirtualCCP()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
+TestData <- readRDS("../dsCCPhos/Development/Data/RealData/CCPRealData_Frankfurt.rds")
 
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
@@ -65,8 +65,7 @@ Messages_Loading <- LoadRawDataSet(DataSources = CCPConnections,
 #                                                       DataSources = CCPConnections)
 
 
-CCPhosApp::StartCCPhosApp(CCPConnections = CCPConnections,
-                          CCPhosData = NULL)
+#CCPhosApp::StartCCPhosApp(CCPConnections = CCPConnections)
 
 
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS)
@@ -78,14 +77,14 @@ dsCCPhosClient::ds.CurateData(RawDataSetName = "RawDataSet",
 CurationReports <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
 
 # Exemplary look at a curation report table
-View(CurationReports$SiteA$Diagnosis)
+View(CurationReports$All$Staging)
 
 # Make html file displaying tables from curation report
 dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReport,
                                    PathToReportTemplate = "./Development/Reporting/CurationReport.qmd")
 
 # # Save for easier testing of CCPhosApp
-# saveRDS(object = CurationReport,
+# saveRDS(object = CurationReports,
 #         file = "CurationReport.rds")
 
 

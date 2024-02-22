@@ -67,7 +67,7 @@ MakeBoxPlot <- function(SampleStatistics,
                              outlier.shape = NA,
                              show.legend = FALSE) +
                 geom_point(aes(y = mean),
-                           color = dsCCPhosClient::Colors$Accent,
+                           color = CCPhosColors$Accent,
                            size = 3,
                            shape = 19,
                            show.legend = FALSE) +

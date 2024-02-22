@@ -26,7 +26,10 @@ library(devtools)
 # Adding package dependencies using usethis::use_package()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_dev_package("CCPhosApp", type = "Suggests", remote = "devtools::BastianReiter/CCPhosApp")
+# use_package("cli")
 # use_package("dplyr")
+# use_dev_package("dsBaseClient", remote = "devtools::datashield/dsBaseClient")
+# use_package("DSLite", type = "Suggests")
 # use_package("DSI")
 # use_package("ggplot2", type = "Suggests")
 # use_package("gt", type = "Suggests")
@@ -50,6 +53,7 @@ library(devtools)
 # use_r("ConnectToCCP.R")
 # use_r("ConnectToVirtualCCP.R")
 # use_r("LoadRawDataSet.R")
+# use_r("Utilities.R")
 
 
 # Linked to dataSHIELD AGGREGATE functions

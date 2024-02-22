@@ -19,8 +19,8 @@ CheckServerRequirements <- function(DataSources = NULL,
     require(tidyr)
 
     # For testing purposes
-    # DataSources <- CCPConnections
-    # ServerRequirements <- dsCCPhosClient::Meta_ServerRequirements
+    DataSources <- CCPConnections
+    ServerRequirements <- dsCCPhosClient::Meta_ServerRequirements
 
     # Initiate output messaging objects
     Messages <- list()
@@ -43,7 +43,7 @@ CheckServerRequirements <- function(DataSources = NULL,
     RequiredPackageAvailability <- ServerRequirements$RequiredPackages %>%
                                         left_join(PackageAvailability, by = join_by(PackageName)) %>%
                                         rowwise() %>%
-                                        mutate(across(ServerNames, ~ ifelse(is.na(.), FALSE, .)),      # Replace NA values with FALSE. NAs are introduced when a required package is not listed in 'PackageAvailability'.
+                                        mutate(across(all_of(ServerNames), ~ ifelse(is.na(.), FALSE, .)),      # Replace NA values with FALSE. NAs are introduced when a required package is not listed in 'PackageAvailability'.
                                                IsAvailableEverywhere = all(c_across(all_of(ServerNames)) == TRUE),
                                                NotAvailableAt = ifelse(IsAvailableEverywhere == FALSE,
                                                                        paste0(ServerNames[c_across(all_of(ServerNames)) == FALSE], collapse = ", "),
@@ -54,11 +54,19 @@ CheckServerRequirements <- function(DataSources = NULL,
     for (i in 1:nrow(RequiredPackageAvailability))
     {
         Row <- RequiredPackageAvailability[i, ]
-        Message <- paste0("Package '",
-                          Row$PackageName,
-                          ifelse(Row$IsAvailableEverywhere == TRUE,
-                                 "' is available on all servers!",
-                                 paste0("' is not available on ", Row$NotAvailableAt)))
+
+        # Note: It's important to use 'dplyr::if_else()' instead of 'ifelse' here, otherwise the return won't be a named vector
+        Message <- if_else(Row$IsAvailableEverywhere == TRUE,
+                           MakeFunctionMessage(Text = paste0("Function '",
+                                                             Row$PackageName,
+                                                             "' is available on all servers!"),
+                                               IsClassSuccess = TRUE),
+                           MakeFunctionMessage(Text = paste0("Package '",
+                                                             Row$PackageName,
+                                                             "' is not available at ",
+                                                             Row$NotAvailableAt),
+                                               IsClassFailure = TRUE))
+
         Messages$PackageAvailability <- c(Messages$PackageAvailability,
                                           Message)
     }
@@ -73,17 +81,23 @@ CheckServerRequirements <- function(DataSources = NULL,
                             filter(PackageName == "dsCCPhos") %>%
                             select(-PackageName)
 
-    IsEqualEverywhere <- apply(VersionOfdsCCPhos, 1, function(Values) { all(Values == Values[1]) })
-
-    if (IsEqualEverywhere == TRUE)
+    if (nrow(VersionOfdsCCPhos > 0))
     {
-        Messages$VersionOfdsCCPhos <- paste0("Version of dsCCPhos is equal on all servers (Ver. ", VersionOfdsCCPhos[1, 1], ")!")
-    } else {
-        Messages$VersionOfdsCCPhos <- paste0("Version of dsCCPhos varies between servers!")
-        for (i in 1:ncol(VersionOfdsCCPhos))
+        IsEqualEverywhere <- apply(VersionOfdsCCPhos, 1, function(Values) { all(Values == Values[1]) })
+
+        if (IsEqualEverywhere == TRUE)
         {
-            Messages$VersionOfdsCCPhos <- c(Messages$VersionOfdsCCPhos,
-                                            paste0(names(VersionOfdsCCPhos)[i], ": Ver. ", VersionOfdsCCPhos[, i]))
+            Messages$VersionOfdsCCPhos <- MakeFunctionMessage(Text = paste0("Version of dsCCPhos is equal on all servers (Ver. ", VersionOfdsCCPhos[1, 1], ")!"),
+                                                              IsClassSuccess = TRUE)
+        } else {
+            Messages$VersionOfdsCCPhos <- MakeFunctionMessage(Text = paste0("Version of dsCCPhos varies between servers!"),
+                                                              IsClassWarning = TRUE)
+            for (i in 1:ncol(VersionOfdsCCPhos))
+            {
+                Messages$VersionOfdsCCPhos <- c(Messages$VersionOfdsCCPhos,
+                                                MakeFunctionMessage(Text = paste0(names(VersionOfdsCCPhos)[i], ": Ver. ", VersionOfdsCCPhos[, i]),
+                                                                    IsClassInfo = TRUE))
+            }
         }
     }
 
@@ -115,21 +129,30 @@ CheckServerRequirements <- function(DataSources = NULL,
     for (i in 1:nrow(RequiredFunctionAvailability))
     {
         Row <- RequiredFunctionAvailability[i, ]
-        Message <- paste0("Function '",
-                          Row$FunctionName,
-                          ifelse(Row$IsAvailableEverywhere == TRUE,
-                                 "' is available on all servers!",
-                                 paste0("' is not available on ", Row$NotAvailableAt)))
+
+        # Note: It's important to use 'dplyr::if_else()' instead of 'ifelse' here, otherwise the return won't be a named vector
+        Message <- if_else(Row$IsAvailableEverywhere == TRUE,
+                           MakeFunctionMessage(Text = paste0("Function '",
+                                                             Row$FunctionName,
+                                                             "' is available on all servers!"),
+                                               IsClassSuccess = TRUE),
+                           MakeFunctionMessage(Text = paste0("Function '",
+                                                             Row$FunctionName,
+                                                             "' is not available at ",
+                                                             Row$NotAvailableAt),
+                                               IsClassWarning = TRUE))
+
         Messages$FunctionAvailability <- c(Messages$FunctionAvailability,
                                            Message)
     }
 
 
-    # Return statement
+    # Print and return Messages object
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    # Additionally to return, print messages on console
-    cat(paste0(unlist(Messages), collapse = "\n"))
+    # Print messages on console
+    PrintMessages(Messages)
 
+    # Return messages
     return(Messages)
 }
