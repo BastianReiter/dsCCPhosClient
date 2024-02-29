@@ -19,8 +19,8 @@ CheckServerRequirements <- function(DataSources = NULL,
     require(tidyr)
 
     # For testing purposes
-    DataSources <- CCPConnections
-    ServerRequirements <- dsCCPhosClient::Meta_ServerRequirements
+    # DataSources <- CCPConnections
+    # ServerRequirements <- dsCCPhosClient::Meta_ServerRequirements
 
     # Initiate output messaging objects
     Messages <- list()

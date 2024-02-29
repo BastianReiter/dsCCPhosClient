@@ -3,7 +3,7 @@
 #'
 #' Takes credentials of CCP sites and returns a list of DSConnection-objects. Has to be executed from within a CCP bridgehead R server session.
 #'
-#' @param CCPSiteCredentials Data frame or tibble | Data on CCP site credentials
+#' @param CCPSiteCredentials \code{data.frame} | Login data of CCP sites
 #'
 #' @return A list of DSConnection-objects
 #' @export
@@ -15,10 +15,7 @@ ConnectToCCP <- function(CCPSiteCredentials)
     require(DSI)
     require(DSOpal)
 
-    # Beam settings (have to be set in global environment / parent frame)
-    #pkgconfig::set_config_in(Options = httr::use_proxy(url = "http://beam-connect", port = 8062), .in = .GlobalEnv)
-    #pkgconfig::set_config_in(Options = httr::config(ssl_verifyhost = 0L, ssl_verifypeer = 0L), .in = .GlobalEnv)
-
+    # Beam settings
     set_config(use_proxy(url = "http://beam-connect", port = 8062))
     set_config(config(ssl_verifyhost = 0L, ssl_verifypeer = 0L))
 

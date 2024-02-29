@@ -38,7 +38,7 @@ CCPhosColors <- list(LightGrey = "#EDEDED",
                      #---------
                      BlueNice = "#7EA6E0",
                      Green = "#269D27",
-                     Orange = "#BD8235",
+                     Orange = "#DE8F02",
                      Red = "#A90939")
 
 # Save data in .rda-file and make it part of package

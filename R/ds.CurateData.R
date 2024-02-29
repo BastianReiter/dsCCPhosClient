@@ -12,8 +12,9 @@
 #' @param RuleProfile_DiagnosisAssociation String | Profile name defining rule set to be used for classification of diagnosis associations. Profile name must be stated in \code{\link{RuleSet_DiagnosisAssociation}. | Default: 'Default'
 #' @param DataSources List of DSConnection objects
 #'
-#' @return Info messages concerning assignment of the following objects on server:
-#'         \itemize{\item CuratedDataSet (list)
+#' @return Info messages concerning completion of CurateDataDS() and assignment of the following objects on server:
+#'         \itemize{\item CurationOutput (list)
+#'                  \item CuratedDataSet (list)
 #'                  \item CurationReport (list)
 #'                  \item CurationMessages (list)}
 #' @export
@@ -41,7 +42,11 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
     }
 
 
-    AssignmentInfo <- list()
+    # Initiate output messaging objects
+    Messages <- list()
+    #Messages$Completion <- character()
+    Messages$Assignment <- character()
+
 
 
     # 1) Trigger dsCCPhos::CurateDataDS()
@@ -59,14 +64,15 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                            symbol = OutputName,
                            value = ServerCall)
 
-    # Call helper function to check if object assignment succeeded
-    AssignmentInfo <- c(AssignmentInfo,
-                        ds.GetObjectInfo(ObjectName = OutputName,
-                                         DataSources = DataSources))
+    # Call helper function to check if assignment of CurationOutput succeeded
+    Messages$Assignment <- c(Messages$Assignment,
+                             ds.GetObjectInfo(ObjectName = OutputName,
+                                              DataSources = DataSources))
+
 
 
     # 2) Extract objects from list returned by CurateDataDS() and assign them to R server sessions
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     CurationOutputObjects <- c("CuratedDataSet",
                                "CurationReport",
@@ -85,13 +91,21 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                                value = ServerCall)
 
         # Call helper function to check if object assignment succeeded
-        AssignmentInfo <- c(AssignmentInfo,
-                            ds.GetObjectInfo(ObjectName = CurationOutputObjects[i],
-                                             DataSources = DataSources))
+        Messages$Assignment <- c(Messages$Assignment,
+                                 ds.GetObjectInfo(ObjectName = CurationOutputObjects[i],
+                                                  DataSources = DataSources))
     }
 
+    # Turn list into (named) vector
+    Messages$Assignment <- purrr::list_c(Messages$Assignment)
 
-    # Return AssignmentInfo
+
+    # Print messages and return Messages object
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    return(AssignmentInfo)
+
+    # Print messages on console
+    PrintMessages(Messages)
+
+    # Return Messages
+    return(Messages)
 }

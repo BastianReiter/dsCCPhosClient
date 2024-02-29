@@ -37,7 +37,7 @@ TestData <- readRDS("../dsCCPhos/Development/Data/RealData/CCPRealData_Frankfurt
 
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
-                                      NumberOfPatientsPerSite = 300)
+                                      NumberOfPatientsPerSite = 1000)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,15 +69,15 @@ Messages_Loading <- LoadRawDataSet(DataSources = CCPConnections,
 
 
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS)
-dsCCPhosClient::ds.CurateData(RawDataSetName = "RawDataSet",
-                              OutputName = "CurationOutput",
-                              DataSources = CCPConnections)
+Messages_DataCuration <- dsCCPhosClient::ds.CurateData(RawDataSetName = "RawDataSet",
+                                                       OutputName = "CurationOutput",
+                                                       DataSources = CCPConnections)
 
 # Get Curation reports
 CurationReports <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
 
 # Exemplary look at a curation report table
-View(CurationReports$All$Staging)
+View(CurationReports$All$Transformation$Staging)
 
 # Make html file displaying tables from curation report
 dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReport,
