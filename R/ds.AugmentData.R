@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' @author Bastian Reiter
-ds.AugmentData <- function(CurationOutputName = "CurationOutput",
+ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
                            OutputName = "AugmentationOutput",
                            DataSources = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,18 +32,67 @@ ds.AugmentData <- function(CurationOutputName = "CurationOutput",
     }
 
 
+    # Initiate output messaging objects
+    Messages <- list()
+    #Messages$Completion <- character()
+    Messages$Assignment <- character()
+
+
+
+    # 1) Trigger dsCCPhos::AugmentDataDS()
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     # Construct the server-side function call
     ServerCall <- call("AugmentDataDS",
-                       .CuratedDataSetName = CuratedDataSetName)
+                       CuratedDataSetName.S = CuratedDataSetName)
 
     # Execute the server-side function call
     DSI::datashield.assign(conns = DataSources,
                            symbol = OutputName,
                            value = ServerCall)
 
-    # Call helper function to check if object assignment succeeded
-    AssignmentInfo <- ds.GetObjectInfo(ObjectName = OutputName,
-                                       DataSources = DataSources)
+    # Call helper function to check if assignment of AugmentationOutput succeeded
+    Messages$Assignment <- c(Messages$Assignment,
+                             ds.GetObjectInfo(ObjectName = OutputName,
+                                              DataSources = DataSources))
 
-    return(AssignmentInfo)
+
+
+    # 2) Extract objects from list returned by AugmentDataDS() and assign them to R server sessions
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    AugmentationOutputObjects <- c("AugmentedDataSet",
+                                   "AugmentationReport",
+                                   "AugmentationMessages")
+
+    for(i in 1:length(AugmentationOutputObjects))
+    {
+        # Construct the server-side function call
+        ServerCall <- call("ExtractFromListDS",
+                           ListName.S = OutputName,
+                           ObjectName.S = AugmentationOutputObjects[i])
+
+        # Execute server-side assign function
+        DSI::datashield.assign(conns = DataSources,
+                               symbol = AugmentationOutputObjects[i],
+                               value = ServerCall)
+
+        # Call helper function to check if object assignment succeeded
+        Messages$Assignment <- c(Messages$Assignment,
+                                 ds.GetObjectInfo(ObjectName = AugmentationOutputObjects[i],
+                                                  DataSources = DataSources))
+    }
+
+    # Turn list into (named) vector
+    Messages$Assignment <- purrr::list_c(Messages$Assignment)
+
+
+    # Print messages and return Messages object
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    # Print messages on console
+    PrintMessages(Messages)
+
+    # Return Messages
+    return(Messages)
 }

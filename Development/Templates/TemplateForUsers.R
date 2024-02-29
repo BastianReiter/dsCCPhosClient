@@ -2,114 +2,42 @@
 # Install own dataSHIELD packages
 #devtools::install_github(repo = "BastianReiter/dsCCPhos")
 #devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
+#devtools::install_github(repo = "BastianReiter/CCPhosApp")
 
-# Load needed packages
-library(dsBaseClient)
+
 library(dsCCPhosClient)
-library(DSI)
-library(DSOpal)
-
-# Beam settings
-set_config(use_proxy(url = "http://beam-connect", port = 8062))
-set_config(config(ssl_verifyhost = 0L, ssl_verifypeer = 0L))
-
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Establish test server connections
+# Establish test server connections using dsCCPhosClient::ConnectToCCP()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # "Sissy" = Home/Local server
 # "Franz" = Remote server
 #-------------------------------------------------------------------------------
 
-# Returns an environment
-LoginBuilder <- DSI::newDSLoginBuilder(.silent = FALSE)
+Credentials <- data.frame(SiteName = c("Sissy", "Franz"),
+                                 URL = c("https://dktk-datashield-test/opal/", "https://dktk-test/opal/"),
+                                 Token = c("157777aa-eede-459f-a7f9-c53b51dba02a", "9e4c0a67-139d-40f3-90cd-c876014efad5"))
 
-# Append credentials for server "Sissy"
-LoginBuilder$append(server = "Sissy",
-                    url = "https://dktk-datashield-test/opal/",
-                    token = "80e589f1-c670-413e-a593-3bbf6f64cf4b")
-
-# Append credentials for server "Franz"
-LoginBuilder$append(server = "Franz",
-                    url = "https://dktk-test/opal/",
-                    token = "a02f3a81-1a49-48c8-9df2-c3225e564cc5")
-
-# Returns a data frame of login data to different Sites
-LoginData <- LoginBuilder$build()
-
-# Get list of DSConnection objects of all servers
-CCPConnections <- DSI::datashield.login(logins = LoginData,
-                                        assign = TRUE)
-
+CCPConnections <- ConnectToCCP(CCPSiteCredentials = Credentials)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Explore test server configurations
+# Check server requirements using dsCCPhosClient::CheckServerRequirements()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# List all available dataSHIELD methods on servers
-DSI::datashield.methods(conns = CCPConnections)
-
-# Alternatively use DSI::datashield.method_status() to get more comparable overview
-# AGGREGATE functions
-DSI::datashield.method_status(conns = CCPConnections,
-                              type = "aggregate")
-
-# ASSIGN functions
-DSI::datashield.method_status(conns = CCPConnections,
-                              type = "assign")
-
-# Get info about installed packages on servers
-DSI::datashield.pkg_status(conns = CCPConnections)
-
+Messages_ServerRequirements <- CheckServerRequirements(DataSources = CCPConnections)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Prepare data objects in server R sessions
+# Load Raw Data Set (RDS) from Opal data base to R sessions on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Goal: Assignment of list object "RawDataSet" on all R server sessions
-#-------------------------------------------------------------------------------
 
-# Get overview of accessible tables on servers
-DSI::datashield.tables(conns = CCPConnections)
-
-# Get table names of CCP core data set
-CCPTableNames_Raw <- dsCCPhos::Meta_TableNames$TableName_Raw
-CCPTableNames_Curated <- dsCCPhos::Meta_TableNames$TableName_Curated
-
-# Enter Opal project name
-ProjectName <- "PROJECT-."
-
-# Check if all tables are accessible on all servers
-ls_TableCheck <- purrr::map(as.list(CCPTableNames_Raw),
-                            function(tbl)
-                            {
-                              datashield.table_status(conns = CCPConnections,
-                                                      table = paste0(ProjectName, tbl))
-                            })
-
-# Turn list into data.frame
-df_TableCheck <- do.call(rbind, ls_TableCheck)
+Messages_Loading <- LoadRawDataSet(DataSources = CCPConnections,
+                                   ProjectName = "PROJECT-TEST_20231220_X1")
 
 
-# Make tables from data repository accessible in R session
-for(i in 1:length(CCPTableNames_Raw))
-{
-  datashield.assign(conns = CCPConnections,
-                    symbol = CCPTableNames_Curated[i],
-                    value = paste0(ProjectName, CCPTableNames_Raw[i], "-view"))
-}
 
 
-# Consolidate all raw data tables in one list object called "RawDataSet"
-ds.list(x = CCPTableNames_Curated,
-        newobj = "RawDataSet",
-        datasources = CCPConnections)
-
-
-# Make sure assignment was successful on all servers
-ds.GetObjectInfo(ObjectName = "RawDataSet",
-                 DataSources = CCPConnections)
 
 
 

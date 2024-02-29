@@ -49,6 +49,8 @@ MakeFunctionMessage <- function(Text,
 #' @export
 PrintMessages <- function(Messages)
 {
+    require(dsCCPhosClient)
+
     purrr::walk(.x = Messages,
                 .f = function(Sublist)
                      {
