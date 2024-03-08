@@ -24,12 +24,12 @@ CheckServerRequirements <- function(DataSources = NULL,
 
     # Initiate output messaging objects
     Messages <- list()
-    Messages$PackageAvailability <- character()
-    Messages$VersionOfdsCCPhos <- character()
-    Messages$FunctionAvailability <- character()
+    Messages$PackageAvailability <- c(Topic = "Package availability")
+    Messages$VersionOfdsCCPhos <- c(Topic = "Version of dsCCPhos")
+    Messages$FunctionAvailability <- c(Topic = "Function availability")
 
-    # Get server names
-    ServerNames <- names(DataSources)
+    # Get server names (sorted alphabetically)
+    ServerNames <- sort(names(DataSources))
 
 
     # Package availability on servers
@@ -84,21 +84,30 @@ CheckServerRequirements <- function(DataSources = NULL,
     if (nrow(VersionOfdsCCPhos > 0))
     {
         IsEqualEverywhere <- apply(VersionOfdsCCPhos, 1, function(Values) { all(Values == Values[1]) })
+        MessageOverall <- NULL
+        MessagesDetail <- NULL
 
         if (IsEqualEverywhere == TRUE)
         {
-            Messages$VersionOfdsCCPhos <- MakeFunctionMessage(Text = paste0("Version of dsCCPhos is equal on all servers (Ver. ", VersionOfdsCCPhos[1, 1], ")!"),
-                                                              IsClassSuccess = TRUE)
-        } else {
-            Messages$VersionOfdsCCPhos <- MakeFunctionMessage(Text = paste0("Version of dsCCPhos varies between servers!"),
-                                                              IsClassWarning = TRUE)
+            MessageOverall <- MakeFunctionMessage(Text = paste0("Version of dsCCPhos is equal on all servers (Ver. ", VersionOfdsCCPhos[1, 1], ")!"),
+                                                  IsClassSuccess = TRUE)
+        }
+        else
+        {
+            MessagesOverall <- MakeFunctionMessage(Text = paste0("Version of dsCCPhos varies between servers!"),
+                                                   IsClassWarning = TRUE)
+
             for (i in 1:ncol(VersionOfdsCCPhos))
             {
-                Messages$VersionOfdsCCPhos <- c(Messages$VersionOfdsCCPhos,
-                                                MakeFunctionMessage(Text = paste0(names(VersionOfdsCCPhos)[i], ": Ver. ", VersionOfdsCCPhos[, i]),
-                                                                    IsClassInfo = TRUE))
+                MessagesDetail <- c(Messages$VersionOfdsCCPhos,
+                                    MakeFunctionMessage(Text = paste0(names(VersionOfdsCCPhos)[i], ": Ver. ", VersionOfdsCCPhos[, i]),
+                                                        IsClassInfo = TRUE))
             }
         }
+
+        Messages$VersionOfdsCCPhos <- c(Messages$VersionOfdsCCPhos,
+                                        MessageOverall,
+                                        MessagesDetail)
     }
 
 

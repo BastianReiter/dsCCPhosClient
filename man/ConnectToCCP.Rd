@@ -7,7 +7,7 @@
 ConnectToCCP(CCPSiteCredentials)
 }
 \arguments{
-\item{CCPSiteCredentials}{Data frame or tibble | Data on CCP site credentials}
+\item{CCPSiteCredentials}{\code{data.frame} | Login data of CCP sites}
 }
 \value{
 A list of DSConnection-objects

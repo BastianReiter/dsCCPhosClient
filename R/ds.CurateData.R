@@ -45,7 +45,7 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
     # Initiate output messaging objects
     Messages <- list()
     #Messages$Completion <- character()
-    Messages$Assignment <- character()
+    Messages$Assignment <- list()
 
 
 
@@ -98,6 +98,10 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
 
     # Turn list into (named) vector
     Messages$Assignment <- purrr::list_c(Messages$Assignment)
+
+    # Add topic element at start of vector
+    Messages$Assignment <- c(Topic = "Object assignment on servers",
+                             Messages$Assignment)
 
 
     # Print messages and return Messages object

@@ -55,6 +55,9 @@ Messages_Loading <- LoadRawDataSet(DataSources = CCPConnections,
                                    ProjectName = "Virtual")
 
 
+
+Test <- GetServerWorkspaceInfo(DataSources = CCPConnections)
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Applying dsCCPhos functionality
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,7 +83,7 @@ CurationReports <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnect
 View(CurationReports$All$Transformation$Staging)
 
 # Make html file displaying tables from curation report
-dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReport,
+dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReports$All,
                                    PathToReportTemplate = "./Development/Reporting/CurationReport.qmd")
 
 # # Save for easier testing of CCPhosApp
@@ -100,8 +103,6 @@ dsCCPhosClient::ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
 
 # List all objects in server-sided R sessions
 DSI::datashield.symbols(conns = CCPConnections)
-
-
 
 
 # Get validation report of Curated Data Set (CDS)

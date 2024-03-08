@@ -26,8 +26,8 @@ LoadRawDataSet <- function(DataSources,
 
     # Initiate output messaging objects
     Messages <- list()
-    Messages$TableAvailability <- character()
-    Messages$Assignment <- character()
+    Messages$TableAvailability <- c(Topic = "Opal table availability")
+    Messages$Assignment <- c(Topic = "Object assignment on servers")
 
     # Get server names
     ServerNames <- names(DataSources)
@@ -37,7 +37,7 @@ LoadRawDataSet <- function(DataSources,
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Get overview of available tables on servers
-    TableAvailability <- DSI::datashield.tables(conns = CCPConnections)
+    TableAvailability <- DSI::datashield.tables(conns = DataSources)
 
     RequiredTableAvailability <- tibble(TableName = dsCCPhosClient::Meta_TableNames$TableName_Raw)
 
@@ -89,7 +89,7 @@ LoadRawDataSet <- function(DataSources,
     # Assign tables from Opal DB to object symbols in R session
     for(i in 1:length(CCPTableNames_Raw))
     {
-        datashield.assign(conns = CCPConnections,
+        datashield.assign(conns = DataSources,
                           symbol = paste0("RDS_", CCPTableNames_Curated[i]),
                           value = ifelse(ProjectName == "Virtual",
                                          CCPTableNames_Raw[i],
@@ -98,25 +98,26 @@ LoadRawDataSet <- function(DataSources,
 
         # Make sure assignment was successful on all servers
         ObjectInfo_Table <- ds.GetObjectInfo(ObjectName = paste0("RDS_", CCPTableNames_Curated[i]),
-                                             DataSources = CCPConnections)
+                                             DataSources = DataSources)
 
         # Add info about table assignment to Messages
         BundledMessages <- c(BundledMessages,
                              ObjectInfo_Table)
     }
 
-    # Turn list into (named) vector and assign it to Messages
-    Messages$Assignment <- purrr::list_c(BundledMessages)
+    # Turn list into (named) vector and add it to Messages
+    Messages$Assignment <- c(Messages$Assignment,
+                             purrr::list_c(BundledMessages))
 
 
     # Consolidate all raw data set tables in one list object called "RawDataSet"
     dsBaseClient::ds.list(x = paste0("RDS_", CCPTableNames_Curated),
                           newobj = "RawDataSet",
-                          datasources = CCPConnections)
+                          datasources = DataSources)
 
     # Make sure assignment of RawDataSet was successful on all servers
     ObjectInfo_RawDataSet <- ds.GetObjectInfo(ObjectName = "RawDataSet",
-                                              DataSources = CCPConnections)
+                                              DataSources = DataSources)
 
     # Add info about RawDataSet assignment to Messages
     Messages$Assignment <- c(Messages$Assignment,

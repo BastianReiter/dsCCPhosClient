@@ -49,3 +49,21 @@
 #'
 #' @author Bastian Reiter
 "Meta_ServerRequirements"
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# CCPSiteCredentials.rda
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#' Template of a data frame containing login credentials being passed to \code{\link{ConnectToCCP}}.
+#'
+#' Data frame with three columns
+#' \itemize{\item{SiteName}
+#'          \item{URL}
+#'          \item{Token}}
+#'
+#' @author Bastian Reiter
+"CCPSiteCredentials"
+
+
