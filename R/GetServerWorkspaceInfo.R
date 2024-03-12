@@ -5,7 +5,7 @@
 #'
 #' @param DataSources List of DSConnection objects
 #'
-#' @return A data frame
+#' @return A tibble
 #' @export
 #'
 #' @author Bastian Reiter
@@ -25,24 +25,24 @@ GetServerWorkspaceInfo <- function(DataSources = NULL)
 
 
     # Get names of symbols (objects) in all server workspaces
-    ServerSymbols <- DSI::datashield.symbols(conns = DataSources)
+    ServerObjectNames <- DSI::datashield.symbols(conns = DataSources)
 
     # Get all uniquely occurring object names across servers (although usually the set of symbol names should be the same on all servers)
-    OccurringSymbolNames <- sort(unique(unlist(ServerSymbols)))
+    UniqueObjectNames <- sort(unique(unlist(ServerObjectNames)))
 
 
     # Create tibble with object names and types (can't use mutate() because ds.class() does not work with vectors)
-    Output <- bind_cols(Object = OccurringSymbolNames,
-                        Type = purrr::modify(OccurringSymbolNames,
-                                             function(object) { dsBaseClient::ds.class(x = object,
-                                                                                       datasources = DataSources)[[1]] }))      # Note: The type definition is based on the object found on the first server (therefore '[[1]]')
+    Output <- bind_cols(Object = UniqueObjectNames,
+                        Type = purrr::modify(UniqueObjectNames,
+                                             function(symbol) { as.character(dsBaseClient::ds.class(x = symbol,
+                                                                                                    datasources = DataSources)[[1]]) }))      # Note: The type definition is based on the object found on the first server (therefore '[[1]]')
 
     # Create server-specific columns that give feedback on existence of objects (TRUE / FALSE)
     ServerColumns <- NULL
 
     for (i in 1:length(ServerNames))
     {
-        Column <- Output$Object %in% ServerSymbols[[ServerNames[i]]]
+        Column <- Output$Object %in% ServerObjectNames[[ServerNames[i]]]
 
         ServerColumns <- cbind(ServerColumns,      # Using cbind() instead of bind_cols() because it's quiet
                                Column)

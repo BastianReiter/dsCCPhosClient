@@ -28,6 +28,12 @@ ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
         stop("'DataSources' were expected to be a list of DSConnection-class objects", call. = FALSE)
     }
 
+
+    # Initiate output messaging objects
+    Messages <- list()
+    Messages$Assignment <- list()
+
+
     CCPTableNames_ADS <- c("Patients", "Diagnoses", "Events")
 
     AssignmentInfo <- list()
@@ -36,8 +42,8 @@ ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
     {
         # Construct the server-side function call
         ServerCall <- call("ExtractFromListDS",
-                           ListName = AugmentedDataSetName,
-                           TableName = CCPTableNames_ADS[i])
+                           ListName.S = AugmentedDataSetName,
+                           ObjectName.S = CCPTableNames_ADS[i])
 
         # Execute server-side assign function
         DSI::datashield.assign(conns = DataSources,
@@ -45,10 +51,25 @@ ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
                                value = ServerCall)
 
         # Call helper function to check if object assignment succeeded
-        AssignmentInfo <- c(AssignmentInfo,
-                            ds.GetObjectInfo(ObjectName = paste0("ADS_", CCPTableNames_ADS[i]),
-                                             DataSources = DataSources))
+        Messages$Assignment <- c(Messages$Assignment,
+                                 ds.GetObjectInfo(ObjectName = paste0("ADS_", CCPTableNames_ADS[i]),
+                                                  DataSources = DataSources))
     }
 
-    return(AssignmentInfo)
+    # Turn list into (named) vector
+    Messages$Assignment <- purrr::list_c(Messages$Assignment)
+
+    # Add topic element to start of vector
+    Messages$Assignment <- c(Topic = "Object assignment on servers",
+                             Messages$Assignment)
+
+
+    # Print messages and return Messages object
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    # Print messages on console
+    PrintMessages(Messages)
+
+    # Return Messages
+    return(Messages)
 }

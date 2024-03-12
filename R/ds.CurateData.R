@@ -99,7 +99,7 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
     # Turn list into (named) vector
     Messages$Assignment <- purrr::list_c(Messages$Assignment)
 
-    # Add topic element at start of vector
+    # Add topic element to start of vector
     Messages$Assignment <- c(Topic = "Object assignment on servers",
                              Messages$Assignment)
 
