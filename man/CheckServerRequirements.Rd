@@ -5,14 +5,17 @@
 \title{CheckServerRequirements}
 \usage{
 CheckServerRequirements(
-  DataSources = NULL,
-  ServerRequirements = dsCCPhosClient::Meta_ServerRequirements
+  CCPSiteSpecifications = NULL,
+  ServerRequirements = dsCCPhosClient::Meta_ServerRequirements,
+  DataSources = NULL
 )
 }
 \arguments{
-\item{DataSources}{List of DSConnection objects}
+\item{CCPSiteSpecifications}{\code{data.frame} | Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). | Default: NULL for virtual project}
 
 \item{ServerRequirements}{A list of data frames as defined in \code{\link{Meta_ServerRequirements}}.}
+
+\item{DataSources}{List of DSConnection objects}
 }
 \value{
 A list of messages

@@ -87,25 +87,22 @@ use_data(Meta_ServerRequirements, overwrite = TRUE)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Template data frame: CCP site credentials
+# Template data frame: CCP site specifications
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Initiate tibble that holds credentials of participating CCP sites
-CCPSiteCredentials <- tibble(SiteName = character(),
-                             URL = character(),
-                             Token = character())
+CCPSiteSpecifications <- tibble(SiteName = character(),
+                                URL = character(),
+                                ProjectName = character(),
+                                Token = character())
 
 # Add site "Sissy"
-CCPSiteCredentials <- add_row(CCPSiteCredentials,
-                              SiteName = "Sissy",
-                              URL = "https://dktk-datashield-test/opal/",
-                              Token = "625732d7-36d5-44d1-9550-7e7899e594cc")
+CCPSiteSpecifications <- add_row(CCPSiteSpecifications,
+                                 SiteName = "Sissi",
+                                 URL = "https://Sissi/",
+                                 ProjectName = "Project",
+                                 Token = "1234567890")
 
-# Add site "Franz"
-CCPSiteCredentials <- add_row(CCPSiteCredentials,
-                              SiteName = "Franz",
-                              URL = "https://dktk-test/opal/",
-                              Token = "73a4e20f-3474-4aa0-8696-6a485bda2242")
-
-use_data(CCPSiteCredentials, overwrite = TRUE)
+# Save data in .rda-file and make it part of package
+use_data(CCPSiteSpecifications, overwrite = TRUE)
 

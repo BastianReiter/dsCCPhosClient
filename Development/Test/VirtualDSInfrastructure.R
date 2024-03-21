@@ -51,8 +51,8 @@ Messages_ServerRequirements <- CheckServerRequirements(DataSources = CCPConnecti
 # Load Raw Data Set (RDS) from Opal data base to R sessions on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Messages_Loading <- LoadRawDataSet(DataSources = CCPConnections,
-                                   ProjectName = "Virtual")
+Messages_Loading <- LoadRawDataSet(CCPSiteSpecifications = NULL,
+                                   DataSources = CCPConnections)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

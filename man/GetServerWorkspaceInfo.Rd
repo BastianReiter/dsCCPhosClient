@@ -10,7 +10,7 @@ GetServerWorkspaceInfo(DataSources = NULL)
 \item{DataSources}{List of DSConnection objects}
 }
 \value{
-A data frame
+A tibble
 }
 \description{
 Check which objects live in server-side R sessions

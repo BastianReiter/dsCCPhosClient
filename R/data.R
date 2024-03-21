@@ -53,17 +53,18 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# CCPSiteCredentials.rda
+# CCPSiteSpecifications.rda
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#' Template of a data frame containing login credentials being passed to \code{\link{ConnectToCCP}}.
+#' Template of a data frame containing site-specific login credentials and project names being passed to \code{\link{ConnectToCCP}}.
 #'
-#' Data frame with three columns
+#' Data frame with four columns
 #' \itemize{\item{SiteName}
 #'          \item{URL}
+#'          \item{ProjectName}
 #'          \item{Token}}
 #'
 #' @author Bastian Reiter
-"CCPSiteCredentials"
+"CCPSiteSpecifications"
 
 

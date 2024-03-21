@@ -3,16 +3,18 @@
 #'
 #' Check if technical requirements are met on every participating CCP server.
 #'
-#' @param DataSources List of DSConnection objects
+#' @param CCPSiteSpecifications \code{data.frame} | Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). | Default: NULL for virtual project
 #' @param ServerRequirements A list of data frames as defined in \code{\link{Meta_ServerRequirements}}.
+#' @param DataSources List of DSConnection objects
 #'
 #' @return A list of messages
 #' @export
 #'
 #' @examples
 #' @author Bastian Reiter
-CheckServerRequirements <- function(DataSources = NULL,
-                                    ServerRequirements = dsCCPhosClient::Meta_ServerRequirements)
+CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
+                                    ServerRequirements = dsCCPhosClient::Meta_ServerRequirements,
+                                    DataSources = NULL)
 {
     require(dplyr)
     require(DSI)
@@ -27,11 +29,14 @@ CheckServerRequirements <- function(DataSources = NULL,
     Messages$PackageAvailability <- c(Topic = "Package availability")
     Messages$VersionOfdsCCPhos <- c(Topic = "Version of dsCCPhos")
     Messages$FunctionAvailability <- c(Topic = "Function availability")
+    Messages$TableAvailability <- c(Topic = "Opal DB table availability")
 
     # Get server names (sorted alphabetically)
     ServerNames <- sort(names(DataSources))
 
 
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Package availability on servers
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -72,6 +77,8 @@ CheckServerRequirements <- function(DataSources = NULL,
     }
 
 
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Available version of dsCCPhos
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -112,6 +119,7 @@ CheckServerRequirements <- function(DataSources = NULL,
 
 
 
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Function availability on servers
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -156,6 +164,39 @@ CheckServerRequirements <- function(DataSources = NULL,
     }
 
 
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Availability of Opal data base tables on servers
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    # Get info on Opal table availability with dsCCPhosClient::GetServerOpalDBInfo()
+    RequiredTableAvailability <- GetServerOpalInfo(CCPSiteSpecifications,
+                                                   DataSources)
+
+    # Compile output message concerning one table each and add it to Messages
+    for (i in 1:nrow(RequiredTableAvailability))
+    {
+        Row <- RequiredTableAvailability[i, ]
+
+        # Note: It's important to use 'dplyr::if_else()' instead of 'ifelse' here, otherwise the return won't be a named vector
+        Message <- if_else(Row$IsAvailableEverywhere == TRUE,
+                           MakeFunctionMessage(Text = paste0("Opal data base table '",
+                                                             Row$TableName,
+                                                             "' is available on all servers!"),
+                                               IsClassSuccess = TRUE),
+                           MakeFunctionMessage(Text = paste0("Opal data base table '",
+                                                             Row$TableName,
+                                                             "' is not available at ",
+                                                             Row$NotAvailableAt),
+                                               IsClassWarning = TRUE))
+
+        Messages$TableAvailability <- c(Messages$TableAvailability,
+                                        Message)
+    }
+
+
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Print and return Messages object
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
