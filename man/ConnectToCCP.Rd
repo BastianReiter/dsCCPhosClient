@@ -4,10 +4,10 @@
 \alias{ConnectToCCP}
 \title{ConnectToCCP}
 \usage{
-ConnectToCCP(CCPSiteCredentials)
+ConnectToCCP(CCPSiteSpecifications)
 }
 \arguments{
-\item{CCPSiteCredentials}{Data frame or tibble | Data on CCP site credentials}
+\item{CCPSiteSpecifications}{\code{data.frame} | Login data of CCP sites}
 }
 \value{
 A list of DSConnection-objects

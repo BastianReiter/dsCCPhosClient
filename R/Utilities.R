@@ -40,7 +40,7 @@ MakeFunctionMessage <- function(Text,
 #'
 #' Take list of messages, add symbols and print them on console
 #'
-#' @param Text \code{list} List of Sublists of named vectors
+#' @param Text \code{list} List of of named vectors
 #' @param IsClassInfo \code{logical}
 #' @param IsClassSuccess \code{logical}
 #' @param IsClassWarning \code{logical}
@@ -50,23 +50,35 @@ MakeFunctionMessage <- function(Text,
 PrintMessages <- function(Messages)
 {
     require(dsCCPhosClient)
+    require(stringr)
 
     purrr::walk(.x = Messages,
-                .f = function(Sublist)
+                .f = function(Subvector)      # List of messages contains named vectors that serve as 'topic-specific messages'
                      {
-                          for (i in 1:length(Sublist))      # for-loop instead of nested purrr::walk because of the latter seems to address Sublist[[i]] instead of Sublist[i]
+                          cat("\n")
+
+                          for (i in 1:length(Subvector))      # for-loop instead of nested purrr::walk because items in list are vectors
                           {
-                              message <- Sublist[i]
-                              cli::cat_bullet(as.character(message),
-                                              bullet = dplyr::case_when(names(message) == "Info" ~ "info",
-                                                                        names(message) == "Success" ~ "tick",
-                                                                        names(message) == "Warning" ~ "warning",
-                                                                        names(message) == "Failure" ~ "cross",
-                                                                        TRUE ~ "none"),
-                                              bullet_col = dplyr::case_when(names(message) == "Success" ~ CCPhosColors$Green,
-                                                                            names(message) == "Warning" ~ CCPhosColors$Orange,
-                                                                            names(message) == "Failure" ~ CCPhosColors$Red,
-                                                                            TRUE ~ "black"))
+                              message <- Subvector[i]
+
+                              if (names(message) == "Topic")
+                              {
+                                  # Print topic string in bold letters (formatted with ANSI code \033...) and with horizontal line underneath
+                                  cat("\033[1m", as.character(message), "\n", paste0(rep("~", times = stringr::str_length(as.character(message))), collapse = ""), "\033[0m", "\n", sep = "")
+                              }
+                              else
+                              {
+                                  cli::cat_bullet(as.character(message),
+                                                  bullet = dplyr::case_when(names(message) == "Info" ~ "info",
+                                                                            names(message) == "Success" ~ "tick",
+                                                                            names(message) == "Warning" ~ "warning",
+                                                                            names(message) == "Failure" ~ "cross",
+                                                                            TRUE ~ "none"),
+                                                  bullet_col = dplyr::case_when(names(message) == "Success" ~ CCPhosColors$Green,
+                                                                                names(message) == "Warning" ~ CCPhosColors$Orange,
+                                                                                names(message) == "Failure" ~ CCPhosColors$Red,
+                                                                                TRUE ~ "black"))
+                              }
                           }
 
                           cat("\n")

@@ -14,9 +14,14 @@ library(dsCCPhosClient)
 # "Franz" = Remote server
 #-------------------------------------------------------------------------------
 
-Credentials <- data.frame(SiteName = c("Sissy", "Franz"),
-                                 URL = c("https://dktk-datashield-test/opal/", "https://dktk-test/opal/"),
-                                 Token = c("157777aa-eede-459f-a7f9-c53b51dba02a", "9e4c0a67-139d-40f3-90cd-c876014efad5"))
+# Credentials <- data.frame(SiteName = c("Sissy", "Franz", "Mannheim"),
+#                           URL = c("https://dktk-datashield-test/opal/", "https://dktk-test/opal/", "https://mannheim/opal/"),
+#                           Token = c("531fdbed-5d30-4547-9a62-8499197b048f", "53e1e3bf-e639-41ff-9e9d-aadc35cea6af", "7491ec62-803a-4271-b153-35bb30ab53b9"))
+
+Credentials <- data.frame(SiteName = c("Mannheim"),
+                          URL = c("https://mannheim/opal/"),
+                          Token = c("7491ec62-803a-4271-b153-35bb30ab53b9"))
+
 
 CCPConnections <- ConnectToCCP(CCPSiteCredentials = Credentials)
 
@@ -32,21 +37,19 @@ Messages_ServerRequirements <- CheckServerRequirements(DataSources = CCPConnecti
 # Load Raw Data Set (RDS) from Opal data base to R sessions on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# Messages_Loading <- LoadRawDataSet(DataSources = CCPConnections,
+#                                    ProjectName = "PROJECT-TEST_20231220_X1")
+
 Messages_Loading <- LoadRawDataSet(DataSources = CCPConnections,
-                                   ProjectName = "PROJECT-TEST_20231220_X1")
-
-
-
-
-
+                                   ProjectName = "PROJECT-")
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Use dsCCPhos functionality to process data
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ds.CurateData(Name_RawData = "RawDataSet",
-              Name_Output = "CurationOutput",
+ds.CurateData(RawDataSetName = "RawDataSet",
+              OutputName = "CurationOutput",
               DataSources = CCPConnections)
 
 
@@ -57,5 +60,6 @@ ds.CurateData(Name_RawData = "RawDataSet",
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 DSI::datashield.logout(CCPConnections)
+
 
 

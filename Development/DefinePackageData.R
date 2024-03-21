@@ -84,3 +84,25 @@ Meta_ServerRequirements <- list(#--- Data frame containing names of required pac
 # Save data in .rda-file and make it part of package
 use_data(Meta_ServerRequirements, overwrite = TRUE)
 
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Template data frame: CCP site specifications
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Initiate tibble that holds credentials of participating CCP sites
+CCPSiteSpecifications <- tibble(SiteName = character(),
+                                URL = character(),
+                                ProjectName = character(),
+                                Token = character())
+
+# Add site "Sissy"
+CCPSiteSpecifications <- add_row(CCPSiteSpecifications,
+                                 SiteName = "Sissi",
+                                 URL = "https://Sissi/",
+                                 ProjectName = "Project",
+                                 Token = "1234567890")
+
+# Save data in .rda-file and make it part of package
+use_data(CCPSiteSpecifications, overwrite = TRUE)
+

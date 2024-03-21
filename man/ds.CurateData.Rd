@@ -21,8 +21,9 @@ ds.CurateData(
 \item{DataSources}{List of DSConnection objects}
 }
 \value{
-Info messages concerning assignment of the following objects on server:
-\itemize{\item CuratedDataSet (list)
+Info messages concerning completion of CurateDataDS() and assignment of the following objects on server:
+\itemize{\item CurationOutput (list)
+\item CuratedDataSet (list)
 \item CurationReport (list)
 \item CurationMessages (list)}
 }

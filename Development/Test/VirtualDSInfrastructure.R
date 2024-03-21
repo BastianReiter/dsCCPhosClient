@@ -51,8 +51,15 @@ Messages_ServerRequirements <- CheckServerRequirements(DataSources = CCPConnecti
 # Load Raw Data Set (RDS) from Opal data base to R sessions on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Messages_Loading <- LoadRawDataSet(DataSources = CCPConnections,
-                                   ProjectName = "Virtual")
+Messages_Loading <- LoadRawDataSet(CCPSiteSpecifications = NULL,
+                                   DataSources = CCPConnections)
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Check out objects in server workspaces
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+GetServerWorkspaceInfo(DataSources = CCPConnections)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,27 +87,13 @@ CurationReports <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnect
 View(CurationReports$All$Transformation$Staging)
 
 # Make html file displaying tables from curation report
-dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReport,
-                                   PathToReportTemplate = "./Development/Reporting/CurationReport.qmd")
-
-# # Save for easier testing of CCPhosApp
-# saveRDS(object = CurationReports,
-#         file = "CurationReport.rds")
-
-
-# Use CCPhosApp to display curation reports
-CCPhosApp::StartCCPhosApp(CCPhosData = CurationReport)
-
+# dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReports$All,
+#                                    PathToReportTemplate = "./Development/Reporting/CurationReport.qmd")
 
 
 # Make tables from Curated Data Set directly addressable by unpacking them into R server session
-dsCCPhosClient::ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
-                                        DataSources = CCPConnections)
-
-
-# List all objects in server-sided R sessions
-DSI::datashield.symbols(conns = CCPConnections)
-
+Messages_UnpackingCDS <- dsCCPhosClient::ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
+                                                                 DataSources = CCPConnections)
 
 
 
@@ -111,14 +104,14 @@ DSI::datashield.symbols(conns = CCPConnections)
 
 
 # Try out data augmentation method
-dsCCPhosClient::ds.AugmentData(Name_CurationOutput = "CurationOutput",
-                               Name_Output = "AugmentationOutput",
+dsCCPhosClient::ds.AugmentData(CuratedDataSetName = "CuratedDataSet",
+                               OutputName = "AugmentationOutput",
                                DataSources = CCPConnections)
 
 
 # Make tables from Augmented Data Set directly addressable by unpacking them into R server session
-dsCCPhosClient::ds.UnpackAugmentedDataSet(Name_AugmentationOutput = "AugmentationOutput",
-                                          DataSources = CCPConnections)
+Messages_UnpackingADS <- dsCCPhosClient::ds.UnpackAugmentedDataSet(AugmentedDataSetName = "AugmentedDataSet",
+                                                                   DataSources = CCPConnections)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -130,7 +123,6 @@ ds.colnames(x = "ADS_Patients",
             datasources = CCPConnections)
 
 
-
 SampleStatistics <- ds.GetSampleStatistics(TableName = "ADS_Patients",
                                            MetricFeatureName = "PatientAgeAtDiagnosis",
                                            DataSources = CCPConnections)
@@ -138,15 +130,10 @@ SampleStatistics <- ds.GetSampleStatistics(TableName = "ADS_Patients",
 
 TestPlot <- MakeBoxPlot(SampleStatistics = SampleStatistics,
                         AxisTitle_y = "Patient age at diagnosis",
-                        FillPalette = c("All" = Colors$MediumGrey,
-                                        "SiteA" = Colors$Primary,
-                                        "SiteB" = Colors$Secondary,
-                                        "SiteC" = Colors$Tertiary))
-
-
-
-
-
+                        FillPalette = c("All" = CCPhosColors$MediumGrey,
+                                        "SiteA" = CCPhosColors$Primary,
+                                        "SiteB" = CCPhosColors$Secondary,
+                                        "SiteC" = CCPhosColors$Tertiary))
 
 
 

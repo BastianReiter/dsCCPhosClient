@@ -8,6 +8,7 @@
 
 
 library(devtools)
+library(dplyr)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,6 +53,8 @@ library(devtools)
 # use_r("CheckServerRequirements.R")
 # use_r("ConnectToCCP.R")
 # use_r("ConnectToVirtualCCP.R")
+# use_r("GetServerOpalDBInfo.R")
+# use_r("GetServerWorkspaceInfo.R")
 # use_r("LoadRawDataSet.R")
 # use_r("Utilities.R")
 

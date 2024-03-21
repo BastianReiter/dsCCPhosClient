@@ -7,7 +7,7 @@
 PrintMessages(Messages)
 }
 \arguments{
-\item{Text}{\code{list} List of Sublists of named vectors}
+\item{Text}{\code{list} List of of named vectors}
 
 \item{IsClassInfo}{\code{logical}}
 

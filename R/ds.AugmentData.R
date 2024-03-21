@@ -32,10 +32,16 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
     }
 
 
+    # For testing purposes
+    # CuratedDataSetName <- "CuratedDataSet"
+    # OutputName <- "AugmentationOutput"
+    # DataSources <- CCPConnections
+
+
     # Initiate output messaging objects
     Messages <- list()
     #Messages$Completion <- character()
-    Messages$Assignment <- character()
+    Messages$Assignment <- list()
 
 
 
@@ -85,6 +91,10 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
 
     # Turn list into (named) vector
     Messages$Assignment <- purrr::list_c(Messages$Assignment)
+
+    # Add topic element to start of vector
+    Messages$Assignment <- c(Topic = "Object assignment on servers",
+                             Messages$Assignment)
 
 
     # Print messages and return Messages object
