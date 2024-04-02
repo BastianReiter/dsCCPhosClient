@@ -57,26 +57,74 @@ ds.GetCurationReport <- function(DataSources = NULL)
 
     for (i in 1:length(CurationReports[[1]]$Transformation))      # Loop through all transformation monitor tables (Diagnosis, Histology, etc.)
     {
-        SummaryOfTable <- data.frame()
+        AllServersTable <- data.frame()
 
         for (j in 1:length(CurationReports))      # Loop through all servers
         {
-            SummaryOfTable <- SummaryOfTable %>%
-                                  bind_rows(CurationReports[[j]]$Transformation[[i]])
+            ServerTable <- CurationReports[[j]]$Transformation[[i]]
+
+            if (!is.null(ServerTable))
+            {
+                ServerTable <- ServerTable %>%
+                                    mutate(TemporaryServerID = j)      # Create temporary server ID for processing
+
+                # Row-bind all server-specific transformation monitor tables
+                AllServersTable <- AllServersTable %>%
+                                      bind_rows(ServerTable)
+            }
         }
 
-        if (nrow(SummaryOfTable) > 0)      # In case 'SummaryOfTable' is not empty
+        if (nrow(AllServersTable) > 0)      # In case 'AllServersTable' is not empty
         {
-            SummaryOfTable <- SummaryOfTable %>%
-                                  group_by(Feature, Value, IsValueEligible) %>%
-                                  summarize(Raw = sum(Raw),
-                                            Transformed = sum(Transformed),
-                                            Final = sum(Final))
+            # Get summarized counts of raw values
+            SummaryRawValues <- AllServersTable %>%
+                                    distinct(pick(TemporaryServerID,      # This makes sure that per server only one 'instance' of a particular value is counted
+                                                  Feature,
+                                                  Value_Raw,
+                                                  Count_Raw)) %>%
+                                    group_by(Feature,
+                                             Value_Raw) %>%
+                                    summarize(Count_Raw = sum(Count_Raw, na.rm = TRUE))
 
+            # Get summarized counts of transformed values
+            SummaryTransformedValues <- AllServersTable %>%
+                                            distinct(pick(TemporaryServerID,      # This makes sure that per server only one 'instance' of a particular value is counted
+                                                          Feature,
+                                                          Value_Transformed,
+                                                          Count_Transformed)) %>%
+                                            group_by(Feature,
+                                                     Value_Transformed) %>%
+                                            summarize(Count_Transformed = sum(Count_Transformed, na.rm = TRUE))
+
+            # Get summarized counts of final values
+            SummaryFinalValues <- AllServersTable %>%
+                                      distinct(pick(TemporaryServerID,      # This makes sure that per server only one 'instance' of a particular value is counted
+                                                    Feature,
+                                                    Value_Final,
+                                                    Count_Final)) %>%
+                                      group_by(Feature,
+                                               Value_Final) %>%
+                                      summarize(Count_Final = sum(Count_Final, na.rm = TRUE))
+
+
+            AllServersTable <- AllServersTable %>%
+                                  select(-TemporaryServerID,
+                                         -Count_Raw,
+                                         -Count_Transformed,
+                                         -Count_Final) %>%
+                                  distinct() %>%
+                                  left_join(SummaryRawValues, by = join_by(Feature, Value_Raw)) %>%
+                                  left_join(SummaryTransformedValues, by = join_by(Feature, Value_Transformed)) %>%
+                                  left_join(SummaryFinalValues, by = join_by(Feature, Value_Final)) %>%
+                                  arrange(Feature,
+                                          desc(IsOccurring),
+                                          desc(IsEligible_Raw),
+                                          desc(IsEligible_Transformed),
+                                          Value_Raw)
         }
 
         TransformationMonitorsSummary <- c(TransformationMonitorsSummary,
-                                           list(SummaryOfTable))
+                                           list(AllServersTable))
     }
 
     names(TransformationMonitorsSummary) <- names(CurationReports[[1]]$Transformation)
