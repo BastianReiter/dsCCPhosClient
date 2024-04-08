@@ -15,8 +15,8 @@
 #devtools::install_github("tombisho/dsSynthetic", dependencies = TRUE)
 #devtools::install_github("tombisho/dsSyntheticClient", dependencies = TRUE)
 
-#devtools::install_github("neelsoumya/dsSurvival")
-#devtools::install_github("neelsoumya/dsSurvivalClient")
+devtools::install_github("neelsoumya/dsSurvival")
+devtools::install_github("neelsoumya/dsSurvivalClient")
 
 
 
@@ -47,6 +47,8 @@ CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
 
 Messages_ServerRequirements <- CheckServerRequirements(DataSources = CCPConnections)
 
+#datashield.pkg_status(conns = CCPConnections)
+datashield.method_status(conns = CCPConnections)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Load Raw Data Set (RDS) from Opal data base to R sessions on servers
