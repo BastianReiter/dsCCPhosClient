@@ -7,7 +7,7 @@
 #'
 #' @param RawDataSetName String | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'
 #' @param OutputName String | Name of output object to be assigned on server | Default: 'CurationOutput'
-#' @param RuleProfile_RawDataTransformation String | Profile name defining rule set to be used for data transformation. Profile name must be stated in \code{\link{RuleSet_RawDataTransformation}. | Default: 'Default'
+#' @param RuleProfile_RawDataHarmonization String | Profile name defining rule set to be used for data harmonization. Profile name must be stated in \code{\link{RuleSet_RawDataHarmonization}. | Default: 'Default'
 #' @param RuleProfile_DiagnosisRedundancy String | Profile name defining rule set to be used for classification of diagnosis redundancies. Profile name must be stated in \code{\link{RuleSet_DiagnosisRedundancy}. | Default: 'Default'
 #' @param RuleProfile_DiagnosisAssociation String | Profile name defining rule set to be used for classification of diagnosis associations. Profile name must be stated in \code{\link{RuleSet_DiagnosisAssociation}. | Default: 'Default'
 #' @param DataSources List of DSConnection objects
@@ -23,7 +23,7 @@
 #' @author Bastian Reiter
 ds.CurateData <- function(RawDataSetName = "RawDataSet",
                           OutputName = "CurationOutput",
-                          RuleProfile_RawDataTransformation = "Default",
+                          RuleProfile_RawDataHarmonization = "Default",
                           RuleProfile_DiagnosisRedundancy = "Default",
                           RuleProfile_DiagnosisAssociation = "Default",
                           DataSources = NULL)
@@ -55,7 +55,7 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
     # Construct the the server-side function call
     ServerCall <- call("CurateDataDS",
                        RawDataSetName.S = RawDataSetName,
-                       RuleProfile_RawDataTransformation.S = RuleProfile_RawDataTransformation,
+                       RuleProfile_RawDataHarmonization.S = RuleProfile_RawDataHarmonization,
                        RuleProfile_DiagnosisRedundancy.S = RuleProfile_DiagnosisRedundancy,
                        RuleProfile_DiagnosisAssociation.S = RuleProfile_DiagnosisAssociation)
 

@@ -39,13 +39,13 @@ ds.GetCurationReport <- function(DataSources = NULL)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Initiate summary with vector from first server
-    UnlinkedEntriesSummary <- CurationReports[[1]]$UnlinkedEntries
+    UnlinkedEntriesCumulated <- CurationReports[[1]]$UnlinkedEntries
 
     if (length(CurationReports) > 1)
     {
         for (i in 2:length(CurationReports))      # Loop through all other servers
         {
-            UnlinkedEntriesSummary <- UnlinkedEntriesSummary + CurationReports[[i]]$UnlinkedEntries
+            UnlinkedEntriesCumulated <- UnlinkedEntriesCumulated + CurationReports[[i]]$UnlinkedEntries
         }
     }
 
@@ -53,7 +53,7 @@ ds.GetCurationReport <- function(DataSources = NULL)
     # 2 B) Summarize server-specific reports: Transformation
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    TransformationMonitorsSummary <- list()
+    TransformationMonitorsCumulated <- list()
 
     for (i in 1:length(CurationReports[[1]]$Transformation))      # Loop through all transformation monitor tables (Diagnosis, Histology, etc.)
     {
@@ -78,6 +78,7 @@ ds.GetCurationReport <- function(DataSources = NULL)
         {
             # Get summarized counts of raw values
             SummaryRawValues <- AllServersTable %>%
+                                    filter(IsOccurring == TRUE) %>%
                                     distinct(pick(TemporaryServerID,      # This makes sure that per server only one 'instance' of a particular value is counted
                                                   Feature,
                                                   Value_Raw,
@@ -86,19 +87,29 @@ ds.GetCurationReport <- function(DataSources = NULL)
                                              Value_Raw) %>%
                                     summarize(Count_Raw = sum(Count_Raw, na.rm = TRUE))
 
-            # Get summarized counts of transformed values
-            SummaryTransformedValues <- AllServersTable %>%
-                                            distinct(pick(TemporaryServerID,      # This makes sure that per server only one 'instance' of a particular value is counted
+            # Get summarized counts of harmonized values
+            SummaryHarmonizedValues <- AllServersTable %>%
+                                            distinct(pick(TemporaryServerID,
                                                           Feature,
-                                                          Value_Transformed,
-                                                          Count_Transformed)) %>%
+                                                          Value_Harmonized,
+                                                          Count_Harmonized)) %>%
                                             group_by(Feature,
-                                                     Value_Transformed) %>%
-                                            summarize(Count_Transformed = sum(Count_Transformed, na.rm = TRUE))
+                                                     Value_Harmonized) %>%
+                                            summarize(Count_Harmonized = sum(Count_Harmonized, na.rm = TRUE))
+
+            # Get summarized counts of recoded values
+            SummaryRecodedValues <- AllServersTable %>%
+                                        distinct(pick(TemporaryServerID,
+                                                      Feature,
+                                                      Value_Recoded,
+                                                      Count_Recoded)) %>%
+                                        group_by(Feature,
+                                                 Value_Recoded) %>%
+                                        summarize(Count_Recoded = sum(Count_Recoded, na.rm = TRUE))
 
             # Get summarized counts of final values
             SummaryFinalValues <- AllServersTable %>%
-                                      distinct(pick(TemporaryServerID,      # This makes sure that per server only one 'instance' of a particular value is counted
+                                      distinct(pick(TemporaryServerID,
                                                     Feature,
                                                     Value_Final,
                                                     Count_Final)) %>%
@@ -110,37 +121,45 @@ ds.GetCurationReport <- function(DataSources = NULL)
             AllServersTable <- AllServersTable %>%
                                   select(-TemporaryServerID,
                                          -Count_Raw,
-                                         -Count_Transformed,
+                                         -Count_Harmonized,
+                                         -Count_Recoded,
                                          -Count_Final) %>%
                                   distinct() %>%
+                                  #--- Delete remnant values marked as non-occurring that actually occur on some server ---
+                                  group_by(Feature, Value_Raw) %>%
+                                      arrange(desc(IsOccurring), .by_group = TRUE) %>%
+                                      slice_head() %>%
+                                  ungroup() %>%
+                                  #--- Add cumulated value counts of different transformation stages ---
                                   left_join(SummaryRawValues, by = join_by(Feature, Value_Raw)) %>%
-                                  left_join(SummaryTransformedValues, by = join_by(Feature, Value_Transformed)) %>%
+                                  left_join(SummaryHarmonizedValues, by = join_by(Feature, Value_Harmonized)) %>%
+                                  left_join(SummaryRecodedValues, by = join_by(Feature, Value_Recoded)) %>%
                                   left_join(SummaryFinalValues, by = join_by(Feature, Value_Final)) %>%
                                   arrange(Feature,
                                           desc(IsOccurring),
                                           desc(IsEligible_Raw),
-                                          desc(IsEligible_Transformed),
+                                          desc(IsEligible_Harmonized),
                                           Value_Raw)
         }
 
-        TransformationMonitorsSummary <- c(TransformationMonitorsSummary,
-                                           list(AllServersTable))
+        TransformationMonitorsCumulated <- c(TransformationMonitorsCumulated,
+                                             list(AllServersTable))
     }
 
-    names(TransformationMonitorsSummary) <- names(CurationReports[[1]]$Transformation)
+    names(TransformationMonitorsCumulated) <- names(CurationReports[[1]]$Transformation)
 
 
     # 2 C) Summarize server-specific reports: Diagnosis Classification
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Initiate summary with vector from first server
-    DiagnosisClassificationSummary <- CurationReports[[1]]$DiagnosisClassification
+    DiagnosisClassificationCumulated <- CurationReports[[1]]$DiagnosisClassification
 
     if (length(CurationReports) > 1)
     {
         for (i in 2:length(CurationReports))      # Loop through all other servers
         {
-            DiagnosisClassificationSummary <- DiagnosisClassificationSummary + CurationReports[[i]]$DiagnosisClassification
+            DiagnosisClassificationCumulated <- DiagnosisClassificationCumulated + CurationReports[[i]]$DiagnosisClassification
         }
     }
 
@@ -149,7 +168,7 @@ ds.GetCurationReport <- function(DataSources = NULL)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     return(c(CurationReports,
-             "All" = list(list(UnlinkedEntries = UnlinkedEntriesSummary,
-                               Transformation = TransformationMonitorsSummary,
-                               DiagnosisClassification = DiagnosisClassificationSummary))))
+             "All" = list(list(UnlinkedEntries = UnlinkedEntriesCumulated,
+                               Transformation = TransformationMonitorsCumulated,
+                               DiagnosisClassification = DiagnosisClassificationCumulated))))
 }
