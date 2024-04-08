@@ -55,13 +55,13 @@ ds.GetCurationReport <- function(DataSources = NULL)
 
     TransformationMonitorsCumulated <- list()
 
-    for (i in 1:length(CurationReports[[1]]$Transformation))      # Loop through all transformation monitor tables (Diagnosis, Histology, etc.)
+    for (i in 1:length(CurationReports[[1]]$Transformation$Details))      # Loop through all transformation monitor tables (Diagnosis, Histology, etc.)
     {
         AllServersTable <- data.frame()
 
         for (j in 1:length(CurationReports))      # Loop through all servers
         {
-            ServerTable <- CurationReports[[j]]$Transformation[[i]]
+            ServerTable <- CurationReports[[j]]$Transformation$Details[[i]]
 
             if (!is.null(ServerTable))
             {
@@ -146,7 +146,7 @@ ds.GetCurationReport <- function(DataSources = NULL)
                                              list(AllServersTable))
     }
 
-    names(TransformationMonitorsCumulated) <- names(CurationReports[[1]]$Transformation)
+    names(TransformationMonitorsCumulated) <- names(CurationReports[[1]]$Transformation$Details)
 
 
     # 2 C) Summarize server-specific reports: Diagnosis Classification
