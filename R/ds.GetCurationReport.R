@@ -169,6 +169,8 @@ ds.GetCurationReport <- function(DataSources = NULL)
 
     return(c(CurationReports,
              "All" = list(list(UnlinkedEntries = UnlinkedEntriesCumulated,
-                               Transformation = TransformationMonitorsCumulated,
+                               Transformation = list(Details = TransformationMonitorsCumulated,      # List of lists
+                                                     EligibilityOverview = list(),
+                                                     ValueSetOverview = list()),
                                DiagnosisClassification = DiagnosisClassificationCumulated))))
 }

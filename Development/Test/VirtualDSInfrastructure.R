@@ -85,7 +85,8 @@ Messages_DataCuration <- dsCCPhosClient::ds.CurateData(RawDataSetName = "RawData
 CurationReports <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
 
 # Exemplary look at a curation report table
-View(CurationReports$All$Transformation$Staging)
+View(CurationReports$All$Transformation$Details$Staging)
+
 
 # Make html file displaying tables from curation report
 # dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReports$All,
