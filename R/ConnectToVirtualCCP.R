@@ -6,7 +6,7 @@
 #' @param CCPTestData List of CCP test data
 #' @param NumberOfSites Integer | The number of virtual sites to install
 #' @param NumberOfPatientsPerSite Integer | Optional value to restrict size of data set for faster testing | Default: NULL
-#' @param IncludedDsPackages Character vector | Server-side dataSHIELD packages to be included | Default: dsBase, dsCCPhos
+#' @param AddedDsPackages Character vector | Server-side dataSHIELD packages to be added to default (dsBase, dsCCPhos) | Default: NULL
 #'
 #' @return A list of DSConnection-objects
 #' @export
@@ -16,7 +16,7 @@
 ConnectToVirtualCCP <- function(CCPTestData,
                                 NumberOfSites = 1,
                                 NumberOfPatientsPerSite = NULL,
-                                IncludedDsPackages = c("dsBase", "dsCCPhos"))
+                                AddedDsPackages = NULL)
 {
     require(dplyr)
     require(DSLite)
@@ -81,7 +81,9 @@ ConnectToVirtualCCP <- function(CCPTestData,
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         assign(x = paste0("Server_", SiteNames[i]),
                value = newDSLiteServer(tables = SiteTestData,
-                                       config = DSLite::defaultDSConfiguration(include = IncludedDsPackages)),
+                                       config = DSLite::defaultDSConfiguration(include = c("dsBase",
+                                                                                           "dsCCPhos",
+                                                                                           AddedDsPackages))),
                envir = .GlobalEnv)
 
         # 3) Add login data to login builder

@@ -25,7 +25,7 @@ ds.GetReportingObject <- function(ObjectName,
                        ObjectName.S = ObjectName)
 
     ReportingObjects <- DSI::datashield.aggregate(conns = DataSources,
-                                                   expr = ServerCall)
+                                                  expr = ServerCall)
 
     return(ReportingObjects)
 }

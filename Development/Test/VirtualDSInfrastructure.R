@@ -15,8 +15,8 @@
 #devtools::install_github("tombisho/dsSynthetic", dependencies = TRUE)
 #devtools::install_github("tombisho/dsSyntheticClient", dependencies = TRUE)
 
-devtools::install_github("neelsoumya/dsSurvival")
-devtools::install_github("neelsoumya/dsSurvivalClient")
+#devtools::install_github("neelsoumya/dsSurvival")
+#devtools::install_github("neelsoumya/dsSurvivalClient")
 
 
 
@@ -38,7 +38,8 @@ TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
-                                      NumberOfPatientsPerSite = 1000)
+                                      NumberOfPatientsPerSite = 1000,
+                                      AddedDsPackages = "dsSurvivalFix")
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -47,8 +48,9 @@ CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
 
 Messages_ServerRequirements <- CheckServerRequirements(DataSources = CCPConnections)
 
-#datashield.pkg_status(conns = CCPConnections)
-datashield.method_status(conns = CCPConnections)
+# datashield.pkg_status(conns = CCPConnections)
+# datashield.method_status(conns = CCPConnections)
+# datashield.methods(conns = CCPConnections, type = "assign")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Load Raw Data Set (RDS) from Opal data base to R sessions on servers
@@ -62,7 +64,12 @@ Messages_Loading <- LoadRawDataSet(CCPSiteSpecifications = NULL,
 # Check out objects in server workspaces
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-GetServerWorkspaceInfo(DataSources = CCPConnections)
+# Overview of all objects in server R session
+View(GetServerWorkspaceInfo(DataSources = CCPConnections)$Overview)
+# Detailed meta data of a particular object
+MetaData <- GetServerWorkspaceInfo(DataSources = CCPConnections)$Details[[1]]
+# View of particular object structure
+View(MetaData$ContentOverview)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -75,24 +82,60 @@ GetServerWorkspaceInfo(DataSources = CCPConnections)
 #                                                       DataSources = CCPConnections)
 
 
-#CCPhosApp::StartCCPhosApp(CCPConnections = CCPConnections)
-
-
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS)
 Messages_DataCuration <- dsCCPhosClient::ds.CurateData(RawDataSetName = "RawDataSet",
                                                        OutputName = "CurationOutput",
                                                        DataSources = CCPConnections)
 
-# Get Curation reports
+# Get curation reports
 CurationReports <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
 
 # Exemplary look at a curation report table
-View(CurationReports$All$Transformation$Details$Staging)
+View(CurationReports$All$Transformation$Monitors$Staging)
+View(CurationReports$All$Transformation$EligibilityOverviews$Staging)
+View(CurationReports$All$Transformation$ValueSetOverviews$Raw)
 
 
-# Make html file displaying tables from curation report
-# dsCCPhosClient::MakeCurationReport(CurationReportData = CurationReports$All,
-#                                    PathToReportTemplate = "./Development/Reporting/CurationReport.qmd")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Prepare data on eligibility for plot display
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# - Restructure eligibility overview table to meet requirements of plot function
+# - Create separate data frames for each 'Feature' value
+# - Columns in final object:
+#   - 'Feature': contains names of features
+#   - 'data': plot data for feature-specific plot
+#-------------------------------------------------------------------------------
+
+PlotData <- CurationReports$All$Transformation$EligibilityOverviews$Staging %>%
+                select(-ends_with("_Proportional")) %>%
+                pivot_longer(cols = c(Raw, Harmonized, Recoded, Final),
+                             names_to = "Stage",
+                             values_to = "Count") %>%
+                pivot_wider(names_from = "Eligibility",
+                            values_from = "Count") %>%
+                nest(.by = Feature)      # 'Split' the whole table into smaller data frames for each 'Feature' value
+
+
+library(plotly)
+
+plot_ly(data = filter(PlotData, Feature == "UICCStage")$data[[1]],
+        x = ~Stage,
+        y = ~Eligible,
+        type = "bar",
+        name = "Eligible",
+        color = I(dsCCPhosClient::CCPhosColors$Green)) %>%
+    add_trace(y = ~Ineligible,
+              name = "Ineligible",
+              color = I(dsCCPhosClient::CCPhosColors$Red)) %>%
+    add_trace(y = ~Missing,
+              name = "Missing",
+              color = I(dsCCPhosClient::CCPhosColors$MediumGrey)) %>%
+    layout(xaxis = list(categoryorder = "array",
+                        categoryarray = c("Raw", "Harmonized", "Recoded", "Final")),
+           yaxis = list(title = "Count"),
+           barmode = "stack")
+
+
 
 
 # Make tables from Curated Data Set directly addressable by unpacking them into R server session
@@ -126,6 +169,15 @@ Messages_UnpackingADS <- dsCCPhosClient::ds.UnpackAugmentedDataSet(AugmentedData
 ds.colnames(x = "ADS_Patients",
             datasources = CCPConnections)
 
+ds.mean(x = "ADS_Patients$PatientAgeAtDiagnosis",
+        datasources = CCPConnections)
+
+
+MetaData_ADS_Patients <- ds.GetObjectMetaData(ObjectName = "ADS_Patients",
+                                              DataSources = CCPConnections)
+
+View(MetaData_ADS_Patients$SiteA$ContentOverview)
+
 
 SampleStatistics <- ds.GetSampleStatistics(TableName = "ADS_Patients",
                                            MetricFeatureName = "PatientAgeAtDiagnosis",
@@ -139,6 +191,16 @@ TestPlot <- MakeBoxPlot(SampleStatistics = SampleStatistics,
                                         "SiteB" = CCPhosColors$Secondary,
                                         "SiteC" = CCPhosColors$Tertiary))
 
+TestPlot
+
+
+# dsSurvivalClient::ds.Surv(time = "ADS_Patients$TimeFollowUp",
+#                           event = "ADS_Patients$IsDocumentedDeceased",
+#                           objectname = "TestSurv",
+#                           datasources = CCPConnections)
+#
+# dsSurvivalClient::ds.survfit(formula = 'TestSurv',
+#                              object = "TestSurvfit")
 
 
 

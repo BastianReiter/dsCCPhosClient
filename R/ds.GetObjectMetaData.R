@@ -1,0 +1,43 @@
+
+#' ds.GetObjectMetaData
+#'
+#' Gathers meta data about an R object.
+#'
+#' Linked to server-side AGGREGATE method GetObjectMetaDataDS()
+#'
+#' @param ObjectName String | Name of object on server
+#' @param DataSources List of DSConnection objects
+#'
+#' @return A list of server returns
+#' @export
+#'
+#' @author Bastian Reiter
+ds.GetObjectMetaData <- function(ObjectName,
+                                 DataSources)
+{
+    # Look for DS connections
+    if (is.null(DataSources))
+    {
+        DataSources <- DSI::datashield.connections_find()
+    }
+
+    # Ensure DataSources is a list of DSConnection-class
+    if (!(is.list(DataSources) && all(unlist(lapply(DataSources, function(d) {methods::is(d,"DSConnection")})))))
+    {
+        stop("'DataSources' were expected to be a list of DSConnection-class objects", call. = FALSE)
+    }
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Call GetObjectMetaDataDS() on every server
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    # Construct server-side function call
+    ServerCall <- call("GetObjectMetaDataDS",
+                       ObjectName.S = ObjectName)
+
+    # Get object meta data from every server
+    ObjectMetaData <- DSI::datashield.aggregate(conns = DataSources,
+                                                expr = ServerCall)
+
+    return(ObjectMetaData)
+}

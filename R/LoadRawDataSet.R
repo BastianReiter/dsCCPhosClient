@@ -80,12 +80,12 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
     for(i in 1:length(CCPTableNames_Curated))
     {
         # Make sure assignment was successful on all servers
-        ObjectInfo_Table <- ds.GetObjectInfo(ObjectName = paste0("RDS_", CCPTableNames_Curated[i]),
-                                             DataSources = DataSources)
+        ObjectStatus_Table <- ds.GetObjectStatus(ObjectName = paste0("RDS_", CCPTableNames_Curated[i]),
+                                                 DataSources = DataSources)
 
         # Add info about table assignment to Messages
         BundledMessages <- c(BundledMessages,
-                             ObjectInfo_Table)
+                             ObjectStatus_Table)
     }
 
 
@@ -105,12 +105,12 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
                           datasources = DataSources)
 
     # Make sure assignment of RawDataSet was successful on all servers
-    ObjectInfo_RawDataSet <- ds.GetObjectInfo(ObjectName = "RawDataSet",
-                                              DataSources = DataSources)
+    ObjectStatus_RawDataSet <- ds.GetObjectStatus(ObjectName = "RawDataSet",
+                                                  DataSources = DataSources)
 
     # Add info about RawDataSet assignment to Messages
     Messages$Assignment <- c(Messages$Assignment,
-                             purrr::list_c(ObjectInfo_RawDataSet))
+                             purrr::list_c(ObjectStatus_RawDataSet))
 
 
 

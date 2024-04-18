@@ -52,8 +52,8 @@ ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
 
         # Call helper function to check if object assignment succeeded
         Messages$Assignment <- c(Messages$Assignment,
-                                 ds.GetObjectInfo(ObjectName = paste0("ADS_", CCPTableNames_ADS[i]),
-                                                  DataSources = DataSources))
+                                 ds.GetObjectStatus(ObjectName = paste0("ADS_", CCPTableNames_ADS[i]),
+                                                    DataSources = DataSources))
     }
 
     # Turn list into (named) vector
