@@ -59,8 +59,8 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
 
     # Call helper function to check if assignment of AugmentationOutput succeeded
     Messages$Assignment <- c(Messages$Assignment,
-                             ds.GetObjectInfo(ObjectName = OutputName,
-                                              DataSources = DataSources))
+                             ds.GetObjectStatus(ObjectName = OutputName,
+                                                DataSources = DataSources))
 
 
 
@@ -85,8 +85,8 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
 
         # Call helper function to check if object assignment succeeded
         Messages$Assignment <- c(Messages$Assignment,
-                                 ds.GetObjectInfo(ObjectName = AugmentationOutputObjects[i],
-                                                  DataSources = DataSources))
+                                 ds.GetObjectStatus(ObjectName = AugmentationOutputObjects[i],
+                                                    DataSources = DataSources))
     }
 
     # Turn list into (named) vector

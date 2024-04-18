@@ -1,11 +1,11 @@
 
 #' GetServerWorkspaceInfo
 #'
-#' Check which objects live in server-side R sessions
+#' Check which objects live in server-side R sessions and collect meta data about them.
 #'
 #' @param DataSources List of DSConnection objects
 #'
-#' @return A tibble
+#' @return A list
 #' @export
 #'
 #' @author Bastian Reiter
@@ -24,37 +24,69 @@ GetServerWorkspaceInfo <- function(DataSources = NULL)
     ServerNames <- sort(names(DataSources))
 
 
+    # 1) Get the names of all object living in the server-side R sessions and check whether they occur on every server
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     # Get names of symbols (objects) in all server workspaces
     ServerObjectNames <- DSI::datashield.symbols(conns = DataSources)
 
     # Get all uniquely occurring object names across servers (although usually the set of symbol names should be the same on all servers)
     UniqueObjectNames <- sort(unique(unlist(ServerObjectNames)))
 
-
-    # Create tibble with object names and types (can't use mutate() because ds.class() does not work with vectors)
-    Output <- bind_cols(Object = UniqueObjectNames,
-                        Type = purrr::modify(UniqueObjectNames,
-                                             function(symbol) { as.character(dsBaseClient::ds.class(x = symbol,
-                                                                                                    datasources = DataSources)[[1]]) }))      # Note: The type definition is based on the object found on the first server (therefore '[[1]]')
+    # Initiate 'ObjectInfo' tibble
+    ObjectInfo <- tibble(Object = UniqueObjectNames)
 
     # Create server-specific columns that give feedback on existence of objects (TRUE / FALSE)
     ServerColumns <- NULL
 
     for (i in 1:length(ServerNames))
     {
-        Column <- Output$Object %in% ServerObjectNames[[ServerNames[i]]]
+        Column <- ObjectInfo$Object %in% ServerObjectNames[[ServerNames[i]]]
 
         ServerColumns <- cbind(ServerColumns,      # Using cbind() instead of bind_cols() because it's quiet
                                Column)
     }
 
+    # Name columns according to server names
     colnames(ServerColumns) <- ServerNames
 
     # Bind columns to Output data frame
-    Output <- bind_cols(Output,
-                        ServerColumns)
+    ObjectInfo <- bind_cols(ObjectInfo,
+                            ServerColumns)
 
-    # Return Output object
+
+    #2) Collect meta data about existing objects and attach some of it to 'ObjectInfo'
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    return(Output)
+    #   - The meta data for an object is collected from the first server where the object actually exists
+
+    MetaData <- ObjectInfo %>%
+                    rowwise() %>%
+                        mutate(ServerToLookAt = first(ServerNames[unlist(pick(all_of(ServerNames)))])) %>%      # Get name of any (first) server that hosts the object in question
+                    ungroup() %>%
+                    select(Object,
+                           ServerToLookAt) %>%
+                    pmap(function(Object, ServerToLookAt)
+                         {
+                             if (!is.na(ServerToLookAt))
+                             {
+                                 ds.GetObjectMetaData(ObjectName = Object,
+                                                      DataSources = DataSources[ServerToLookAt])[[1]]
+                             }
+                             else { return(list()) }
+                         }) %>%
+                    setNames(ObjectInfo$Object)
+
+
+    # Add some meta data to 'ObjectInfo'
+    ObjectInfo <- ObjectInfo %>%
+                      rowwise() %>%
+                          mutate(Class = ifelse(!is.null(MetaData[[Object]]$Class), MetaData[[Object]]$Class, NA),
+                                 Length = ifelse(!is.null(MetaData[[Object]]$Length), MetaData[[Object]]$Length, NA),
+                                 RowCount = ifelse(!is.null(MetaData[[Object]]$RowCount), MetaData[[Object]]$RowCount, NA))
+
+
+    # Return list
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    return(list(Overview = ObjectInfo,
+                Details = MetaData))
 }

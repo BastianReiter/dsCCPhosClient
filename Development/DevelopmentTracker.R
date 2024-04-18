@@ -62,7 +62,8 @@ library(dplyr)
 # Linked to dataSHIELD AGGREGATE functions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_r("ds.GetCurationReport.R")
-# use_r("ds.GetObjectInfo.R")
+# use_r("ds.GetObjectMetaData.R")
+# use_r("ds.GetObjectStatus.R")
 # use_r("ds.GetReportingObject.R")
 # use_r("ds.GetSampleStatistics.R")
 # use_r("ds.GetValidationReport_RawData.R")

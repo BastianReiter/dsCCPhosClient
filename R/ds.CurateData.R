@@ -66,8 +66,8 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
 
     # Call helper function to check if assignment of CurationOutput succeeded
     Messages$Assignment <- c(Messages$Assignment,
-                             ds.GetObjectInfo(ObjectName = OutputName,
-                                              DataSources = DataSources))
+                             ds.GetObjectStatus(ObjectName = OutputName,
+                                                DataSources = DataSources))
 
 
 
@@ -92,8 +92,8 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
 
         # Call helper function to check if object assignment succeeded
         Messages$Assignment <- c(Messages$Assignment,
-                                 ds.GetObjectInfo(ObjectName = CurationOutputObjects[i],
-                                                  DataSources = DataSources))
+                                 ds.GetObjectStatus(ObjectName = CurationOutputObjects[i],
+                                                    DataSources = DataSources))
     }
 
     # Turn list into (named) vector

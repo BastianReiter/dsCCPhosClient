@@ -46,8 +46,8 @@ ds.ExtractFromList <- function(ListName,
                            value = ServerCall)
 
     # Call helper function to check if object assignment succeeded
-    AssignmentInfo <- ds.GetObjectInfo(ObjectName,
-                                       DataSources = DataSources)
+    AssignmentInfo <- ds.GetObjectStatus(ObjectName,
+                                         DataSources = DataSources)
 
     return(AssignmentInfo)
 }

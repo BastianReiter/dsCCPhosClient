@@ -13,7 +13,7 @@ ds.GetCurationReport(DataSources = NULL)
 A list of Curation Reports
 }
 \description{
-Receive Curation Reports from servers.
+Receive Curation Reports from servers and create cumulated reporting objects.
 }
 \details{
 Linked to server-side AGGREGATE method GetReportingObjectDS()

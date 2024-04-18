@@ -7,7 +7,7 @@
 ds.CurateData(
   RawDataSetName = "RawDataSet",
   OutputName = "CurationOutput",
-  RuleProfile_RawDataTransformation = "Default",
+  RuleProfile_RawDataHarmonization = "Default",
   RuleProfile_DiagnosisRedundancy = "Default",
   RuleProfile_DiagnosisAssociation = "Default",
   DataSources = NULL

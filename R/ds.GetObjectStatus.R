@@ -1,9 +1,9 @@
 
-#' ds.GetObjectInfo
+#' ds.GetObjectStatus
 #'
 #' Checks if an object exists on every server in a valid form and returns appropriate messages.
 #'
-#' Linked to server-side AGGREGATE method GetObjectInfoDS()
+#' Linked to server-side AGGREGATE method GetObjectStatusDS()
 #'
 #' @param ObjectName String | Name of object on server
 #' @param DataSources List of DSConnection objects
@@ -13,8 +13,8 @@
 #'
 #' @examples
 #' @author Bastian Reiter
-ds.GetObjectInfo <- function(ObjectName,
-                             DataSources)
+ds.GetObjectStatus <- function(ObjectName,
+                               DataSources)
 {
     # Look for DS connections
     if (is.null(DataSources))
@@ -30,20 +30,20 @@ ds.GetObjectInfo <- function(ObjectName,
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Call GetObjectInfoDS() on every server
+# Call GetObjectStatusDS() on every server
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Construct server-side function call
-    ServerCall <- call("GetObjectInfoDS",
+    ServerCall <- call("GetObjectStatusDS",
                        ObjectName.S = ObjectName)
 
-    # Get object info from every server
-    ObjectInfo <- DSI::datashield.aggregate(conns = DataSources,
-                                            expr = ServerCall)
+    # Get object status info from every server
+    ObjectStatus <- DSI::datashield.aggregate(conns = DataSources,
+                                              expr = ServerCall)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Inspect object info and return message
+# Inspect object status info and return message
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Initiate output messaging objects
@@ -51,18 +51,18 @@ ds.GetObjectInfo <- function(ObjectName,
     Messages$ObjectValidity <- character()
 
 
-    CountSources <- length(ObjectInfo)
+    CountSources <- length(ObjectStatus)
 
     ObjectExistsEverywhere <- TRUE
     ObjectNotNullEverywhere <- TRUE
 
     for (i in 1:CountSources)
     {
-    	  if (!ObjectInfo[[i]]$ObjectExists)
+    	  if (!ObjectStatus[[i]]$ObjectExists)
     	  {
     		    ObjectExistsEverywhere <- FALSE
     		}
-    	  if (is.null(ObjectInfo[[i]]$ObjectClass) || ("ABSENT" %in% ObjectInfo[[i]]$ObjectClass))
+    	  if (is.null(ObjectStatus[[i]]$ObjectClass) || ("ABSENT" %in% ObjectStatus[[i]]$ObjectClass))
     	  {
     		    ObjectNotNullEverywhere <- FALSE
     		}

@@ -7,7 +7,8 @@
 ConnectToVirtualCCP(
   CCPTestData,
   NumberOfSites = 1,
-  NumberOfPatientsPerSite = NULL
+  NumberOfPatientsPerSite = NULL,
+  AddedDsPackages = NULL
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ ConnectToVirtualCCP(
 \item{NumberOfSites}{Integer | The number of virtual sites to install}
 
 \item{NumberOfPatientsPerSite}{Integer | Optional value to restrict size of data set for faster testing | Default: NULL}
+
+\item{AddedDsPackages}{Character vector | Server-side dataSHIELD packages to be added to default (dsBase, dsCCPhos) | Default: NULL}
 }
 \value{
 A list of DSConnection-objects

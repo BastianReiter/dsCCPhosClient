@@ -52,8 +52,8 @@ ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
 
         # Call helper function to check if object assignment succeeded
         Messages$Assignment <- c(Messages$Assignment,
-                                 ds.GetObjectInfo(ObjectName = paste0("CDS_", CCPTableNames_CDS[i]),
-                                                  DataSources = DataSources))
+                                 ds.GetObjectStatus(ObjectName = paste0("CDS_", CCPTableNames_CDS[i]),
+                                                    DataSources = DataSources))
     }
 
     # Turn list into (named) vector
