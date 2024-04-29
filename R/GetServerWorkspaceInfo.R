@@ -57,22 +57,13 @@ GetServerWorkspaceInfo <- function(DataSources = NULL)
 
     #2) Collect meta data about existing objects and attach some of it to 'ObjectInfo'
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    #   - The meta data for an object is collected from the first server where the object actually exists
 
-    MetaData <- ObjectInfo %>%
-                    rowwise() %>%
-                        mutate(ServerToLookAt = first(ServerNames[unlist(pick(all_of(ServerNames)))])) %>%      # Get name of any (first) server that hosts the object in question
-                    ungroup() %>%
-                    select(Object,
-                           ServerToLookAt) %>%
-                    pmap(function(Object, ServerToLookAt)
+    MetaData <- ObjectInfo$Object %>%
+                    map(function(object)
                          {
-                             if (!is.na(ServerToLookAt))
-                             {
-                                 ds.GetObjectMetaData(ObjectName = Object,
-                                                      DataSources = DataSources[ServerToLookAt])[[1]]
-                             }
-                             else { return(list()) }
+                              ObjectMetaData <- ds.GetObjectMetaData(ObjectName = object,
+                                                                     DataSources = DataSources)
+                              return(ObjectMetaData$FirstEligible)      # The meta data for an object is collected from the first server where the object actually exists (in case it does not exist everywhere)
                          }) %>%
                     setNames(ObjectInfo$Object)
 
@@ -82,7 +73,8 @@ GetServerWorkspaceInfo <- function(DataSources = NULL)
                       rowwise() %>%
                           mutate(Class = ifelse(!is.null(MetaData[[Object]]$Class), MetaData[[Object]]$Class, NA),
                                  Length = ifelse(!is.null(MetaData[[Object]]$Length), MetaData[[Object]]$Length, NA),
-                                 RowCount = ifelse(!is.null(MetaData[[Object]]$RowCount), MetaData[[Object]]$RowCount, NA))
+                                 RowCount = ifelse(!is.null(MetaData[[Object]]$RowCount), MetaData[[Object]]$RowCount, NA)) %>%
+                      ungroup()
 
 
     # Return list

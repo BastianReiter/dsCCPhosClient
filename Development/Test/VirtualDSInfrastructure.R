@@ -24,7 +24,7 @@
 # Load required packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#library(dsBaseClient)
+library(dsBaseClient)
 library(dsCCPhosClient)
 
 
@@ -46,58 +46,55 @@ CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
 # Check server requirements using dsCCPhosClient::CheckServerRequirements()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Messages_ServerRequirements <- CheckServerRequirements(DataSources = CCPConnections)
+CheckServerRequirements(DataSources = CCPConnections)
+
 
 # datashield.pkg_status(conns = CCPConnections)
 # datashield.method_status(conns = CCPConnections)
 # datashield.methods(conns = CCPConnections, type = "assign")
 
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Load Raw Data Set (RDS) from Opal data base to R sessions on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Messages_Loading <- LoadRawDataSet(CCPSiteSpecifications = NULL,
-                                   DataSources = CCPConnections)
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Check out objects in server workspaces
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# Overview of all objects in server R session
-View(GetServerWorkspaceInfo(DataSources = CCPConnections)$Overview)
-# Detailed meta data of a particular object
-MetaData <- GetServerWorkspaceInfo(DataSources = CCPConnections)$Details[[1]]
-# View of particular object structure
-View(MetaData$ContentOverview)
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Applying dsCCPhos functionality
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+Messages <- LoadRawDataSet(CCPSiteSpecifications = NULL,
+                           DataSources = CCPConnections)
 
 # Get validation report of Raw Data Set (RDS)
 # ValidationReportRDS <- ds.GetValidationReport_RDS(Name_RawDataSet = "RawDataSet",
 #                                                       DataSources = CCPConnections)
 
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS)
-Messages_DataCuration <- dsCCPhosClient::ds.CurateData(RawDataSetName = "RawDataSet",
-                                                       OutputName = "CurationOutput",
-                                                       DataSources = CCPConnections)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Transform Raw Data Set (RDS) into Curated Data Set (CDS)
+Messages <- ds.CurateData(RawDataSetName = "RawDataSet",
+                          OutputName = "CurationOutput",
+                          DataSources = CCPConnections)
+
+# Make tables from Curated Data Set directly addressable by unpacking them into R server session
+Messages <- ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
+                                    DataSources = CCPConnections)
 
 # Get curation reports
 CurationReports <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
 
 # Exemplary look at a curation report table
-View(CurationReports$All$Transformation$Monitors$Staging)
-View(CurationReports$All$Transformation$EligibilityOverviews$Staging)
-View(CurationReports$All$Transformation$ValueSetOverviews$Raw)
+#View(CurationReports$All$Transformation$Monitors$Staging)
+#View(CurationReports$All$Transformation$EligibilityOverviews$Staging)
+#View(CurationReports$All$Transformation$ValueSetOverviews$Raw)
+
+# Get validation report of Curated Data Set (CDS)
+# ValidationReportCDS <- ds.GetValidationReport_CDS(Name_CurationOutput = "CurationOutput",
+#                                                   DataSources = CCPConnections)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Prepare data on eligibility for plot display
+# Plot data on value eligibility for exemplary table in CDS
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # - Restructure eligibility overview table to meet requirements of plot function
 # - Create separate data frames for each 'Feature' value
@@ -137,28 +134,44 @@ plot_ly(data = filter(PlotData, Feature == "UICCStage")$data[[1]],
 
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Transform Curated Data Set (CDS) into Augmented Data Set (ADS)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Make tables from Curated Data Set directly addressable by unpacking them into R server session
-Messages_UnpackingCDS <- dsCCPhosClient::ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
-                                                                 DataSources = CCPConnections)
-
-
-
-# Get validation report of Curated Data Set (CDS)
-# ValidationReportCDS <- ds.GetValidationReport_CDS(Name_CurationOutput = "CurationOutput",
-#                                                   DataSources = CCPConnections)
-
-
-
-# Try out data augmentation method
-dsCCPhosClient::ds.AugmentData(CuratedDataSetName = "CuratedDataSet",
-                               OutputName = "AugmentationOutput",
-                               DataSources = CCPConnections)
+# Run ds.AugmentData
+Messages <- ds.AugmentData(CuratedDataSetName = "CuratedDataSet",
+                           OutputName = "AugmentationOutput",
+                           DataSources = CCPConnections)
 
 
 # Make tables from Augmented Data Set directly addressable by unpacking them into R server session
-Messages_UnpackingADS <- dsCCPhosClient::ds.UnpackAugmentedDataSet(AugmentedDataSetName = "AugmentedDataSet",
-                                                                   DataSources = CCPConnections)
+Messages <- ds.UnpackAugmentedDataSet(AugmentedDataSetName = "AugmentedDataSet",
+                                      DataSources = CCPConnections)
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Get overview of objects in server workspaces
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# - Using dsCCPhosClient::GetServerWorkspaceInfo() and dsCCPhosClient::ds.GetObjectMetaData()
+#-------------------------------------------------------------------------------
+
+# Collect comprehensive information about all workspace objects
+ServerWorkspaceInfo <- GetServerWorkspaceInfo(DataSources = CCPConnections)
+
+# Overview of all objects in server R sessions
+View(ServerWorkspaceInfo$Overview)
+
+# Detailed meta data of a particular object (also part of ServerWorkspaceInfo)
+ObjectMetaData <- ds.GetObjectMetaData(ObjectName = "ADS_Patients",
+                                       DataSources = CCPConnections)
+
+# Explore Object meta data: Structural overview
+View(ObjectMetaData$FirstEligible$Structure)
+
+# Get type of feature 'PatientID'
+ObjectMetaData$FirstEligible$DataTypes["PatientID"]
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -168,6 +181,11 @@ Messages_UnpackingADS <- dsCCPhosClient::ds.UnpackAugmentedDataSet(AugmentedData
 
 ds.colnames(x = "ADS_Patients",
             datasources = CCPConnections)
+
+
+ds.GetObjectMetaData(ObjectName = "AugmentationOutput",
+                     DataSources = CCPConnections)
+
 
 ds.mean(x = "ADS_Patients$PatientAgeAtDiagnosis",
         datasources = CCPConnections)
