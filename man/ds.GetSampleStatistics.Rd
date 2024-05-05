@@ -5,26 +5,31 @@
 \title{ds.GetSampleStatistics}
 \usage{
 ds.GetSampleStatistics(
+  DataSources = NULL,
   TableName,
   MetricFeatureName,
   GroupingFeatureName = NULL,
-  DataSources = NULL
+  RemoveMissings = TRUE
 )
 }
 \arguments{
-\item{TableName}{String | Name of the table containing the metric feature of concern}
+\item{DataSources}{\code{list} of DSConnection objects}
 
-\item{MetricFeatureName}{String | Name of metric feature}
+\item{TableName}{\code{string} | Name of the table containing the feature of concern}
 
-\item{GroupingFeatureName}{String | Name of optional grouping feature from the same table}
+\item{MetricFeatureName}{\code{string} | Name of feature}
 
-\item{DataSources}{List of DSConnection objects}
+\item{GroupingFeatureName}{\code{string} | Name of optional grouping feature from the same table}
+}
+\value{
+A \code{tibble} containing parametric and non-parametric sample statistics
 }
 \description{
-Making use of dsBaseClient::ds.meanSdGp() and dsBaseClient::ds.quantileMean() to provide common parametric and nonparametric statistics about a metric feature.
+Obtain common parametric and nonparametric statistics about a metric feature.
+Making use of \code{dsBaseClient::ds.meanSdGp()} and \code{dsBaseClient::ds.quantileMean()}.
 }
 \details{
-Linked to server-side AGGREGATE dsBase-functions
+Linked to server-side \code{AGGREGATE} function \code{dsCCPhos::GetSampleStatisticsDS()}.
 }
 \author{
 Bastian Reiter

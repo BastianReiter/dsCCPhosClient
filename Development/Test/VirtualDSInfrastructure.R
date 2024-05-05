@@ -46,7 +46,7 @@ CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
 # Check server requirements using dsCCPhosClient::CheckServerRequirements()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-CheckServerRequirements(DataSources = CCPConnections)
+Messages <- CheckServerRequirements(DataSources = CCPConnections)
 
 
 # datashield.pkg_status(conns = CCPConnections)
@@ -178,9 +178,24 @@ ObjectMetaData$FirstEligible$DataTypes["PatientID"]
 # Perform exemplary analyses
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Test <- ds.GetFeatureInfo(DataSources = CCPConnections,
+                          TableName = "ADS_Patients",
+                          FeatureName = "TNM_T")
 
-ds.colnames(x = "ADS_Patients",
-            datasources = CCPConnections)
+Test <- ds.GetSampleStatistics(DataSources = CCPConnections,
+                               TableName = "ADS_Patients",
+                               MetricFeatureName = "PatientAgeAtDiagnosis")
+
+Test <- ds.GetFrequencyTable(DataSources = CCPConnections,
+                             TableName = "ADS_Patients",
+                             FeatureName = "TNM_T",
+                             MaxNumberCategories = 5)
+
+Test <- ExploreFeature(DataSources = CCPConnections,
+                       TableName = "ADS_Patients",
+                       FeatureName = "TimeDiagnosisToDeath")
+
+
 
 
 ds.GetObjectMetaData(ObjectName = "AugmentationOutput",
