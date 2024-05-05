@@ -1,91 +1,127 @@
 
 #' ds.GetSampleStatistics
 #'
-#' Making use of dsBaseClient::ds.meanSdGp() and dsBaseClient::ds.quantileMean() to provide common parametric and nonparametric statistics about a metric feature.
+#' Obtain common parametric and nonparametric statistics about a metric feature.
+#' Making use of \code{dsBaseClient::ds.meanSdGp()} and \code{dsBaseClient::ds.quantileMean()}.
 #'
-#' Linked to server-side AGGREGATE dsBase-functions
+#' Linked to server-side \code{AGGREGATE} function \code{dsCCPhos::GetSampleStatisticsDS()}.
 #'
-#' @param TableName String | Name of the table containing the metric feature of concern
-#' @param MetricFeatureName String | Name of metric feature
-#' @param GroupingFeatureName String | Name of optional grouping feature from the same table
-#' @param DataSources List of DSConnection objects
+#' @param DataSources \code{list} of DSConnection objects
+#' @param TableName \code{string} | Name of the table containing the feature of concern
+#' @param MetricFeatureName \code{string} | Name of feature
+#' @param GroupingFeatureName \code{string} | Name of optional grouping feature from the same table
 #'
-#' @return
+#' @return A \code{tibble} containing parametric and non-parametric sample statistics
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
-ds.GetSampleStatistics <- function(TableName,
+ds.GetSampleStatistics <- function(DataSources = NULL,
+                                   TableName,
                                    MetricFeatureName,
                                    GroupingFeatureName = NULL,
-                                   DataSources = NULL)
+                                   RemoveMissings = TRUE)
 {
+    # For Testing Purposes
+    # DataSources <- CCPConnections
+    # TableName <- "ADS_Patients"
+    # MetricFeatureName <- "TNM_T"
+    # GroupingFeatureName <- NULL
+    # RemoveMissings <- TRUE
+
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Check argument eligibility
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    if (!(is.character(TableName) & is.character(MetricFeatureName)))
+    {
+        stop("Error: Arguments 'TableName' and 'MetricFeatureName' must be character strings.", call. = FALSE)
+    }
+
     if (is.null(DataSources))
     {
         DataSources <- DSI::datashield.connections_find()
     }
 
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Package requirements
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     require(dsBaseClient)
+    require(dplyr)
+    require(purrr)
 
-    # ServerCall <- call("GetSampleStatisticsDS",
-    #                    TableName,
-    #                    MetricFeatureName,
-    #                    GroupingFeatureName,
-    #                    na.rm)
-    #
-    # ServerResults <- DSI::datashield.aggregate(conns = DataSources,
-    #                                            expr = ServerCall)
 
-    # For Testing Purposes
-    # TableName <- "ADS_Patients"
-    # MetricFeatureName <- "PatientAgeAtDiagnosis"
-    # DataSources <- CCPConnections
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Check if addressed objects (Table and Feature) are eligible
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    # Get meta data of table object
+    TableMetaData <- ds.GetObjectMetaData(ObjectName = TableName,
+                                          DataSources = DataSources)
+
+    # Stop execution if referred table object is not a data.frame
+    if (TableMetaData$FirstEligible$Class != "data.frame") { stop("Error: The referred table object does not seem to be a data.frame.", call. = FALSE)}
+
+    # Get data type of feature in question
+    FeatureType <- TableMetaData$FirstEligible$DataTypes[MetricFeatureName]
+
+    # Stop function if referred feature is not of class 'numeric'
+    if (!(FeatureType %in% c("integer", "double", "numeric"))) { stop("Error: The referred feature must be of class 'numeric'.", call. = FALSE) }
+
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Separate returns
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    # SiteReturns: Obtain sample statistics for each server calling dsCCPhos::GetSampleStatisticsDS()
+    ls_SiteReturns <- DSI::datashield.aggregate(conns = DataSources,
+                                                expr = call("GetSampleStatisticsDS",
+                                                            TableName.S = TableName,
+                                                            MetricFeatureName.S = MetricFeatureName,
+                                                            GroupingFeatureName.S = GroupingFeatureName,
+                                                            RemoveMissings.S = RemoveMissings))
 
     # --- TO DO --- : Implement grouping on server and execute functions below on grouped vectors
 
 
-    ls_ParametricStatistics <- ds.meanSdGp(x = paste0(TableName, "$", MetricFeatureName),
-                                           y = "1",
-                                           datasources = DataSources)
-
-    ls_NonParametricStatistics_Split <- ds.quantileMean(x = paste0(TableName, "$", MetricFeatureName),
-                                                        type = "split",
-                                                        datasources = DataSources)
-
-    vc_NonParametricStatistics_Combined <- ds.quantileMean(x = paste0(TableName, "$", MetricFeatureName),
-                                                           type = "combine",
-                                                           datasources = DataSources)
-
-    df_NonParametricStatistics <- as.data.frame(rbind(t(as.data.frame(ls_NonParametricStatistics_Split)),
-                                                      "All" = vc_NonParametricStatistics_Combined))
-
-    #--- Site names and sample sizes ---
-    Col_SiteNames <- colnames(ls_ParametricStatistics$Nvalid_gp_study)
-    Col_SiteNames <- replace(Col_SiteNames, Col_SiteNames == "COMBINE", "All")
-    Col_N <- as.vector(ls_ParametricStatistics$Nvalid_gp_study)
-    #--- Nonparametric Statistics ---
-    Col_q5 <- df_NonParametricStatistics$`5%`
-    Col_Q1 <- df_NonParametricStatistics$`25%`
-    Col_Median <- df_NonParametricStatistics$`50%`
-    Col_Q3 <- df_NonParametricStatistics$`75%`
-    Col_q95 <- df_NonParametricStatistics$`95%`
-    #--- Parametric Statistics ---
-    Col_Mean <- as.vector(ls_ParametricStatistics$Mean_gp_study)
-    Col_SD <- as.vector(ls_ParametricStatistics$StDev_gp_study)
-    Col_SEM <- as.vector(ls_ParametricStatistics$SEM_gp_study)
+    # Convert site returns into tibble containing separate statistics
+    df_SeparateStatistics <- ls_SiteReturns %>%
+                                  list_rbind(names_to = "Site")
 
 
-    df_Output <- tibble(Site = Col_SiteNames,
-                        N = Col_N,
-                        q5 = Col_q5,
-                        Q1 = Col_Q1,
-                        Median = Col_Median,
-                        Q3 = Col_Q3,
-                        q95 = Col_q95,
-                        Mean = Col_Mean,
-                        SD = Col_SD,
-                        SEM = Col_SEM)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Cumulation
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    return(df_Output)
+    # Making use of dsBaseClient::ds.meadSdGp() to obtain CUMULATED parametric statistics
+    ls_CumulatedStatistics_Parametric <- ds.meanSdGp(x = paste0(TableName, "$", MetricFeatureName),
+                                                     y = "1",
+                                                     datasources = DataSources)
+
+    # Making use of dsBaseClient::ds.quantileMean() to obtain CUMULATED non-parametric statistics
+    vc_CumulatedStatistics_Nonparametric <- ds.quantileMean(x = paste0(TableName, "$", MetricFeatureName),
+                                                            type = "combine",
+                                                            datasources = DataSources)
+
+    # Compiling cumulated statistics
+    df_CumulatedStatistics <- tibble(Site = "All",
+                                     N = ls_CumulatedStatistics_Parametric$Nvalid_gp_study[1, "COMBINE"],
+                                     q5 = vc_CumulatedStatistics_Nonparametric["5%"],
+                                     Q1 = vc_CumulatedStatistics_Nonparametric["25%"],
+                                     Median = vc_CumulatedStatistics_Nonparametric["50%"],
+                                     Q3 = vc_CumulatedStatistics_Nonparametric["75%"],
+                                     q95 = vc_CumulatedStatistics_Nonparametric["95%"],
+                                     MAD = NA,
+                                     Mean = ls_CumulatedStatistics_Parametric$Mean_gp_study[1, "COMBINE"],
+                                     SD = ls_CumulatedStatistics_Parametric$StDev_gp_study[1, "COMBINE"],
+                                     SEM = ls_CumulatedStatistics_Parametric$SEM_gp_study[1, "COMBINE"])
+
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Glue separate and cumulated statistics together and return tibble
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    return(bind_rows(df_SeparateStatistics,
+                     df_CumulatedStatistics))
 }

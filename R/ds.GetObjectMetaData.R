@@ -31,6 +31,8 @@ ds.GetObjectMetaData <- function(ObjectName,
 # Call GetObjectMetaDataDS() on every server
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    require(purrr)
+
     # Construct server-side function call
     ServerCall <- call("GetObjectMetaDataDS",
                        ObjectName.S = ObjectName)
@@ -38,6 +40,16 @@ ds.GetObjectMetaData <- function(ObjectName,
     # Get object meta data from every server
     ObjectMetaData <- DSI::datashield.aggregate(conns = DataSources,
                                                 expr = ServerCall)
+
+    # Get logical vector indicating existence of object on servers
+    ObjectExistence <- ObjectMetaData %>%
+                            map_lgl(\(metadatalist) metadatalist$ObjectExists)
+
+    # Get names of all servers that host the object (so everywhere it exists)
+    EligibleServers <- names(DataSources)[ObjectExistence]
+
+    # Add to output list: Meta data from any (first eligible) server that hosts the object in question
+    ObjectMetaData$FirstEligible <- if(!is.null(EligibleServers)) { ObjectMetaData[[first(EligibleServers)]] } else { NULL }
 
     return(ObjectMetaData)
 }

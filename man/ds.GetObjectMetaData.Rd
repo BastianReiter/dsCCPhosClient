@@ -11,6 +11,9 @@ ds.GetObjectMetaData(ObjectName, DataSources)
 
 \item{DataSources}{List of DSConnection objects}
 }
+\value{
+A list of server returns
+}
 \description{
 Gathers meta data about an R object.
 }

@@ -10,10 +10,10 @@ GetServerWorkspaceInfo(DataSources = NULL)
 \item{DataSources}{List of DSConnection objects}
 }
 \value{
-A tibble
+A list
 }
 \description{
-Check which objects live in server-side R sessions
+Check which objects live in server-side R sessions and collect meta data about them.
 }
 \author{
 Bastian Reiter
