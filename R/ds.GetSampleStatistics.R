@@ -67,8 +67,8 @@ ds.GetSampleStatistics <- function(DataSources = NULL,
     # Get data type of feature in question
     FeatureType <- TableMetaData$FirstEligible$DataTypes[MetricFeatureName]
 
-    # Stop function if referred feature is not of class 'numeric'
-    if (!(FeatureType %in% c("integer", "double", "numeric"))) { stop("Error: The referred feature must be of class 'numeric'.", call. = FALSE) }
+    # Stop function if referred feature is not of class 'numeric' or similar
+    if (!(FeatureType %in% c("double", "integer", "numeric"))) { stop(paste0("Error: The referred feature '", MetricFeatureName, "' is of class '", FeatureType, "' and therefore not suitable."), call. = FALSE) }
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,8 +120,8 @@ ds.GetSampleStatistics <- function(DataSources = NULL,
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Glue separate and cumulated statistics together and return tibble
+    # Glue cumulated and separate statistics together and return tibble
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    return(bind_rows(df_SeparateStatistics,
-                     df_CumulatedStatistics))
+    return(bind_rows(df_CumulatedStatistics,
+                     df_SeparateStatistics))
 }

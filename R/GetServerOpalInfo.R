@@ -62,7 +62,8 @@ GetServerOpalInfo <- function(CCPSiteSpecifications = NULL,
                                       mutate(IsAvailableEverywhere = all(c_across(all_of(ServerNames)) == TRUE),
                                              NotAvailableAt = ifelse(IsAvailableEverywhere == FALSE,
                                                                      paste0(ServerNames[c_across(all_of(ServerNames)) == FALSE], collapse = ", "),
-                                                                     NA)) %>%
+                                                                     NA),
+                                             .after = TableName) %>%
                                       ungroup()
 
     return(RequiredTableAvailability)

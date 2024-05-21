@@ -24,7 +24,7 @@ GetServerWorkspaceInfo <- function(DataSources = NULL)
     ServerNames <- sort(names(DataSources))
 
 
-    # 1) Get the names of all object living in the server-side R sessions and check whether they occur on every server
+    # 1) Get the names of all objects living in the server-side R sessions and check whether they occur on every server
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Get names of symbols (objects) in all server workspaces
@@ -73,7 +73,8 @@ GetServerWorkspaceInfo <- function(DataSources = NULL)
                       rowwise() %>%
                           mutate(Class = ifelse(!is.null(MetaData[[Object]]$Class), MetaData[[Object]]$Class, NA),
                                  Length = ifelse(!is.null(MetaData[[Object]]$Length), MetaData[[Object]]$Length, NA),
-                                 RowCount = ifelse(!is.null(MetaData[[Object]]$RowCount), MetaData[[Object]]$RowCount, NA)) %>%
+                                 RowCount = ifelse(!is.null(MetaData[[Object]]$RowCount), MetaData[[Object]]$RowCount, NA),
+                                 .after = Object) %>%
                       ungroup()
 
 
