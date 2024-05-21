@@ -289,10 +289,10 @@ ds.GetCurationReport <- function(DataSources = NULL)
     # Return list of server-specific and summarized Curation Reports
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    return(c(CurationReports,
-             "All" = list(list(UnlinkedEntries = UnlinkedEntriesCumulated,      # The list for "All" must have the same structure and naming of return of dsCCPhos::CurateData() for every single server
+    return(c("All" = list(list(UnlinkedEntries = UnlinkedEntriesCumulated,      # The list for "All" must have the same structure and naming of return of dsCCPhos::CurateData() for every single server
                                Transformation = list(Monitors = TransformationMonitorsCumulated,
                                                      EligibilityOverviews = EligibilityOverviewsCumulated,
                                                      ValueSetOverviews = ValueSetOverviewsCumulated),
-                               DiagnosisClassification = DiagnosisClassificationCumulated))))
+                               DiagnosisClassification = DiagnosisClassificationCumulated)),
+           CurationReports))
 }

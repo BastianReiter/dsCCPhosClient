@@ -1,7 +1,7 @@
 
 #' ds.GetFrequencyTable
 #'
-#' Get table of absolute and relative value frequencies (proportions) for a nominal / ordinal feature.
+#' Get table of absolute and relative value frequencies for a nominal / ordinal feature.
 #'
 #' Linked to server-side \code{AGGREGATE} function \code{dsCCPhos::GetFrequencyTableDS()}.
 #'
@@ -12,8 +12,8 @@
 #' @param MaxNumberCategories \code{integer} | Maximum number of categories analyzed individually before frequencies are cumulated in 'Other' category.
 #'
 #' @return A \code{list} containing:
-#'         \itemize{\item MetaData (\code{tibble}): Meta data about data type and sample size
-#'                  \item FrequencyTable (\code{tibble}: Absolute and relative frequencies)}
+#'         \itemize{\item AbsoluteFrequencies (\code{tibble}: Absolute value frequencies)
+#'                  \item RelativeFrequencies (\code{tibble}: Relative value frequencies)}
 #' @export
 #'
 #' @author Bastian Reiter
@@ -28,7 +28,7 @@ ds.GetFrequencyTable <- function(DataSources = NULL,
     # TableName <- "ADS_Patients"
     # FeatureName <- "TNM_T"
     # GroupingFeatureName <- NULL
-    # MaxNumberCategories <- NULL
+    # MaxNumberCategories <- 5
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,6 +52,9 @@ ds.GetFrequencyTable <- function(DataSources = NULL,
 
     require(dplyr)
     require(purrr)
+    require(stringr)
+    require(tibble)
+    require(tidyr)
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,8 +70,8 @@ ds.GetFrequencyTable <- function(DataSources = NULL,
     # Get data type of feature in question
     FeatureType <- TableMetaData$FirstEligible$DataTypes[FeatureName]
 
-    # Stop function if referred feature is of class "numeric
-    if (FeatureType %in% c("integer", "double", "numeric")) { stop("Error: The referred feature can not be of class 'numeric'.", call. = FALSE) }
+    # Stop function if referred feature is of class 'numeric' or similar
+    if (FeatureType %in% c("double", "integer", "numeric")) { stop(paste0("Error: The referred feature '", FeatureName, "' is of class '", FeatureType, "' and therefore not suitable."), call. = FALSE) }
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,43 +89,76 @@ ds.GetFrequencyTable <- function(DataSources = NULL,
     # --- TO DO --- : Implement grouping on server and execute functions below on grouped vectors
 
 
-    # Convert site returns into tibble containing separate frequency tables
-    df_SeparateFrequencyTables <- ls_SiteReturns %>%
-                                      list_rbind(names_to = "Site")
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Cumulation
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    # Get cumulated frequencies and proportions
-    df_CumulatedFrequencyTable <- df_SeparateFrequencyTables %>%
-                                      group_by(Value) %>%
-                                          summarize(Frequency = sum(Frequency)) %>%
-                                      ungroup() %>%
-                                      arrange(desc(Frequency))
+    SiteNames <- names(DataSources)
+
+    # Convert site returns into tibble containing separate frequency tables
+    df_FrequencyTable <- ls_SiteReturns %>%
+                              list_rbind(names_to = "Site") %>%
+                              pivot_wider(names_from = Site,
+                                          names_glue = "{Site}_{.value}",
+                                          names_vary = "slowest",
+                                          values_from = c(AbsoluteFrequency, RelativeFrequency)) %>%
+                              mutate(All_AbsoluteFrequency = rowSums(pick(paste0(SiteNames, "_AbsoluteFrequency")), na.rm = TRUE),
+                                     All_RelativeFrequency = All_AbsoluteFrequency / sum(All_AbsoluteFrequency),
+                                     .after = Value) %>%
+                              arrange(desc(All_AbsoluteFrequency))
 
     # If the number of unique values exceeds 'MaxNumberCategories', cumulate less frequent categories under 'Other' category
     if (!is.null(MaxNumberCategories))
     {
-      if (nrow(df_CumulatedFrequencyTable) > MaxNumberCategories)
+      if (nrow(df_FrequencyTable) > MaxNumberCategories)
       {
-           FrequenciesKeep <- df_CumulatedFrequencyTable %>%
+           FrequenciesKeep <- df_FrequencyTable %>%
                                   slice_head(n = MaxNumberCategories)
 
-           FrequenciesCumulate <- df_CumulatedFrequencyTable %>%
-                                      slice_tail(n = nrow(df_CumulatedFrequencyTable) - MaxNumberCategories)
+           FrequenciesCumulate <- df_FrequencyTable %>%
+                                      slice_tail(n = nrow(df_FrequencyTable) - MaxNumberCategories) %>%
+                                      select(-Value) %>%
+                                      colSums(na.rm = TRUE) %>%
+                                      as_tibble_row() %>%
+                                      mutate(Value = "Other")
 
-           df_CumulatedFrequencyTable <- bind_rows(FrequenciesKeep,
-                                                   tibble(Value = "Other",
-                                                          Frequency = sum(FrequenciesCumulate$Frequency)))
+           df_FrequencyTable <- bind_rows(FrequenciesKeep,
+                                          FrequenciesCumulate)
       }
     }
 
-    # Calculate proportions
-    df_CumulatedFrequencyTable <- df_CumulatedFrequencyTable %>%
-                                      mutate(Site = "All",
-                                             Proportion = Frequency / sum(Frequency))
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Restructuring output
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    # Select columns containing absolute frequencies and transpose tibble using combination of pivot_longer() and pivot_wider()
+    df_AbsoluteFrequencies <- df_FrequencyTable %>%
+                                  select(Value,
+                                         contains("AbsoluteFrequency")) %>%
+                                  rename_with(.fn = \(colnames) str_remove(colnames, "_AbsoluteFrequency"),
+                                              .cols = contains("AbsoluteFrequency")) %>%
+                                  pivot_longer(cols = -Value,
+                                               names_to = "Site") %>%
+                                  pivot_wider(names_from = Value,
+                                              values_from = value)
+
+    # Select columns containing relative frequencies and transpose tibble using combination of pivot_longer() and pivot_wider()
+    df_RelativeFrequencies <- df_FrequencyTable %>%
+                                  select(Value,
+                                         contains("RelativeFrequency")) %>%
+                                  rename_with(.fn = \(colnames) str_remove(colnames, "_RelativeFrequency"),
+                                              .cols = contains("RelativeFrequency")) %>%
+                                  pivot_longer(cols = -Value,
+                                               names_to = "Site",
+                                               values_to = "RelativeFrequency") %>%
+                                  pivot_wider(names_from = Value,
+                                              values_from = RelativeFrequency)
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Return statement
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    return(bind_rows(df_SeparateFrequencyTables,
-                     df_CumulatedFrequencyTable))
+    return(list(AbsoluteFrequencies = df_AbsoluteFrequencies,
+                RelativeFrequencies = df_RelativeFrequencies))
 }

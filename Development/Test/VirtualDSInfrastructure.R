@@ -191,6 +191,38 @@ Test <- ds.GetFrequencyTable(DataSources = CCPConnections,
                              FeatureName = "TNM_T",
                              MaxNumberCategories = 5)
 
+RelativeFrequencies <- Test$RelativeFrequencies %>%
+                            mutate(across(-Site, ~ paste0("(", round(.x * 100, 0), "%)")))
+
+TableData <- Test$AbsoluteFrequencies %>%
+                  mutate(across(everything(), as.character)) %>%
+                  bind_rows(RelativeFrequencies) %>%
+                  group_by(Site) %>%
+                      summarize(across(everything(), ~ paste0(.x, collapse = "  ")))
+
+
+PlotData <- Test$AbsoluteFrequencies %>%
+                pivot_longer(cols = -Site,
+                             names_to = "Value",
+                             values_to = "AbsoluteFrequency") %>%
+                filter(Site != "All")
+
+Plot <- ggplot(data = as.data.frame(PlotData),
+               mapping = aes(fill = Site,
+                             x = Value,
+                             y = AbsoluteFrequency)) +
+            geom_bar(position = "stack",
+                     stat = "identity")
+
+Plot <- MakeColumnPlot(DataFrame = PlotData,
+                       XFeature = Value,
+                       YFeature = AbsoluteFrequency,
+                       FillPalette = c("SiteA" = CCPhosColors$Primary,
+                                       "SiteB" = CCPhosColors$Secondary,
+                                       "SiteC" = CCPhosColors$Tertiary))
+
+
+
 Test <- ExploreFeature(DataSources = CCPConnections,
                        TableName = "ADS_Patients",
                        FeatureName = "TimeDiagnosisToDeath")

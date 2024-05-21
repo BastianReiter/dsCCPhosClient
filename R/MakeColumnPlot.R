@@ -35,7 +35,7 @@
 #'
 #' @examples
 #' @author Bastian Reiter
-MakeColumnPlot <- function(SampleFrequencies,
+MakeColumnPlot <- function(DataFrame,
                            XFeature,
                            XFeatureSpecs = NULL,
                            XFeatureAdditionalMapping = "none",
@@ -66,6 +66,7 @@ MakeColumnPlot <- function(SampleFrequencies,
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
     require(ggplot2)
+    require(scales)
 
 
     #--- Process plot data -----------------------------------------------------
@@ -238,7 +239,7 @@ MakeColumnPlot <- function(SampleFrequencies,
                    aes(x = X,
                        y = Y)) +
             do.call(ggTheme, c(list(...),      # Apply custom theme with optional arguments as concatenated lists
-                               list(Theme_LegendPosition = LegendPosition),      # Because legend position is often used, it gets its own argument
+                               list(LegendPosition = LegendPosition),      # Because legend position is often used, it gets its own argument
                                ThemeArguments)) +
             var_Geom +
             labs(x = AxisTitle_x,
