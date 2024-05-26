@@ -14,16 +14,51 @@ library(dsCCPhosClient)
 # "Franz" = Remote server
 #-------------------------------------------------------------------------------
 
+
+
+
+#devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
+#devtools::install_github(repo = "BastianReiter/CCPhosApp")
+
+library(dplyr)
+library(dsCCPhosClient)
+library(DSI)
+library(CCPhosApp)
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# USING CCPHOS APP (look for manual approach below)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+StartCCPhosApp()
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# MANUAL APPROACH (without app)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# Read in CCP site specifications from uploaded file (first upload 'SiteSpecs.csv' using RStudio) ...
+Credentials <- read.csv(file = "SiteSpecs.csv")
+
+# ... or enter specifications manually
 # Credentials <- data.frame(SiteName = c("Sissy", "Franz", "Mannheim"),
 #                           URL = c("https://dktk-datashield-test/opal/", "https://dktk-test/opal/", "https://mannheim/opal/"),
-#                           Token = c("531fdbed-5d30-4547-9a62-8499197b048f", "53e1e3bf-e639-41ff-9e9d-aadc35cea6af", "7491ec62-803a-4271-b153-35bb30ab53b9"))
+#                           Token = c("xxx", "xxx", "xxx"))
 
-Credentials <- data.frame(SiteName = c("Mannheim"),
-                          URL = c("https://mannheim/opal/"),
-                          Token = c("7491ec62-803a-4271-b153-35bb30ab53b9"))
+# Filtering for sites that work
+Credentials <- Credentials %>%
+                    filter(SiteName %in% c(#"Berlin",
+                                           #"Dresden",
+                                           #"Mainz",      # Problem: 'The input data is not of the same class in all studies! ...'
+                                           "Mannheim",
+                                           "MunichLMU"
+                                           #"MunichTU"     # Problem: 'The input data is not of the same class in all studies! ...'
+                                           ))
 
-
-CCPConnections <- ConnectToCCP(CCPSiteCredentials = Credentials)
+# Establish connection to servers using convenience funtion 'ConnectToCCP'
+CCPConnections <- ConnectToCCP(CCPSiteSpecifications = Credentials)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,22 +72,15 @@ Messages_ServerRequirements <- CheckServerRequirements(DataSources = CCPConnecti
 # Load Raw Data Set (RDS) from Opal data base to R sessions on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Messages_Loading <- LoadRawDataSet(DataSources = CCPConnections,
-#                                    ProjectName = "PROJECT-TEST_20231220_X1")
-
-Messages_Loading <- LoadRawDataSet(DataSources = CCPConnections,
-                                   ProjectName = "PROJECT-")
+Messages <- LoadRawDataSet(CCPSiteSpecifications = Credentials,
+                           DataSources = CCPConnections)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Use dsCCPhos functionality to process data
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ds.CurateData(RawDataSetName = "RawDataSet",
-              OutputName = "CurationOutput",
-              DataSources = CCPConnections)
-
-
+ds.CurateData(DataSources = CCPConnections)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
