@@ -63,12 +63,25 @@ ConnectToVirtualCCP <- function(CCPTestData,
         SitePatientIDs <- sample(AllPatientIDs,
                                  size = PatientsPerSite)
 
+        # Handle (optionally) empty tables 'sample' and 'molecular-marker'
+        sample <- data.frame()
+        if (nrow(CCPTestData$sample) > 0)
+        {
+            sample <- as.data.frame(filter(CCPTestData$sample, CCPTestData$sample$"patient-id" %in% SamplePatientIDs))
+        }
+
+        molecularmarker <- data.frame()
+        if (nrow(CCPTestData$`molecular-marker`) > 0)
+        {
+            molecularmarker <- as.data.frame(filter(CCPTestData$"molecular-marker", CCPTestData$"molecular-marker"$"patient-id" %in% SamplePatientIDs))
+        }
+
         # Get data subsets that relate to sampled PatientIDs
-        SiteTestData <- list(sample = as.data.frame(filter(CCPTestData$sample, CCPTestData$sample$"patient-id" %in% SitePatientIDs)),
+        SiteTestData <- list(sample = sample,
                              diagnosis = as.data.frame(filter(CCPTestData$diagnosis, CCPTestData$diagnosis$"patient-id" %in% SitePatientIDs)),
                              histology = as.data.frame(filter(CCPTestData$histology, CCPTestData$histology$"patient-id" %in% SitePatientIDs)),
                              metastasis = as.data.frame(filter(CCPTestData$metastasis, CCPTestData$metastasis$"patient-id" %in% SitePatientIDs)),
-                             "molecular-marker" = as.data.frame(filter(CCPTestData$"molecular-marker", CCPTestData$"molecular-marker"$"patient-id" %in% SitePatientIDs)),
+                             "molecular-marker" = molecularmarker,
                              patient = as.data.frame(filter(CCPTestData$patient, CCPTestData$patient$"_id" %in% SitePatientIDs)),
                              progress = as.data.frame(filter(CCPTestData$progress, CCPTestData$progress$"patient-id" %in% SitePatientIDs)),
                              "radiation-therapy" = as.data.frame(filter(CCPTestData$"radiation-therapy", CCPTestData$"radiation-therapy"$"patient-id" %in% SitePatientIDs)),
