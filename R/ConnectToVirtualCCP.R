@@ -67,13 +67,13 @@ ConnectToVirtualCCP <- function(CCPTestData,
         sample <- data.frame()
         if (nrow(CCPTestData$sample) > 0)
         {
-            sample <- as.data.frame(filter(CCPTestData$sample, CCPTestData$sample$"patient-id" %in% SamplePatientIDs))
+            sample <- as.data.frame(filter(CCPTestData$sample, CCPTestData$sample$"patient-id" %in% SitePatientIDs))
         }
 
         molecularmarker <- data.frame()
         if (nrow(CCPTestData$`molecular-marker`) > 0)
         {
-            molecularmarker <- as.data.frame(filter(CCPTestData$"molecular-marker", CCPTestData$"molecular-marker"$"patient-id" %in% SamplePatientIDs))
+            molecularmarker <- as.data.frame(filter(CCPTestData$"molecular-marker", CCPTestData$"molecular-marker"$"patient-id" %in% SitePatientIDs))
         }
 
         # Get data subsets that relate to sampled PatientIDs
