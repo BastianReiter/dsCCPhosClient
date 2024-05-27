@@ -35,8 +35,16 @@ library(dsCCPhosClient)
 
 #TestData <- readRDS("../dsCCPhos/Development/Data/RealData/CCPRealData_Frankfurt.rds")
 TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
+TestData_WithEmptyTables <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData_WithEmptyTables.rds")
 
-CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
+
+# TestData$sample <- data.frame()
+# TestData$`molecular-marker` <- data.frame()
+#
+# saveRDS(TestData, file = "../dsCCPhos/Development/Data/TestData/CCPTestData_WithEmptyTables.rds")
+
+
+CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData_WithEmptyTables,
                                       NumberOfSites = 3,
                                       NumberOfPatientsPerSite = 1000,
                                       AddedDsPackages = "dsSurvivalFix")
