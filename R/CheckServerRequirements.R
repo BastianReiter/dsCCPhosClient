@@ -4,23 +4,22 @@
 #' Check if technical requirements are met on every participating CCP server.
 #'
 #' @param CCPSiteSpecifications \code{data.frame} | Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). | Default: NULL for virtual project
-#' @param ServerRequirements A list of data frames as defined in \code{\link{Meta_ServerRequirements}}.
+#' @param RequiredPackages A character vector naming required packages
+#' @param RequiredFunctions A named character vector containing names of required functions. Their type ('aggregate' or 'assign') is defined by the correspondent element names.
 #' @param DataSources List of DSConnection objects
 #'
-#' @return A list of messages
+#' @return A list of data frames containing gathered info and messages
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
-                                    ServerRequirements = dsCCPhosClient::Meta_ServerRequirements,
+                                    RequiredPackages = c("dsBase", "dsCCPhos"),
+                                    RequiredFunctions = c(aggregate = "GetReportingObjectDS",
+                                                          assign = "AugmentDataDS",
+                                                          assign = "CurateDataDS",
+                                                          assign = "ExtractFromListDS"),
                                     DataSources = NULL)
 {
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Check argument eligibility
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Package requirements
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -31,7 +30,12 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
 
     # For testing purposes
     # DataSources <- CCPConnections
-    # ServerRequirements <- dsCCPhosClient::Meta_ServerRequirements
+    # RequiredPackages = c("dsBase", "dsCCPhos")
+    # RequiredFunctions = c(aggregate = "GetReportingObjectDS",
+    #                       assign = "AugmentDataDS",
+    #                       assign = "CurateDataDS",
+    #                       assign = "ExtractFromListDS")
+
 
     # Initiate output messaging objects
     Messages <- list()
@@ -44,7 +48,6 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
     ServerNames <- sort(names(DataSources))
 
 
-
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Package availability on servers
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,7 +57,7 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
                                      rownames = "PackageName")
 
     # Check if defined set of packages is available on all servers
-    RequiredPackageAvailability <- ServerRequirements$RequiredPackages %>%
+    RequiredPackageAvailability <- data.frame(PackageName = RequiredPackages) %>%
                                         left_join(PackageAvailability, by = join_by(PackageName)) %>%
                                         rowwise() %>%
                                         mutate(across(all_of(ServerNames), ~ ifelse(is.na(.), FALSE, .)),      # Replace NA values with FALSE. NAs are introduced when a required package is not listed in 'PackageAvailability'.
@@ -84,6 +87,18 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
         Messages$PackageAvailability <- c(Messages$PackageAvailability,
                                           Message)
     }
+
+    # Transform / Transpose data frame into more handy return object
+    RequiredPackageAvailability <- RequiredPackageAvailability %>%
+                                        select(-IsAvailableEverywhere,
+                                               -NotAvailableAt) %>%
+                                        pivot_longer(!PackageName,
+                                                     names_to = "SiteName",
+                                                     values_to = "IsAvailable") %>%
+                                        pivot_wider(names_from = PackageName,
+                                                    values_from = IsAvailable) %>%
+                                        mutate(CheckPackageAvailability = case_when(if_all(-SiteName, ~ .x == TRUE) ~ "green",
+                                                                                    TRUE ~ "red"))
 
 
 
@@ -126,6 +141,12 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
                                         MessagesDetail)
     }
 
+    # Transform / Transpose data frame into more handy return object
+    VersionOfdsCCPhos <- VersionOfdsCCPhos %>%
+                              pivot_longer(everything(),
+                                           names_to = "SiteName",
+                                           values_to = "dsCCPhosVersion")
+
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -141,10 +162,11 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
                                                                 type = "assign"))
 
     # Check if defined set of required functions is available on all servers
-    RequiredFunctionAvailability <- ServerRequirements$RequiredFunctions %>%
+    RequiredFunctionAvailability <- data.frame(FunctionName = RequiredFunctions,
+                                               FunctionType = names(RequiredFunctions)) %>%
                                         left_join(FunctionAvailability, by = join_by(FunctionName == name, FunctionType == type)) %>%
                                         rowwise() %>%
-                                        mutate(across(ServerNames, ~ ifelse(is.na(.), FALSE, .)),      # Replace NA values with FALSE. NAs are introduced when a required function is not listed in 'FunctionAvailability'.
+                                        mutate(across(all_of(ServerNames), ~ ifelse(is.na(.), FALSE, .)),      # Replace NA values with FALSE. NAs are introduced when a required function is not listed in 'FunctionAvailability'.
                                                IsAvailableEverywhere = all(c_across(all_of(ServerNames)) == TRUE),
                                                NotAvailableAt = ifelse(IsAvailableEverywhere == FALSE,
                                                                        paste0(ServerNames[c_across(all_of(ServerNames)) == FALSE], collapse = ", "),
@@ -172,6 +194,18 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
                                            Message)
     }
 
+    # Transform / Transpose data frame into more handy return object
+    RequiredFunctionAvailability <- RequiredFunctionAvailability %>%
+                                        select(-FunctionType,
+                                               -IsAvailableEverywhere,
+                                               -NotAvailableAt) %>%
+                                        pivot_longer(!FunctionName,
+                                                     names_to = "SiteName",
+                                                     values_to = "IsAvailable") %>%
+                                        pivot_wider(names_from = FunctionName,
+                                                    values_from = IsAvailable) %>%
+                                        mutate(CheckFunctionAvailability = case_when(if_all(-SiteName, ~ .x == TRUE) ~ "green",
+                                                                                     TRUE ~ "red"))
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -203,15 +237,31 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
                                         Message)
     }
 
+    # Transform / Transpose data frame into more handy return object
+    RequiredTableAvailability <- RequiredTableAvailability %>%
+                                        select(-IsAvailableEverywhere,
+                                               -NotAvailableAt) %>%
+                                        pivot_longer(!TableName,
+                                                     names_to = "SiteName",
+                                                     values_to = "IsAvailable") %>%
+                                        pivot_wider(names_from = TableName,
+                                                    values_from = IsAvailable) %>%
+                                        mutate(CheckTableAvailability = case_when(if_all(-SiteName, ~ .x == TRUE) ~ "green",
+                                                                                  TRUE ~ "red"))
+
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Print and return Messages object
+    # Print messages and return list object
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Print messages on console
     PrintMessages(Messages)
 
-    # Return messages
-    return(Messages)
+    # Return list containing data frames of gathered info and messages
+    return(list(PackageAvailability = RequiredPackageAvailability,
+                VersionOfdsCCPhos = VersionOfdsCCPhos,
+                FunctionAvailability = RequiredFunctionAvailability,
+                OpalTableAvailability = RequiredTableAvailability,
+                Messages = Messages))
 }

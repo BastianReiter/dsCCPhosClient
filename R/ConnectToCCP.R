@@ -30,12 +30,17 @@ ConnectToCCP <- function(CCPSiteSpecifications)
                             token = CCPSiteSpecifications$Token[i])
     }
 
-    # Returns a data frame of login data to different Sites
+    # Returns a data frame of login data to CCP Sites
     LoginData <- LoginBuilder$build()
 
-    # Get list of DSConnection objects of all servers
+    # Perform login process and get list of DSConnection objects of all servers
     CCPConnections <- DSI::datashield.login(logins = LoginData,
-                                            assign = TRUE)
+                                            assign = TRUE,
+                                            failSafe = TRUE)
 
+    # Trigger creation of vector holding info on processing checkpoints
+    ds.CreateCheckpoints(DataSources = CCPConnections)
+
+    # Return DSConnection objects
     return(CCPConnections)
 }

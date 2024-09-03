@@ -7,18 +7,17 @@
 #' @param BaseSize Font size that relatively determines all other sizes
 #' @param LegendPosition Legend position ("none", "left", "right", "bottom", "top", or two-element numeric vector)
 #' @param SizeFactorPlotTitle Determines font size of plot title
-#' @param SizeFactorPlotSubtitle
-#' @param SizeFactorPlotCaption
-#' @param SizeFactorAxisLabels
-#' @param SizeFactorTickLabels_x
-#' @param SizeFactorTickLabels_y
-#' @param SizeFactorLegendLabels
-#' @param SizeFactorFacetLabels
+#' @param SizeFactorPlotSubtitle Determines font size of plot subtitle
+#' @param SizeFactorPlotCaption Determines font size of plot caption
+#' @param SizeFactorAxisLabels Determines font size of main axis labels
+#' @param SizeFactorTickLabels_x Determines font size of x axis tick labels
+#' @param SizeFactorTickLabels_y Determines font size of y axis tick labels
+#' @param SizeFactorLegendLabels Determines font size of legend labels
+#' @param SizeFactorFacetLabels Determines font size of facet labels
 #'
 #' @return
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 ggTheme_CCP <- function(...,
                         BaseSize = 11,

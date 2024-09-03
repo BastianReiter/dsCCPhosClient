@@ -36,18 +36,25 @@ GetServerOpalInfo <- function(CCPSiteSpecifications = NULL,
 
     for (i in 1:length(ServerNames))
     {
-        # In case project is virtual, server Opal table names are just raw CCP table names
-        ServerTableNames <- CCPTableNames_Raw
-
-        # If project is not virtual, there can be server-specific project names and therefore server-specific Opal table names
-        if (!is.null(CCPSiteSpecifications))
+        # When connecting to virtual servers 'CCPSiteSpecifications' can be NULL or project name can be 'Virtual' (e.g. in CCPhosApp)
+        if (is.null(CCPSiteSpecifications))
+        {
+            ServerProjectName <- "Virtual"
+        }
+        else
         {
             # Get server-specific project name
             ServerProjectName <- CCPSiteSpecifications %>%
                                       filter(SiteName == ServerNames[i]) %>%
                                       select(ProjectName) %>%
                                       pull()
+        }
 
+        # In case project is virtual, server Opal table names are just raw CCP table names
+        ServerTableNames <- CCPTableNames_Raw
+
+        if (ServerProjectName != "Virtual")
+        {
             # Create vector with server-specific table names (raw CCP table names concatenated with server-specific project name)
             ServerTableNames <- paste0(ServerProjectName, ".", CCPTableNames_Raw)
         }

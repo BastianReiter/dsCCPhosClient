@@ -1,22 +1,7 @@
 
-# Install own dataSHIELD packages
+
+# Install CCPhos R packages
 #devtools::install_github(repo = "BastianReiter/dsCCPhos")
-#devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
-#devtools::install_github(repo = "BastianReiter/CCPhosApp")
-
-
-library(dsCCPhosClient)
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Establish test server connections using dsCCPhosClient::ConnectToCCP()
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# "Sissy" = Home/Local server
-# "Franz" = Remote server
-#-------------------------------------------------------------------------------
-
-
-
-
 #devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
 #devtools::install_github(repo = "BastianReiter/CCPhosApp")
 

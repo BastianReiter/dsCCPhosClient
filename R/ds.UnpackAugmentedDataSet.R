@@ -11,7 +11,6 @@
 #' @return A list of messages about object assignment for monitoring purposes
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
                                       DataSources = NULL)

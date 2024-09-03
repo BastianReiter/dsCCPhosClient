@@ -1,7 +1,7 @@
 
-#' GetServerWorkspaceInfo
+#' GetServerCheckpoints
 #'
-#' Check which objects live in server-side R sessions and collect meta data about them.
+#' Collect server status info with respect to defined checkpoints in preparation and processing.
 #'
 #' @param DataSources List of DSConnection objects
 #'
@@ -9,7 +9,8 @@
 #' @export
 #'
 #' @author Bastian Reiter
-GetServerWorkspaceInfo <- function(DataSources = NULL)
+GetServerCheckpoints <- function(CCPSiteSpecifications,
+                                 DataSources = NULL)
 {
     require(dplyr)
     require(dsBaseClient)
@@ -20,8 +21,60 @@ GetServerWorkspaceInfo <- function(DataSources = NULL)
     # For testing purposes
     #DataSources <- CCPConnections
 
-    # Get server names (sorted alphabetically)
-    ServerNames <- sort(names(DataSources))
+    Checkpoints <- tibble(SiteName = CCPSiteSpecifications$SiteName)
+
+
+    # Checkpoint 1) Connection status (Checked by Client)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Checkpoints <- Checkpoints %>%
+                        mutate(ConnectionStatus = case_when(SiteName %in% names(DataSources) ~ "green",
+                                                            TRUE ~ "red"))
+
+
+    # Checkpoint 2) Package availability (Checked by Client)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+    # Checkpoint 3) dsCCPhos package version (Checked by Client)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+    # Checkpoint 4) Function availability (Checked by Client)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+    # Checkpoint 5) Loading of Raw Data Set (RDS) from Opal DB into R session (Checked by Client)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+    # Checkpoint 6) Existence and completeness of all RDS data frames (Checked by Client)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+    # Checkpoint 7) Validation of RDS data (Checked by Client)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+    # Checkpoint 8) Curation: Transformation of RDS into Curated Data Set (CDS) (Checked by Server)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+    # Checkpoint 9) Validation of CDS data (Checked by Client)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+    # Checkpoint 10) Augmentation: Transformation of CDS into Augmented Data Set (ADS) (Checked by Server)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+    # Checkpoint 11) Validation of ADS data (Checked by Client)
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
 
 
     # 1) Get the names of all objects living in the server-side R sessions and check whether they occur on every server

@@ -25,11 +25,11 @@ ds.GetFrequencyTable(
 }
 \value{
 A \code{list} containing:
-\itemize{\item MetaData (\code{tibble}): Meta data about data type and sample size
-\item FrequencyTable (\code{tibble}: Absolute and relative frequencies)}
+\itemize{\item AbsoluteFrequencies (\code{tibble}: Absolute value frequencies)
+\item RelativeFrequencies (\code{tibble}: Relative value frequencies)}
 }
 \description{
-Get table of absolute and relative value frequencies (proportions) for a nominal / ordinal feature.
+Get table of absolute and relative value frequencies for a nominal / ordinal feature.
 }
 \details{
 Linked to server-side \code{AGGREGATE} function \code{dsCCPhos::GetFrequencyTableDS()}.

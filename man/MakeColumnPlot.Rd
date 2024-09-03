@@ -5,7 +5,7 @@
 \title{MakeColumn_Plot}
 \usage{
 MakeColumnPlot(
-  SampleFrequencies,
+  DataFrame,
   XFeature,
   XFeatureSpecs = NULL,
   XFeatureAdditionalMapping = "none",
@@ -36,6 +36,8 @@ MakeColumnPlot(
 )
 }
 \arguments{
+\item{DataFrame}{Data frame that should have tidy format}
+
 \item{XFeature}{Variable that contains X axis categories}
 
 \item{XFeatureSpecs}{Optional: Character vector that determines selection and order of categories}
@@ -71,8 +73,6 @@ MakeColumnPlot(
 \item{FillPalette}{Custom color palette passed into function environment}
 
 \item{...}{Anonymous additional arguments}
-
-\item{DataFrame}{Data frame that should have tidy format}
 }
 \value{
 A ggplot2 object
