@@ -6,19 +6,23 @@
 \usage{
 CheckServerRequirements(
   CCPSiteSpecifications = NULL,
-  ServerRequirements = dsCCPhosClient::Meta_ServerRequirements,
+  RequiredPackages = c("dsBase", "dsCCPhos"),
+  RequiredFunctions = c(aggregate = "GetReportingObjectDS", assign = "AugmentDataDS",
+    assign = "CurateDataDS", assign = "ExtractFromListDS"),
   DataSources = NULL
 )
 }
 \arguments{
 \item{CCPSiteSpecifications}{\code{data.frame} | Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). | Default: NULL for virtual project}
 
-\item{ServerRequirements}{A list of data frames as defined in \code{\link{Meta_ServerRequirements}}.}
+\item{RequiredPackages}{A character vector naming required packages}
+
+\item{RequiredFunctions}{A named character vector containing names of required functions. Their type ('aggregate' or 'assign') is defined by the correspondent element names.}
 
 \item{DataSources}{List of DSConnection objects}
 }
 \value{
-A list of messages
+A list of data frames containing gathered info and messages
 }
 \description{
 Check if technical requirements are met on every participating CCP server.

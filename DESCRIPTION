@@ -1,6 +1,6 @@
 Package: dsCCPhosClient
 Title: Enabling Data Science with the DKTK-CCP
-Version: 0.1.31
+Version: 0.1.35
 Authors@R: 
     person("Bastian", "Reiter", , "b.reiter@med.uni-frankfurt.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1088-0502"))
@@ -14,6 +14,7 @@ Imports:
     cli,
     dplyr,
     dsBaseClient (>= 6.3.0),
+    dsCCPhos (>= 0.1.31),
     DSI,
     tibble,
     tidyr
@@ -30,6 +31,7 @@ Suggests:
 Depends: 
     R (>= 2.10)
 LazyData: true
-Remotes: 
+Remotes:  
     BastianReiter/CCPhosApp,
+    BastianReiter/dsCCPhos,
     datashield/dsBaseClient

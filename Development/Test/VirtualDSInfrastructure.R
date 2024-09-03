@@ -35,7 +35,7 @@ library(dsCCPhosClient)
 
 #TestData <- readRDS("../dsCCPhos/Development/Data/RealData/CCPRealData_Frankfurt.rds")
 TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
-TestData_WithEmptyTables <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData_WithEmptyTables.rds")
+#TestData_WithEmptyTables <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData_WithEmptyTables.rds")
 
 
 # TestData$sample <- data.frame()
@@ -44,17 +44,17 @@ TestData_WithEmptyTables <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTe
 # saveRDS(TestData, file = "../dsCCPhos/Development/Data/TestData/CCPTestData_WithEmptyTables.rds")
 
 
-CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData_WithEmptyTables,
+CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
-                                      NumberOfPatientsPerSite = 1000,
-                                      AddedDsPackages = "dsSurvivalFix")
+                                      NumberOfPatientsPerSite = 5000)
+                                      #AddedDsPackages = "dsSurvivalFix")
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Check server requirements using dsCCPhosClient::CheckServerRequirements()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Messages <- CheckServerRequirements(DataSources = CCPConnections)
+Requirements <- CheckServerRequirements(DataSources = CCPConnections)
 
 
 # datashield.pkg_status(conns = CCPConnections)
@@ -73,6 +73,12 @@ Messages <- LoadRawDataSet(CCPSiteSpecifications = NULL,
 # ValidationReportRDS <- ds.GetValidationReport_RDS(Name_RawDataSet = "RawDataSet",
 #                                                       DataSources = CCPConnections)
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Check RDS tables for existence and completeness
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Messages <-ds.GetRDSTableCheck(DataSources = CCPConnections)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

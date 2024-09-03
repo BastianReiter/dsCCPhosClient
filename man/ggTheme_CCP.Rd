@@ -25,7 +25,19 @@ ggTheme_CCP(
 
 \item{SizeFactorPlotTitle}{Determines font size of plot title}
 
-\item{SizeFactorFacetLabels}{}
+\item{SizeFactorPlotSubtitle}{Determines font size of plot subtitle}
+
+\item{SizeFactorPlotCaption}{Determines font size of plot caption}
+
+\item{SizeFactorAxisLabels}{Determines font size of main axis labels}
+
+\item{SizeFactorTickLabels_x}{Determines font size of x axis tick labels}
+
+\item{SizeFactorTickLabels_y}{Determines font size of y axis tick labels}
+
+\item{SizeFactorLegendLabels}{Determines font size of legend labels}
+
+\item{SizeFactorFacetLabels}{Determines font size of facet labels}
 }
 \description{
 Custom ggplot2 theme, based on ggplot2::theme_classic()

@@ -11,7 +11,6 @@
 #' @return A list of reporting objects
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 ds.GetReportingObject <- function(ObjectName,
                                   DataSources = NULL)
