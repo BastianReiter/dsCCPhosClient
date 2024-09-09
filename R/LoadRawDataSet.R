@@ -115,9 +115,11 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
     }
   }
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+  if(!is.null(CCPTablesRemoveIndex)){
+    CCPTableNamesCuratedReduced <- CCPTableNames_Curated[-CCPTablesRemoveIndex]
+  }
   # Consolidate all raw data set tables in one list object called "RawDataSet"
-  dsBaseClient::ds.list(x = paste0("RDS_", CCPTableNames_Curated[-CCPTablesRemoveIndex]),
+  dsBaseClient::ds.list(x = paste0("RDS_", CCPTableNames_Curated),
                         newobj = "RawDataSet",
                         datasources = DataSources)
 
