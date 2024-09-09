@@ -10,13 +10,13 @@
 #'
 #' @examples
 #' @author Bastian Reiter
-ConnectToCCP <- function(CCPSiteSpecifications)
+ConnectToCCP <- function(CCPSiteSpecifications, proxyurl = "http://localhost")
 {
     require(DSI)
     require(DSOpal)
 
     # Beam settings
-    set_config(use_proxy(url = "http://beam-connect", port = 8062))
+    set_config(use_proxy(url = proxyurl, port = 8062))
     set_config(config(ssl_verifyhost = 0L, ssl_verifypeer = 0L))
 
     # Create an environment
