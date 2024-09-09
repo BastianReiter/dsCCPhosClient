@@ -41,7 +41,7 @@ GetServerWorkspaceInfo <- function(DataSources = NULL)
 
   for (i in 1:length(ServerNames))
   {
-    print(i)
+    #print(i)
     ObjectInfo <- tibble(Object = UniqueObjectNames)
     ObjectInfo$ObjectExists <- ObjectInfo$Object %in% ServerObjectNames[[ServerNames[i]]]
 
