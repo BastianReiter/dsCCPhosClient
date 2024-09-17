@@ -17,6 +17,7 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
     require(dplyr)
     require(dsBaseClient)
     require(DSI)
+    require(purrr)
     require(tidyr)
 
     # For testing purposes
@@ -43,10 +44,10 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
     # Loop through all participating sites / servers
     for (i in 1:length(ServerNames))
     {
-        # In case project is virtual, server Opal table names are just raw CCP table names
+        # In case CCPSiteSpecifications are NULL, server Opal table names are just raw CCP table names
         ServerTableNames <- CCPTableNames_Raw
 
-        # If project is not virtual, there can be server-specific project names and therefore server-specific Opal table names
+        # If CCPSiteSpecifications are assigned, there can be server-specific project names and therefore server-specific Opal table names
         if (!is.null(CCPSiteSpecifications))
         {
             # Get server-specific project name
@@ -55,8 +56,14 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
                                       select(ProjectName) %>%
                                       pull()
 
+            # If ServerProjectName is "Virtual" (as it is the case when using virtual infrastructure in CCPhosApp) make the variable empty so that server Opal table names are just raw CCP table names
+            if (ServerProjectName == "Virtual") { ServerProjectName <- "" }
+
+            # Else add a dot ('.') to ServerProjectName according to Opal table name nomenclature
+            else { ServerProjectName <- paste0(ServerProjectName, ".") }
+
             # Create vector with server-specific table names (raw CCP table names concatenated with server-specific project name)
-            ServerTableNames <- paste0(ServerProjectName, ".", CCPTableNames_Raw)
+            ServerTableNames <- paste0(ServerProjectName, CCPTableNames_Raw)
         }
 
         # Loop through all tables from Opal DB and assign their content to objects (data.frames) in R session
@@ -68,6 +75,7 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
                               id.name = "_id")
         }
     }
+
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -87,7 +95,6 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
         BundledMessages <- c(BundledMessages,
                              ObjectStatus_Table)
     }
-
 
     # Turn list into (named) vector and add it to Messages
     Messages$Assignment <- c(Messages$Assignment,

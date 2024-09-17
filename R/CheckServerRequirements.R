@@ -213,13 +213,13 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Get info on Opal table availability with dsCCPhosClient::GetServerOpalDBInfo()
-    RequiredTableAvailability <- GetServerOpalInfo(CCPSiteSpecifications,
-                                                   DataSources)
+    RequiredOpalTableAvailability <- GetServerOpalInfo(CCPSiteSpecifications,
+                                                       DataSources)
 
     # Compile output message concerning one table each and add it to Messages
-    for (i in 1:nrow(RequiredTableAvailability))
+    for (i in 1:nrow(RequiredOpalTableAvailability))
     {
-        Row <- RequiredTableAvailability[i, ]
+        Row <- RequiredOpalTableAvailability[i, ]
 
         # Note: It's important to use 'dplyr::if_else()' instead of 'ifelse' here, otherwise the return won't be a named vector
         Message <- if_else(Row$IsAvailableEverywhere == TRUE,
@@ -238,7 +238,7 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
     }
 
     # Transform / Transpose data frame into more handy return object
-    RequiredTableAvailability <- RequiredTableAvailability %>%
+    RequiredOpalTableAvailability <- RequiredOpalTableAvailability %>%
                                         select(-IsAvailableEverywhere,
                                                -NotAvailableAt) %>%
                                         pivot_longer(!TableName,
@@ -246,8 +246,8 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
                                                      values_to = "IsAvailable") %>%
                                         pivot_wider(names_from = TableName,
                                                     values_from = IsAvailable) %>%
-                                        mutate(CheckTableAvailability = case_when(if_all(-SiteName, ~ .x == TRUE) ~ "green",
-                                                                                  TRUE ~ "red"))
+                                        mutate(CheckOpalTableAvailability = case_when(if_all(-SiteName, ~ .x == TRUE) ~ "green",
+                                                                                      TRUE ~ "red"))
 
 
 
@@ -262,6 +262,6 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
     return(list(PackageAvailability = RequiredPackageAvailability,
                 VersionOfdsCCPhos = VersionOfdsCCPhos,
                 FunctionAvailability = RequiredFunctionAvailability,
-                OpalTableAvailability = RequiredTableAvailability,
+                OpalTableAvailability = RequiredOpalTableAvailability,
                 Messages = Messages))
 }

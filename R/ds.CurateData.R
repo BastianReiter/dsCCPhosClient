@@ -42,11 +42,14 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
     }
 
 
+    # For testing purposes only
+    #DataSources <- CCPConnections
+
+
     # Initiate output messaging objects
     Messages <- list()
-    #Messages$Completion <- character()
     Messages$Assignment <- list()
-
+    Messages$CurationCompletion <- list()
 
 
     # 1) Trigger dsCCPhos::CurateDataDS()
@@ -104,12 +107,48 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                              Messages$Assignment)
 
 
+
+    # 3) Get CurationMessages objects from servers (as a list of lists) and create completion check object
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ServerCall <- call("GetReportingObjectDS",
+                       ObjectName.S = "CurationMessages")
+
+    CurationMessages <- DSI::datashield.aggregate(conns = DataSources,
+                                                  expr = ServerCall)
+
+    # Create table object for output
+    CurationCompletionCheck <- CurationMessages %>%
+                                  map(\(SiteMessages) tibble(CheckCurationCompletion = SiteMessages$CheckCurationCompletion) ) %>%
+                                  list_rbind(names_to = "SiteName")
+
+    # Create vector of messages informing about curation completion
+    Messages$CurationCompletion <- CurationMessages %>%
+                                      imap(function(SiteMessages, sitename)
+                                           {
+                                              case_when(SiteMessages$CheckCurationCompletion == "green" ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' performed successfully!"),
+                                                                                                                             IsClassSuccess = TRUE),
+                                                        SiteMessages$CheckCurationCompletion == "yellow" ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' performed with warnings!"),
+                                                                                                                              IsClassWarning = TRUE),
+                                                        SiteMessages$CheckCurationCompletion == "red" ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' could not be performed!"),
+                                                                                                                           IsClassFailure = TRUE),
+                                                        TRUE ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' could not be assessed."),
+                                                                                   IsClassFailure = TRUE))
+                                           }) %>%
+                                      list_c()
+
+    # Add topic element to start of vector
+    Messages$CurationCompletion <- c(Topic = "Curation process completion",
+                                     Messages$CurationCompletion)
+
+
     # Print messages and return Messages object
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Print messages on console
     PrintMessages(Messages)
 
-    # Return Messages
-    return(Messages)
+    # Return Messages and Curation completion check object
+    return(list(Messages = Messages,
+                CurationCompletionCheck = CurationCompletionCheck))
 }
