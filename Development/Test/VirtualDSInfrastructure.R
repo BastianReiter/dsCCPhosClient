@@ -81,7 +81,7 @@ RDSTableCheck <- ds.CheckRDSTables(DataSources = CCPConnections)
 # Validate RDS data
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Messages <- ds.GetRDSValidationReport(DataSources = CCPConnections)
+RDSValidationReport <- ds.GetRDSValidationReport(DataSources = CCPConnections)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -89,7 +89,7 @@ Messages <- ds.GetRDSValidationReport(DataSources = CCPConnections)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS)
-Messages <- ds.CurateData(RawDataSetName = "RawDataSet",
+Curation <- ds.CurateData(RawDataSetName = "RawDataSet",
                           OutputName = "CurationOutput",
                           DataSources = CCPConnections)
 
