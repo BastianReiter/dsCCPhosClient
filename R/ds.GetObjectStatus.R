@@ -8,10 +8,9 @@
 #' @param ObjectName String | Name of object on server
 #' @param DataSources List of DSConnection objects
 #'
-#' @return
+#' @return \code{list}
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 ds.GetObjectStatus <- function(ObjectName,
                                DataSources)
@@ -28,6 +27,10 @@ ds.GetObjectStatus <- function(ObjectName,
         stop("'DataSources' were expected to be a list of DSConnection-class objects", call. = FALSE)
     }
 
+
+    # For testing purposes only
+    #ObjectName <- "RDS_Patients"
+    #DataSources <- CCPConnections
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Call GetObjectStatusDS() on every server

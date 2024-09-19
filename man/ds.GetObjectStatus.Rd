@@ -11,6 +11,9 @@ ds.GetObjectStatus(ObjectName, DataSources)
 
 \item{DataSources}{List of DSConnection objects}
 }
+\value{
+\code{list}
+}
 \description{
 Checks if an object exists on every server in a valid form and returns appropriate messages.
 }

@@ -55,7 +55,7 @@ ds.GetCurationReport <- function(DataSources = NULL)
     #   i) Detailed monitors
     #   ii) Eligibility overviews
     #   iii) Value set overviews
-
+    #---------------------------------------------------------------------------
 
     TransformationMonitorsCumulated <- list()
     EligibilityOverviewsCumulated <- list()
