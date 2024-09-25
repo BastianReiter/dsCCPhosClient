@@ -256,9 +256,14 @@ MakeColumnPlot <- function(DataFrame,
             } +
             scale_y_continuous(labels = function(value) round(value, Decimals),      # Format y axis tick mark labels: rounded numbers
                                expand = expansion(mult = c(0, 0.1))) +      # No padding between data lower y limit, 10 % padding on upper y limit
-            scale_fill_manual(labels = var_LegendLabels,
-                              values = FillPalette,      # Set custom fill colors
-                              name = NULL) +
+            {
+              if (!is.null(FillPalette)) { scale_fill_manual(name = NULL,
+                                                             labels = var_LegendLabels,
+                                                             values = FillPalette) }      # Set custom fill colors
+              else { scale_color_brewer(name = NULL,
+                                        labels = var_LegendLabels,
+                                        type = "qual") }
+            } +
             scale_alpha_manual(values = var_AlphaValues,
                                guide = NULL) +      # Do not display alpha related legend, if alpha mapping is not used
             var_Modifications +      # Pass list of optional modifications determined above

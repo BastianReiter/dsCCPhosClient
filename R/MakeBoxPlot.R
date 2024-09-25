@@ -82,7 +82,11 @@ MakeBoxPlot <- function(SampleStatistics,
                 scale_x_discrete(labels = label_wrap(TickLabelWidth_x)) +      # Set width of x axis tick mark labels, after which linebreak should occur
                 scale_y_continuous(labels = function(value) round(value, Decimals)) +
                 ylim(AxisLimits_y[1], AxisLimits_y[2]) +      # Set y axis limits
-                scale_fill_manual(values = FillPalette)      # Set custom fill color palette
+                {
+                  if (!is.null(FillPalette)) { scale_fill_manual(values = FillPalette) }      # Set custom fill color palette}
+                  else { scale_color_brewer(name = "Paired") }
+                }
+
 
     return(Plot)
 }

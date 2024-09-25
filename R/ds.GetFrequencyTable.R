@@ -9,7 +9,7 @@
 #' @param TableName String | Name of the table containing the feature of concern
 #' @param FeatureName String | Name of feature
 #' @param GroupingFeatureName String | Name of optional grouping feature from the same table
-#' @param MaxNumberCategories \code{integer} | Maximum number of categories analyzed individually before frequencies are cumulated in 'Other' category.
+#' @param MaxNumberCategories \code{integer} | Maximum number of categories analyzed individually before frequencies are cumulated in 'Other' category. | Default: 10
 #'
 #' @return A \code{list} containing:
 #'         \itemize{\item AbsoluteFrequencies (\code{tibble}: Absolute value frequencies)
@@ -21,7 +21,7 @@ ds.GetFrequencyTable <- function(DataSources = NULL,
                                  TableName,
                                  FeatureName,
                                  GroupingFeatureName = NULL,
-                                 MaxNumberCategories = NULL)
+                                 MaxNumberCategories = 10)
 {
     # For Testing Purposes
     # DataSources <- CCPConnections

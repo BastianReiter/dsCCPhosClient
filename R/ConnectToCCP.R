@@ -8,7 +8,6 @@
 #' @return A list of DSConnection-objects
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 ConnectToCCP <- function(CCPSiteSpecifications)
 {
@@ -37,9 +36,6 @@ ConnectToCCP <- function(CCPSiteSpecifications)
     CCPConnections <- DSI::datashield.login(logins = LoginData,
                                             assign = TRUE,
                                             failSafe = TRUE)
-
-    # Trigger creation of vector holding info on processing checkpoints
-    ds.CreateCheckpoints(DataSources = CCPConnections)
 
     # Return DSConnection objects
     return(CCPConnections)

@@ -53,14 +53,14 @@ use_data(CCPhosColors, overwrite = TRUE)
 Meta_TableNames <- dsCCPhos::Meta_TableNames
 Meta_FeatureNames <- dsCCPhos::Meta_FeatureNames
 Meta_ValueSets <- dsCCPhos::Meta_ValueSets
-RuleSet_RawDataTransformation <- dsCCPhos::RuleSet_RawDataTransformation
+RuleSet_RawDataHarmonization <- dsCCPhos::RuleSet_RawDataHarmonization
 RuleSet_DiagnosisRedundancy <- dsCCPhos::RuleSet_DiagnosisRedundancy
 RuleSet_DiagnosisAssociation <- dsCCPhos::RuleSet_DiagnosisAssociation
 
 use_data(Meta_TableNames, overwrite = TRUE)
 use_data(Meta_FeatureNames, overwrite = TRUE)
 use_data(Meta_ValueSets, overwrite = TRUE)
-use_data(RuleSet_RawDataTransformation, overwrite = TRUE)
+use_data(RuleSet_RawDataHarmonization, overwrite = TRUE)
 use_data(RuleSet_DiagnosisRedundancy, overwrite = TRUE)
 use_data(RuleSet_DiagnosisAssociation, overwrite = TRUE)
 
