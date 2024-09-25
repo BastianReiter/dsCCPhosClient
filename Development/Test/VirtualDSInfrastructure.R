@@ -100,6 +100,8 @@ Messages <- ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
 # Get curation reports
 CurationReports <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
 
+CurationReports$All$UnlinkedEntries
+
 # Exemplary look at a curation report table
 #View(CurationReports$All$Transformation$Monitors$Staging)
 #View(CurationReports$All$Transformation$EligibilityOverviews$Staging)
@@ -218,6 +220,8 @@ TableData <- Test$AbsoluteFrequencies %>%
                       summarize(across(everything(), ~ paste0(.x, collapse = "  ")))
 
 
+library(ggplot2)
+
 PlotData <- Test$AbsoluteFrequencies %>%
                 pivot_longer(cols = -Site,
                              names_to = "Value",
@@ -234,9 +238,7 @@ Plot <- ggplot(data = as.data.frame(PlotData),
 Plot <- MakeColumnPlot(DataFrame = PlotData,
                        XFeature = Value,
                        YFeature = AbsoluteFrequency,
-                       FillPalette = c("SiteA" = CCPhosColors$Primary,
-                                       "SiteB" = CCPhosColors$Secondary,
-                                       "SiteC" = CCPhosColors$Tertiary))
+                       GroupingFeature = Site)
 
 
 
