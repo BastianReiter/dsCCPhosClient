@@ -67,11 +67,11 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
         }
 
         # Loop through all tables from Opal DB and assign their content to objects (data.frames) in R session
-        for(i in 1:length(ServerTableNames))
+        for(j in 1:length(ServerTableNames))
         {
-            datashield.assign(conns = DataSources,
-                              symbol = paste0("RDS_", CCPTableNames_Curated[i]),
-                              value = ServerTableNames[i],
+            datashield.assign(conns = DataSources[[i]],
+                              symbol = paste0("RDS_", CCPTableNames_Curated[j]),
+                              value = ServerTableNames[j],
                               id.name = "_id")
         }
     }

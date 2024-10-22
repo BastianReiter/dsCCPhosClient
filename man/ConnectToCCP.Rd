@@ -4,7 +4,7 @@
 \alias{ConnectToCCP}
 \title{ConnectToCCP}
 \usage{
-ConnectToCCP(CCPSiteSpecifications)
+ConnectToCCP(CCPSiteSpecifications, proxyurl = "http://localhost")
 }
 \arguments{
 \item{CCPSiteSpecifications}{\code{data.frame} | Login data of CCP sites}
