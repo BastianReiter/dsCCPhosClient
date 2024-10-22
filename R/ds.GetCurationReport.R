@@ -10,11 +10,11 @@
 #' @return A list of Curation Reports
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 ds.GetCurationReport <- function(DataSources = NULL)
 {
     require(dplyr)
+    require(purrr)
 
     # For testing purposes
     #DataSources <- CCPConnections
@@ -24,7 +24,7 @@ ds.GetCurationReport <- function(DataSources = NULL)
         DataSources <- DSI::datashield.connections_find()
     }
 
-
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # 1) Get CurationReport objects from servers (as a list of lists)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -34,23 +34,36 @@ ds.GetCurationReport <- function(DataSources = NULL)
     CurationReports <- DSI::datashield.aggregate(conns = DataSources,
                                                  expr = ServerCall)
 
+    # Turn returned list 'inside-out' using purrr::list_transpose() for easier processing
+    CurationReports <- CurationReports %>% list_transpose()
 
-    # 2 A) Summarize server-specific reports: Unlinked Entries
+
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # 2) Cumulation of site-specific reports
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #   a) Unlinked Entries
+    #   b) Transformation Monitor objects
+    #         i) Detailed monitors
+    #         ii) Eligibility overviews
+    #         iii) Value set overviews
+    #   c) Diagnosis classification
+    #---------------------------------------------------------------------------
+
+
+    # 2 a) Unlinked Entries
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    # Initiate summary with vector from first server
-    UnlinkedEntriesCumulated <- CurationReports[[1]]$UnlinkedEntries
+    # Bind rows of site-specific vectors
+    UnlinkedEntries_Sites <- as_tibble(do.call(rbind, CurationReports$UnlinkedEntries))
 
-    if (length(CurationReports) > 1)
-    {
-        for (i in 2:length(CurationReports))      # Loop through all other servers
-        {
-            UnlinkedEntriesCumulated <- UnlinkedEntriesCumulated + CurationReports[[i]]$UnlinkedEntries
-        }
-    }
+    # Add row with column sums and add site name feature
+    UnlinkedEntriesTable <- colSums(UnlinkedEntries_Sites) %>%
+                                bind_rows(UnlinkedEntries_Sites) %>%
+                                mutate(SiteName = c("All", names(DataSources)), .before = 1)
 
 
-    # 2 B) Summarize server-specific reports: Transformation
+    # 2 b) Transformation objects
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #   i) Detailed monitors
     #   ii) Eligibility overviews
@@ -61,7 +74,7 @@ ds.GetCurationReport <- function(DataSources = NULL)
     EligibilityOverviewsCumulated <- list()
     ValueSetOverviewsCumulated <- list()
 
-    for (i in 1:length(CurationReports[[1]]$Transformation$Monitors))      # Loop through all transformation monitor tables (Diagnosis, Histology, etc.)
+    for (i in 1:length(CurationReports$Transformation[[1]]$Monitors))      # Loop through all transformation monitor tables (Diagnosis, Histology, etc.)
     {
         AllServersMonitor <- data.frame()
 
@@ -77,13 +90,13 @@ ds.GetCurationReport <- function(DataSources = NULL)
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         for (j in 1:length(CurationReports))      # Loop through all servers
         {
-            ServerMonitor <- CurationReports[[j]]$Transformation$Monitors[[i]]
-            ServerEligibilityOverview <- CurationReports[[j]]$Transformation$EligibilityOverviews[[i]]
+            ServerMonitor <- CurationReports$Transformation[[j]]$Monitors[[i]]
+            ServerEligibilityOverview <- CurationReports$Transformation[[j]]$EligibilityOverviews[[i]]
 
-            ServerValueSetOverview_Raw <- CurationReports[[j]]$Transformation$ValueSetOverviews[[i]]$Raw
-            ServerValueSetOverview_Harmonized <- CurationReports[[j]]$Transformation$ValueSetOverviews[[i]]$Harmonized
-            ServerValueSetOverview_Recoded <- CurationReports[[j]]$Transformation$ValueSetOverviews[[i]]$Recoded
-            ServerValueSetOverview_Final <- CurationReports[[j]]$Transformation$ValueSetOverviews[[i]]$Final
+            ServerValueSetOverview_Raw <- CurationReports$Transformation[[j]]$ValueSetOverviews[[i]]$Raw
+            ServerValueSetOverview_Harmonized <- CurationReports$Transformation[[j]]$ValueSetOverviews[[i]]$Harmonized
+            ServerValueSetOverview_Recoded <- CurationReports$Transformation[[j]]$ValueSetOverviews[[i]]$Recoded
+            ServerValueSetOverview_Final <- CurationReports$Transformation[[j]]$ValueSetOverviews[[i]]$Final
 
             # Monitor table
             if (!is.null(ServerMonitor))
@@ -264,35 +277,32 @@ ds.GetCurationReport <- function(DataSources = NULL)
                                              Final = AllServersValueSetOverview_Final))
     }
 
-    names(TransformationMonitorsCumulated) <- names(CurationReports[[1]]$Transformation$Monitors)
-    names(EligibilityOverviewsCumulated) <- names(CurationReports[[1]]$Transformation$EligibilityOverviews)
-    names(TransformationMonitorsCumulated) <- names(CurationReports[[1]]$Transformation$ValueSetOverviews)
+    names(TransformationMonitorsCumulated) <- names(CurationReports$Transformation[[1]]$Monitors)
+    names(EligibilityOverviewsCumulated) <- names(CurationReports$Transformation[[1]]$EligibilityOverviews)
+    names(TransformationMonitorsCumulated) <- names(CurationReports$Transformation[[1]]$ValueSetOverviews)
 
 
-
-    # 2 C) Summarize server-specific reports: Diagnosis Classification
+    # 2 c) Summarize server-specific reports: Diagnosis Classification
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    # Initiate summary with vector from first server
-    DiagnosisClassificationCumulated <- CurationReports[[1]]$DiagnosisClassification
+    # Bind rows of site-specific vectors
+    DiagnosisClassification_Sites <- as_tibble(do.call(rbind, CurationReports$DiagnosisClassification))
 
-    if (length(CurationReports) > 1)
-    {
-        for (i in 2:length(CurationReports))      # Loop through all other servers
-        {
-            DiagnosisClassificationCumulated <- DiagnosisClassificationCumulated + CurationReports[[i]]$DiagnosisClassification
-        }
-    }
+    # Add row with column sums and add site name feature
+    DiagnosisClassificationTable <- colSums(DiagnosisClassification_Sites) %>%
+                                        bind_rows(DiagnosisClassification_Sites) %>%
+                                        mutate(SiteName = c("All", names(DataSources)), .before = 1)
 
 
 
-    # Return list of server-specific and summarized Curation Reports
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Return list
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    return(c("All" = list(list(UnlinkedEntries = UnlinkedEntriesCumulated,      # The list for "All" must have the same structure and naming of return of dsCCPhos::CurateData() for every single server
-                               Transformation = list(Monitors = TransformationMonitorsCumulated,
-                                                     EligibilityOverviews = EligibilityOverviewsCumulated,
-                                                     ValueSetOverviews = ValueSetOverviewsCumulated),
-                               DiagnosisClassification = DiagnosisClassificationCumulated)),
-           CurationReports))
+    return(list(UnlinkedEntries = UnlinkedEntriesTable,
+                Transformation = c(list(All = list(Monitors = TransformationMonitorsCumulated,
+                                                   EligibilityOverviews = EligibilityOverviewsCumulated,
+                                                   ValueSetOverviews = ValueSetOverviewsCumulated)),
+                                   CurationReports$Transformation),
+                DiagnosisClassification = DiagnosisClassificationTable))
 }

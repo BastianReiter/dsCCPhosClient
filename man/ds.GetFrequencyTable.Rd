@@ -9,7 +9,7 @@ ds.GetFrequencyTable(
   TableName,
   FeatureName,
   GroupingFeatureName = NULL,
-  MaxNumberCategories = NULL
+  MaxNumberCategories = 10
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ ds.GetFrequencyTable(
 
 \item{GroupingFeatureName}{String | Name of optional grouping feature from the same table}
 
-\item{MaxNumberCategories}{\code{integer} | Maximum number of categories analyzed individually before frequencies are cumulated in 'Other' category.}
+\item{MaxNumberCategories}{\code{integer} | Maximum number of categories analyzed individually before frequencies are cumulated in 'Other' category. | Default: 10}
 }
 \value{
 A \code{list} containing:

@@ -98,14 +98,14 @@ Messages <- ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
                                     DataSources = CCPConnections)
 
 # Get curation reports
-CurationReports <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
+CurationReport <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
 
-CurationReports$All$UnlinkedEntries
+View(CurationReport$UnlinkedEntries)
 
 # Exemplary look at a curation report table
-#View(CurationReports$All$Transformation$Monitors$Staging)
-#View(CurationReports$All$Transformation$EligibilityOverviews$Staging)
-#View(CurationReports$All$Transformation$ValueSetOverviews$Raw)
+#View(CurationReport$Transformation$All$Monitors$Staging)
+#View(CurationReport$Transformation$All$EligibilityOverviews$Staging)
+#View(CurationReport$Transformation$All$ValueSetOverviews$Raw)
 
 # Get validation report of Curated Data Set (CDS)
 # ValidationReportCDS <- ds.GetValidationReport_CDS(Name_CurationOutput = "CurationOutput",

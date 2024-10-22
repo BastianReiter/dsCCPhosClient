@@ -72,13 +72,13 @@ GetServerWorkspaceInfo <- function(DataSources = NULL)
 
     # Add some meta data to 'ObjectInfo'
     ObjectInfo <- ObjectInfo %>%
-      rowwise() %>%
-      mutate(Class = ifelse(!is.null(MetaData[[Object]]$Class), MetaData[[Object]]$Class, NA),
-             Length = ifelse(!is.null(MetaData[[Object]]$Length), MetaData[[Object]]$Length, NA),
-             RowCount = ifelse(!is.null(MetaData[[Object]]$RowCount), MetaData[[Object]]$RowCount, NA),
-             .after = Object) %>%
-      ungroup() %>%
-      mutate(ServerName = ServerNames[i])
+                      rowwise() %>%
+                      mutate(Class = ifelse(!is.null(MetaData[[Object]]$Class), MetaData[[Object]]$Class, NA),
+                             Length = ifelse(!is.null(MetaData[[Object]]$Length), MetaData[[Object]]$Length, NA),
+                             RowCount = ifelse(!is.null(MetaData[[Object]]$RowCount), MetaData[[Object]]$RowCount, NA),
+                             .after = Object) %>%
+                      ungroup() %>%
+                      mutate(ServerName = ServerNames[i])
 
     ObjectInfoComplete <- rbind(ObjectInfoComplete, ObjectInfo)
     MetaDataComplete[[i]] <- MetaData
