@@ -29,8 +29,8 @@ ds.GetObjectStatus <- function(ObjectName,
 
 
     # For testing purposes only
-    #ObjectName <- "RDS_Patients"
-    #DataSources <- CCPConnections
+    # ObjectName <- "RDS_GeneralCondition"
+    # DataSources <- CCPConnections
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Call GetObjectStatusDS() on every server

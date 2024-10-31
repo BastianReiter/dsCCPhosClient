@@ -46,7 +46,7 @@ TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
-                                      NumberOfPatientsPerSite = 5000)
+                                      NumberOfPatientsPerSite = 1000)
                                       #AddedDsPackages = "dsSurvivalFix")
 
 

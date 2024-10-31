@@ -9,7 +9,6 @@
 #' @return A list of messages
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
                            DataSources)
@@ -21,8 +20,8 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
     require(tidyr)
 
     # For testing purposes
+    #CCPSiteSpecifications <- NULL
     #DataSources <- CCPConnections
-    #ProjectName <- "Virtual"
 
 
     # Initiate output messaging objects
@@ -71,8 +70,8 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
         {
             datashield.assign(conns = DataSources[[i]],
                               symbol = paste0("RDS_", CCPTableNames_Curated[j]),
-                              value = ServerTableNames[j],
-                              id.name = "_id")
+                              value = ServerTableNames[j])
+                              #id.name = "_id")
         }
     }
 
@@ -103,13 +102,25 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Assign list 'RawDataSet'
+    # Assign list 'RawDataSet' on all servers
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    # Consolidate all raw data set tables in one list object called "RawDataSet"
-    dsBaseClient::ds.list(x = paste0("RDS_", CCPTableNames_Curated),
-                          newobj = "RawDataSet",
-                          datasources = DataSources)
+    # Create list of vectors (one for each site) containing names of data.frames that are not of class "NULL"
+    ExistingRDSTables <- paste0("RDS_", CCPTableNames_Curated) %>%
+                              map(\(tablename) unlist(ds.class(x = tablename, datasources = CCPConnections))) %>%
+                              set_names(paste0("RDS_", CCPTableNames_Curated)) %>%
+                              list_transpose() %>%
+                              map(\(TableNames) names(TableNames[TableNames != "NULL"]))
+
+    # For every site, consolidate all existing Raw Data Set tables in one list object called "RawDataSet"
+    ExistingRDSTables %>%
+        purrr::iwalk(function(RDSTableNames, servername)
+                     {
+                        dsBaseClient::ds.list(x = RDSTableNames,
+                                              newobj = "RawDataSet",
+                                              datasources = DataSources[servername])
+                     })
+
 
     # Make sure assignment of RawDataSet was successful on all servers
     ObjectStatus_RawDataSet <- ds.GetObjectStatus(ObjectName = "RawDataSet",
