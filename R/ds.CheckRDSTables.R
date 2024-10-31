@@ -18,8 +18,8 @@ ds.CheckRDSTables <- function(DataSources = NULL,
     require(purrr)
 
     # For testing purposes
-    #DataSources <- CCPConnections
-    #RawDataSetName <- "RawDataSet"
+    # DataSources <- CCPConnections
+    # RawDataSetName <- "RawDataSet"
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Check argument eligibility
@@ -58,10 +58,12 @@ ds.CheckRDSTables <- function(DataSources = NULL,
                                 SiteTableStatus <- SiteTableCheck %>%
                                                       map_chr(function(TableInfo)
                                                               {
-                                                                 case_when(TableInfo$TableExists == TRUE & TableInfo$TableComplete == TRUE ~ "green",
-                                                                           TableInfo$TableExists == FALSE ~ "red",
-                                                                           TableInfo$TableComplete == FALSE ~ "yellow",
-                                                                           TRUE ~ "grey")
+                                                                  Status <- "grey"
+
+                                                                  if (TableInfo$TableExists == FALSE) { Status <- "red" }
+                                                                  else if (TableInfo$TableExists == TRUE & TableInfo$TableComplete == TRUE) { Status <- "green" }
+                                                                  else if (TableInfo$TableExists == TRUE & TableInfo$TableComplete == FALSE) { Status <- "yellow" }
+
                                                               }) %>%
                                                       rbind() %>%
                                                       as_tibble()
@@ -72,14 +74,13 @@ ds.CheckRDSTables <- function(DataSources = NULL,
                                                           if_any(-SiteName, ~ .x == "yellow") ~ "yellow",
                                                           TRUE ~ "grey"))
 
-
     # Create list of data frames (one per RDS table) containing info about existence of table features
     FeatureStatus <- TableCheck %>%
                           list_transpose() %>%
                           map(function(TableInfo)
                               {
                                   TableInfo %>%
-                                      map(\(SiteTableInfo) SiteTableInfo$FeatureExistence) %>%
+                                      map(\(SiteTableInfo) SiteTableInfo$FeatureExistence)  %>%
                                       list_rbind(names_to = "SiteName") %>%
                                       pivot_wider(names_from = FeatureName,
                                                   values_from = Exists)
