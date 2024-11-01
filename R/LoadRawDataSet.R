@@ -70,8 +70,8 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
         {
             datashield.assign(conns = DataSources[[i]],
                               symbol = paste0("RDS_", CCPTableNames_Curated[j]),
-                              value = ServerTableNames[j])
-                              #id.name = "_id")
+                              value = ServerTableNames[j],
+                              id.name = "_id")
         }
     }
 
