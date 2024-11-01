@@ -43,7 +43,13 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
 
 
     # For testing purposes only
-    #DataSources <- CCPConnections
+    RawDataSetName = "RawDataSet"
+    OutputName = "CurationOutput"
+    RuleProfile_RawDataHarmonization = "Default"
+    RuleProfile_DiagnosisRedundancy = "Default"
+    RuleProfile_DiagnosisAssociation = "Default"
+    DataSources <- CCPConnections
+
 
 
     # Initiate output messaging objects
@@ -127,12 +133,15 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                                       imap(function(SiteMessages, sitename)
                                            {
                                               case_when(SiteMessages$CheckCurationCompletion == "green" ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' performed successfully!"),
-                                                                                                                             IsClassSuccess = TRUE),
-                                                        SiteMessages$CheckCurationCompletion == "yellow" ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' performed with warnings!"),
-                                                                                                                              IsClassWarning = TRUE),
-                                                        SiteMessages$CheckCurationCompletion == "red" ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' could not be performed!"),
-                                                                                                                           IsClassFailure = TRUE),
-                                                        TRUE ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' could not be assessed."),
+                                                                                                                              IsClassSuccess = TRUE),
+                                                        SiteMessages$CheckCurationCompletion == "yellow" ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' performed with warnings! \n",
+                                                                                                                                             SiteMessages$FinalMessage),
+                                                                                                                               IsClassWarning = TRUE),
+                                                        SiteMessages$CheckCurationCompletion == "red" ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' could not be performed! \n",
+                                                                                                                                          SiteMessages$FinalMessage),
+                                                                                                                            IsClassFailure = TRUE),
+                                                        TRUE ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' could not be assessed. \n",
+                                                                                                 SiteMessages$FinalMessage),
                                                                                    IsClassFailure = TRUE))
                                            }) %>%
                                       list_c()
@@ -140,6 +149,7 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
     # Add topic element to start of vector
     Messages$CurationCompletion <- c(Topic = "Curation process completion",
                                      Messages$CurationCompletion)
+
 
 
     # Print messages and return Messages object

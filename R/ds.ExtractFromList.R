@@ -35,8 +35,8 @@ ds.ExtractFromList <- function(ListName,
 
     # Construct the server-side function call
     ServerCall <- call("ExtractFromListDS",
-                       .ListName = ListName,
-                       .ObjectName = ObjectName)
+                       ListName.S = ListName,
+                       ObjectName.S = ObjectName)
 
     # Execute server-side assign function
     DSI::datashield.assign(conns = DataSources,
