@@ -46,7 +46,7 @@ TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
-                                      NumberOfPatientsPerSite = 1000)
+                                      NumberOfPatientsPerSite = 5000)
                                       #AddedDsPackages = "dsSurvivalFix")
 
 
@@ -82,6 +82,14 @@ RDSTableCheck <- ds.CheckRDSTables(DataSources = CCPConnections)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 RDSValidationReport <- ds.GetRDSValidationReport(DataSources = CCPConnections)
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Optionally: Draw random sample from Raw Data Set on servers
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ds.DrawSample(RawDataSetName = "RawDataSet",
+              SampleSize = "1000")
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
