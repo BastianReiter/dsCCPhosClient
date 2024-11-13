@@ -15,7 +15,7 @@
 #'
 #' @author Bastian Reiter
 ds.DrawSample <- function(RawDataSetName = "RawDataSet",
-                          SampleSize = "10",
+                          SampleSize = "100",
                           SampleName = "RawDataSet",
                           DataSources = NULL)
 {

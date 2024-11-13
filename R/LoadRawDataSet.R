@@ -107,7 +107,7 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
 
     # Create list of vectors (one for each site) containing names of data.frames that are not of class "NULL"
     ExistingRDSTables <- paste0("RDS_", CCPTableNames_Curated) %>%
-                              map(\(tablename) unlist(ds.class(x = tablename, datasources = CCPConnections))) %>%
+                              map(\(tablename) unlist(ds.class(x = tablename, datasources = DataSources))) %>%
                               set_names(paste0("RDS_", CCPTableNames_Curated)) %>%
                               list_transpose() %>%
                               map(\(TableNames) names(TableNames[TableNames != "NULL"]))
