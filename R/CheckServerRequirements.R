@@ -13,11 +13,14 @@
 #'
 #' @author Bastian Reiter
 CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
-                                    RequiredPackages = c("dsBase", "dsCCPhos"),
+                                    RequiredPackages = c("dsBase",
+                                                         "dsCCPhos",
+                                                         "dsTidyverse"),
                                     RequiredFunctions = c(aggregate = "GetReportingObjectDS",
                                                           assign = "AugmentDataDS",
                                                           assign = "CurateDataDS",
-                                                          assign = "ExtractFromListDS"),
+                                                          assign = "ExtractFromListDS",
+                                                          assign = "DrawSampleDS"),
                                     DataSources = NULL)
 {
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,7 +60,7 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
                                      rownames = "PackageName")
 
     # Check if defined set of packages is available on all servers
-    RequiredPackageAvailability <- data.frame(PackageName = RequiredPackages) %>%
+    RequiredPackageAvailability <- tibble(PackageName = RequiredPackages) %>%
                                         left_join(PackageAvailability, by = join_by(PackageName)) %>%
                                         rowwise() %>%
                                         mutate(across(all_of(ServerNames), ~ ifelse(is.na(.), FALSE, .)),      # Replace NA values with FALSE. NAs are introduced when a required package is not listed in 'PackageAvailability'.
