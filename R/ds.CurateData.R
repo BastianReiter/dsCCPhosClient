@@ -43,12 +43,12 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
 
 
     # For testing purposes only
-    RawDataSetName = "RawDataSet"
-    OutputName = "CurationOutput"
-    RuleProfile_RawDataHarmonization = "Default"
-    RuleProfile_DiagnosisRedundancy = "Default"
-    RuleProfile_DiagnosisAssociation = "Default"
-    DataSources <- CCPConnections
+    # RawDataSetName = "RawDataSet"
+    # OutputName = "CurationOutput"
+    # RuleProfile_RawDataHarmonization = "Default"
+    # RuleProfile_DiagnosisRedundancy = "Default"
+    # RuleProfile_DiagnosisAssociation = "Default"
+    # DataSources <- CCPConnections
 
 
 

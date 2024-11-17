@@ -2,7 +2,7 @@
 install.packages("devtools")
 
 # Install CCPhos R packages
-devtools::install_github(repo = "BastianReiter/dsCCPhos")
+#devtools::install_github(repo = "BastianReiter/dsCCPhos")
 devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
 #devtools::install_github(repo = "BastianReiter/CCPhosApp")
 
@@ -35,15 +35,15 @@ Credentials <- read.csv(file = "SiteSpecs.csv")
 
 # Filtering for sites that work
 Credentials <- Credentials %>%
-  filter(SiteName %in% c(# "Sissi",      # Altes Datenmodell
+  filter(SiteName %in% c(# "Sissi",
     # "Franz"      # Not available
-    "Berlin",      # Altes Datenmodell
-    "Dresden"      # Altes Datenmodell
-    # "Mainz",      # Altes Datenmodell
+    "Berlin",
+    "Dresden"
+    # "Mainz",
     # "Mannheim",      # Instabil, Connection möglich, danach nicht testbar
-    # "MunichLMU"      # Altes Datenmodell
+    # "MunichLMU"
     # "MunichTU"      # Instabil, Connection möglich, danach nicht testbar
-    # "Essen",      # Altes Datenmodell
+    # "Essen",
     # "Freiburg",      # Kein Export?
     # "Ulm",      # Not available
     # "Wuerzburg",
@@ -61,8 +61,6 @@ CCPConnections <- ConnectToCCP(CCPSiteSpecifications = Credentials)
 ServerRequirements <- CheckServerRequirements(CCPSiteSpecifications = Credentials,
                                               DataSources = CCPConnections)
 
-# Get manual overview over available Opal tables
-DSI::datashield.tables(conns = CCPConnections)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Load Raw Data Set (RDS) from Opal data base to R sessions on servers
@@ -75,7 +73,6 @@ Messages <- LoadRawDataSet(CCPSiteSpecifications = Credentials,
 # Collect comprehensive information about all workspace objects
 ServerWorkspaceInfo <- GetServerWorkspaceInfo(DataSources = CCPConnections)
 
-ds.names(xname = "RDS_Diagnosis", datasources = CCPConnections)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Check RDS tables for existence and completeness
