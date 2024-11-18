@@ -205,6 +205,15 @@ ObjectMetaData$FirstEligible$DataTypes["PatientID"]
 # Perform exemplary analyses
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+Test <- ds.GetSurvModel(DataSources = CCPConnections,
+                        TableName = "ADS_Patients",
+                        TimeFeature = "TimeFollowUp",
+                        EventFeature = "IsDocumentedDeceased")
+
+
+
+
 Test <- ds.GetFeatureInfo(DataSources = CCPConnections,
                           TableName = "ADS_Patients",
                           FeatureName = "TNM_T")
