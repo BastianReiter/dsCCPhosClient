@@ -61,7 +61,7 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
 
     # Check if defined set of packages is available on all servers
     RequiredPackageAvailability <- tibble(PackageName = RequiredPackages) %>%
-                                        left_join(PackageAvailability, by = dplyr::join_by(PackageName)) %>%
+                                        left_join(PackageAvailability, by = join_by(PackageName)) %>%
                                         rowwise() %>%
                                         mutate(across(all_of(ServerNames), ~ ifelse(is.na(.), FALSE, .)),      # Replace NA values with FALSE. NAs are introduced when a required package is not listed in 'PackageAvailability'.
                                                IsAvailableEverywhere = all(c_across(all_of(ServerNames)) == TRUE),
