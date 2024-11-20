@@ -14,7 +14,7 @@ Imports:
     cli,
     dplyr,
     dsBaseClient (>= 6.3.0),
-    dsCCPhos (>= 0.1.44),
+    dsCCPhos (>= 0.1.45),
     DSI,
     DSOpal,
     httr,

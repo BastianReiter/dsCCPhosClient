@@ -1,26 +1,31 @@
 
 #' ds.GetSurvModel
 #'
-#' Get Survival
+#' Get survival models
 #'
 #' Linked to server-side \code{AGGREGATE} function \code{dsCCPhos::GetSurvModelDS()}.
 #'
 #' @param DataSources List of DSConnection objects
 #' @param TableName \code{string} | Name of the table containing the features of concern
-#' @param TimeFeature \code{string} | Name of feature
-#' @param EventFeature \code{string} | Name of optional grouping feature from the same table
-#' @param Covariates
+#' @param TimeFeature \code{string} | Name of time feature
+#' @param EventFeature \code{string} | Name of event feature
+#' @param CovariateA \code{string} | Name of optional CovariateA
+#' @param CovariateB \code{string} | Name of optional CovariateB
+#' @param CovariateC \code{string} | Name of optional CovariateC
+#' @param MinFollowUpTime \code{integer} | Optional minimum of observed follow up time
 #'
-#' @return
+#' @return A list of survival models
 #'
 #' @export
-#'
 #' @author Bastian Reiter
 ds.GetSurvModel <- function(DataSources = NULL,
                             TableName,
                             TimeFeature,
                             EventFeature,
-                            Covariates = NULL)
+                            CovariateA = NULL,
+                            CovariateB = NULL,
+                            CovariateC = NULL,
+                            MinFollowUpTime = 1)
 {
 
 # For Testing Purposes
@@ -70,7 +75,11 @@ ls_SiteReturns <- DSI::datashield.aggregate(conns = DataSources,
                                             expr = call("GetSurvModelDS",
                                                         TableName.S = TableName,
                                                         TimeFeature.S = TimeFeature,
-                                                        EventFeature.S = EventFeature))
+                                                        EventFeature.S = EventFeature,
+                                                        CovariateA.S = CovariateA,
+                                                        CovariateB.S = CovariateB,
+                                                        CovariateC.S = CovariateC,
+                                                        MinFollowUpTime.S = MinFollowUpTime))
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

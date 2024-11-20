@@ -43,10 +43,10 @@ Credentials <- Credentials %>%
     # "Mannheim",      # Instabil, Connection möglich, danach nicht testbar
     # "MunichLMU"
     # "MunichTU"      # Instabil, Connection möglich, danach nicht testbar
-    # "Essen",
+    # "Essen",      # Instabil
     # "Freiburg",      # Kein Export?
     # "Ulm",      # Not available
-    # "Wuerzburg",
+    # "Wuerzburg",      # Instabil
     # "Hannover"
   ))
 

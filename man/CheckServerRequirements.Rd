@@ -6,9 +6,9 @@
 \usage{
 CheckServerRequirements(
   CCPSiteSpecifications = NULL,
-  RequiredPackages = c("dsBase", "dsCCPhos"),
+  RequiredPackages = c("dsBase", "dsCCPhos", "dsTidyverse"),
   RequiredFunctions = c(aggregate = "GetReportingObjectDS", assign = "AugmentDataDS",
-    assign = "CurateDataDS", assign = "ExtractFromListDS"),
+    assign = "CurateDataDS", assign = "ExtractFromListDS", assign = "DrawSampleDS"),
   DataSources = NULL
 )
 }

@@ -6,7 +6,7 @@
 \usage{
 ds.DrawSample(
   RawDataSetName = "RawDataSet",
-  SampleSize = "10",
+  SampleSize = "100",
   SampleName = "RawDataSet",
   DataSources = NULL
 )

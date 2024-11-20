@@ -209,7 +209,8 @@ ObjectMetaData$FirstEligible$DataTypes["PatientID"]
 Test <- ds.GetSurvModel(DataSources = CCPConnections,
                         TableName = "ADS_Patients",
                         TimeFeature = "TimeFollowUp",
-                        EventFeature = "IsDocumentedDeceased")
+                        EventFeature = "IsDocumentedDeceased",
+                        MinFollowUpTime = 20)
 
 
 
