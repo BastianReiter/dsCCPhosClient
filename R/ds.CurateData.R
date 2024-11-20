@@ -19,7 +19,6 @@
 #'                  \item CurationMessages (list)}
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 ds.CurateData <- function(RawDataSetName = "RawDataSet",
                           OutputName = "CurationOutput",
