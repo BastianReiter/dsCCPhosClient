@@ -206,11 +206,13 @@ ObjectMetaData$FirstEligible$DataTypes["PatientID"]
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Test <- ds.GetSurvModel(DataSources = CCPConnections,
-                        TableName = "ADS_Patients",
-                        TimeFeature = "TimeFollowUp",
-                        EventFeature = "IsDocumentedDeceased",
-                        MinFollowUpTime = 20)
+Test <- ds.GetTTEModel(DataSources = CCPConnections,
+                       TableName = "ADS_Patients",
+                       TimeFeature = "TimeFollowUp",
+                       EventFeature = "IsDocumentedDeceased",
+                       ModelType = "coxph",
+                       CovariateA = "Gender",
+                       MinFollowUpTime = 20)
 
 
 

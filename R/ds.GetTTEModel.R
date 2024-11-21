@@ -1,7 +1,7 @@
 
-#' ds.GetSurvModel
+#' ds.GetTTEModel
 #'
-#' Get survival models
+#' Get Time-to-Event model
 #'
 #' Linked to server-side \code{AGGREGATE} function \code{dsCCPhos::GetSurvModelDS()}.
 #'
@@ -9,23 +9,28 @@
 #' @param TableName \code{string} | Name of the table containing the features of concern
 #' @param TimeFeature \code{string} | Name of time feature
 #' @param EventFeature \code{string} | Name of event feature
+#' @param ModelType \code{string} | Function name of different TTE models implemented in \code{survival} package:
+#'                                  \itemize{\item 'survfit'
+#'                                           \item 'survdiff'
+#'                                           \item 'coxph'}
 #' @param CovariateA \code{string} | Name of optional CovariateA
 #' @param CovariateB \code{string} | Name of optional CovariateB
 #' @param CovariateC \code{string} | Name of optional CovariateC
 #' @param MinFollowUpTime \code{integer} | Optional minimum of observed follow up time
 #'
-#' @return A list of survival models
+#' @return A list of Time-to-Event models
 #'
 #' @export
 #' @author Bastian Reiter
-ds.GetSurvModel <- function(DataSources = NULL,
-                            TableName,
-                            TimeFeature,
-                            EventFeature,
-                            CovariateA = NULL,
-                            CovariateB = NULL,
-                            CovariateC = NULL,
-                            MinFollowUpTime = 1)
+ds.GetTTEModel <- function(DataSources = NULL,
+                           TableName,
+                           TimeFeature,
+                           EventFeature,
+                           ModelType = "survfit",
+                           CovariateA = NULL,
+                           CovariateB = NULL,
+                           CovariateC = NULL,
+                           MinFollowUpTime = 1)
 {
 
 # For Testing Purposes
@@ -72,10 +77,11 @@ if (TableMetaData$FirstEligible$Class != "data.frame") { stop("Error: The referr
 
 # SiteReturns: Obtain survival model for each server calling dsCCPhos::GetSurvModelDS()
 ls_SiteReturns <- DSI::datashield.aggregate(conns = DataSources,
-                                            expr = call("GetSurvModelDS",
+                                            expr = call("GetTTEModelDS",
                                                         TableName.S = TableName,
                                                         TimeFeature.S = TimeFeature,
                                                         EventFeature.S = EventFeature,
+                                                        ModelType.S = ModelType,
                                                         CovariateA.S = CovariateA,
                                                         CovariateB.S = CovariateB,
                                                         CovariateC.S = CovariateC,
