@@ -36,6 +36,13 @@ ds.GetTTEModel <- function(DataSources = NULL,
 # For Testing Purposes
 # DataSources <- CCPConnections
 # TableName <- "ADS_Patients"
+# TimeFeature <- "TimeFollowUp"
+# EventFeature <- "IsDocumentedDeceased"
+# ModelType <- "coxph"
+# CovariateA <- NULL
+# CovariateB <- NULL
+# CovariateC <- NULL
+# MinFollowUpTime <- 20
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,6 +75,7 @@ require(dplyr)
 TableMetaData <- ds.GetObjectMetaData(ObjectName = TableName,
                                       DataSources = DataSources)
 
+if (is.null(TableMetaData$FirstEligible$Class)) { stop("Error: The referred table object does not seem to exist on any server.", call. = FALSE)}
 if (TableMetaData$FirstEligible$Class != "data.frame") { stop("Error: The referred table object does not seem to be a data.frame.", call. = FALSE)}
 
 

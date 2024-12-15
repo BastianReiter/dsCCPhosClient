@@ -42,7 +42,7 @@ ds.GetCurationReport <- function(DataSources = NULL)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # 2) Cumulation of site-specific reports
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    #   a) Unlinked Entries
+    #   a) Ineligible Entries
     #   b) Transformation Monitor objects
     #         i) Detailed monitors
     #         ii) Eligibility overviews
@@ -51,16 +51,16 @@ ds.GetCurationReport <- function(DataSources = NULL)
     #---------------------------------------------------------------------------
 
 
-    # 2 a) Unlinked Entries
+    # 2 a) Ineligible Entries
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Bind rows of site-specific vectors
-    UnlinkedEntries_Sites <- as_tibble(do.call(rbind, CurationReports$UnlinkedEntries))
+    IneligibleEntries_Sites <- as_tibble(do.call(rbind, CurationReports$IneligibleEntries))
 
     # Add row with column sums and add site name feature
-    UnlinkedEntriesTable <- colSums(UnlinkedEntries_Sites) %>%
-                                bind_rows(UnlinkedEntries_Sites) %>%
-                                mutate(SiteName = c("All", names(DataSources)), .before = 1)
+    IneligibleEntriesTable <- colSums(IneligibleEntries_Sites) %>%
+                                  bind_rows(IneligibleEntries_Sites) %>%
+                                  mutate(SiteName = c("All", names(DataSources)), .before = 1)
 
 
     # 2 b) Transformation objects
@@ -299,7 +299,7 @@ ds.GetCurationReport <- function(DataSources = NULL)
     # Return list
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    return(list(UnlinkedEntries = UnlinkedEntriesTable,
+    return(list(IneligibleEntries = IneligibleEntriesTable,
                 Transformation = c(list(All = list(Monitors = TransformationMonitorsCumulated,
                                                    EligibilityOverviews = EligibilityOverviewsCumulated,
                                                    ValueSetOverviews = ValueSetOverviewsCumulated)),
