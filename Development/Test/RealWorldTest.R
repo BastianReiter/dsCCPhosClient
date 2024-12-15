@@ -104,7 +104,7 @@ Messages <- ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
 # Get curation reports
 CurationReport <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
 
-View(CurationReport$UnlinkedEntries)
+View(CurationReport$IneligibleEntries)
 
 
 

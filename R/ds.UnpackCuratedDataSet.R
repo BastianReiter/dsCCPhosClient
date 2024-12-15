@@ -34,7 +34,7 @@ ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
     Messages$Assignment <- list()
 
 
-    CCPTableNames_CDS <- dsCCPhos::Meta_TableNames$TableName_Curated
+    CCPTableNames_CDS <- dsCCPhosClient::Meta_Tables$TableName_Curated
 
     AssignmentInfo <- list()
 
