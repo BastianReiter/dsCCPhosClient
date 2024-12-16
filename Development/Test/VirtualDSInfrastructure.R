@@ -211,7 +211,8 @@ Test <- ds.GetTTEModel(DataSources = CCPConnections,
                        TimeFeature = "TimeFollowUp",
                        EventFeature = "IsDocumentedDeceased",
                        ModelType = "coxph",
-                       CovariateA = "Gender",
+                       CovariateA = "UICCStageCategory",
+                       #CovariateB = "UICCStageCategory",
                        MinFollowUpTime = 20)
 
 

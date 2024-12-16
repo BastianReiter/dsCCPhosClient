@@ -25,8 +25,8 @@ GetServerOpalInfo <- function(CCPSiteSpecifications = NULL,
     ServerNames <- sort(names(DataSources))
 
     # Get table names from meta data
-    CCPTableNames_Raw <- dsCCPhosClient::Meta_TableNames$TableName_Raw
-    CCPTableNames_Curated <- dsCCPhosClient::Meta_TableNames$TableName_Curated
+    CCPTableNames_Raw <- dsCCPhosClient::Meta_Tables$TableName_Raw
+    CCPTableNames_Curated <- dsCCPhosClient::Meta_Tables$TableName_Curated
 
     # Get overview of available tables on servers
     TableAvailability <- DSI::datashield.tables(conns = DataSources)
