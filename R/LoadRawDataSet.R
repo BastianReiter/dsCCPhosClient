@@ -32,8 +32,8 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
     ServerNames <- names(DataSources)
 
     # Get table names from meta data
-    CCPTableNames_Raw <- dsCCPhosClient::Meta_TableNames$TableName_Raw
-    CCPTableNames_Curated <- dsCCPhosClient::Meta_TableNames$TableName_Curated
+    CCPTableNames_Raw <- dsCCPhosClient::Meta_Tables$TableName_Raw
+    CCPTableNames_Curated <- dsCCPhosClient::Meta_Tables$TableName_Curated
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
