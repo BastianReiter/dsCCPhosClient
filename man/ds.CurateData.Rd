@@ -8,17 +8,23 @@ ds.CurateData(
   RawDataSetName = "RawDataSet",
   OutputName = "CurationOutput",
   RuleProfile_RawDataHarmonization = "Default",
+  PerformDiagnosisRedundancyCheck = TRUE,
   RuleProfile_DiagnosisRedundancy = "Default",
+  PerformDiagnosisAssociationCheck = TRUE,
   RuleProfile_DiagnosisAssociation = "Default",
   DataSources = NULL
 )
 }
 \arguments{
-\item{RawDataSetName}{String | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'}
+\item{RawDataSetName}{\code{character} | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'}
 
-\item{OutputName}{String | Name of output object to be assigned on server | Default: 'CurationOutput'}
+\item{OutputName}{\code{character} | Name of output object to be assigned on server | Default: 'CurationOutput'}
 
-\item{DataSources}{List of DSConnection objects}
+\item{PerformDiagnosisRedundancyCheck}{\code{logical}}
+
+\item{PerformDiagnosisAssociationCheck}{\code{logical}}
+
+\item{DataSources}{\code{list} of DSConnection objects}
 }
 \value{
 Info messages concerning completion of CurateDataDS() and assignment of the following objects on server:
