@@ -96,7 +96,7 @@ ds.DrawSample(RawDataSetName = "RawDataSet",
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Transform Raw Data Set (RDS) into Curated Data Set (CDS)
+# Transform Raw Data Set (RDS) into Curated Data Set (CDS) (using default settings)
 Curation <- ds.CurateData(RawDataSetName = "RawDataSet",
                           OutputName = "CurationOutput",
                           DataSources = CCPConnections)
