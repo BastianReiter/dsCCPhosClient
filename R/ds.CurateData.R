@@ -6,29 +6,38 @@
 #' Linked to server-side ASSIGN methods dsCCPhos::CurateDataDS() and dsCCPhos::ExtractFromListDS()
 #'
 #' @param RawDataSetName \code{character} | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'
-#' @param OutputName \code{character} | Name of output object to be assigned on server | Default: 'CurationOutput'
-#' @param RuleProfile_RawDataHarmonization \code{character} | Profile name defining rule set to be used for data harmonization. Profile name must be stated in \code{\link{RuleSet_RawDataHarmonization}. | Default: 'Default'
-#' @param PerformDiagnosisRedundancyCheck \code{logical}
-#' @param RuleProfile_DiagnosisRedundancy \code{character} | Profile name defining rule set to be used for classification of diagnosis redundancies. Profile name must be stated in \code{\link{RuleSet_DiagnosisRedundancy}. | Default: 'Default'
-#' @param PerformDiagnosisAssociationCheck \code{logical}
-#' @param RuleProfile_DiagnosisAssociation \code{character} | Profile name defining rule set to be used for classification of diagnosis associations. Profile name must be stated in \code{\link{RuleSet_DiagnosisAssociation}. | Default: 'Default'
+#' @param Settings \code{list} - Settings passed to function
+#'                 \itemize{\item DataHarmonization_RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_DataHarmonization}
+#'                          \item DataHarmonization_Profile \code{character} - Profile name defining rule set to be used for data harmonization. Profile name must be stated in \code{RawDataHarmonization_RuleSet} - Default: 'Default'
+#'                          \item DiagnosisRedundancy_Check \code{logical} - Whether or not to check for redundant diagnosis entries
+#'                          \item DiagnosisRedundancy_RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_DiagnosisRedundancy}
+#'                          \item DiagnosisRedundancy_Profile \code{character} - Profile name defining rule set to be used for classification of diagnosis redundancies. Profile name must be stated in \code{DiagnosisRedundancy_RuleSet} - Default: 'Default'
+#'                          \item DiagnosisAssociation_Check \code{logical} - Whether or not to classify associated diagnosis entries
+#'                          \item DiagnosisAssociation_RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_DiagnosisAssociation}
+#'                          \item DiagnosisAssociation_Profile \code{character} - Profile name defining rule set to be used for classification of diagnosis associations. Profile name must be stated in \code{DiagnosisAssociation_RuleSet} - Default: 'Default'
+#'                          \item FeatureObligations_RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_FeatureObligations}
+#'                          \item FeatureObligations_Profile \code{character} - Profile name defining strict and trans-feature rules for obligatory feature content. Profile name must be stated in \code{FeatureObligations_RuleSet} - Default: 'Default'}
+#' @param OutputName \code{character} - Name of output object to be assigned on server | Default: 'CurationOutput'
 #' @param DataSources \code{list} of DSConnection objects
 #'
-#' @return Info messages concerning completion of CurateDataDS() and assignment of the following objects on server:
-#'         \itemize{\item CurationOutput (list)
-#'                  \item CuratedDataSet (list)
-#'                  \item CurationReport (list)
-#'                  \item CurationMessages (list)}
+#' @return \code{list} of following objects:
+#'         \itemize{\item 'Messages' - Info messages concerning completion of CurateDataDS() and assignment of the following objects on server:
+#'                  \itemize{\item CurationOutput (\code{list})
+#'                            \item CuratedDataSet (\code{list})
+#'                            \item CurationReport (\code{list})
+#'                            \item CurationMessages (\code{list})}
+#'                  \item 'CurationCompletionCheck'}
 #' @export
 #'
 #' @author Bastian Reiter
 ds.CurateData <- function(RawDataSetName = "RawDataSet",
+                          Settings = list(DataHarmonization_Profile = "Default",
+                                          DiagnosisRedundancy_Check = TRUE,
+                                          DiagnosisRedundancy_Profile = "Default",
+                                          DiagnosisAssociation_Check = TRUE,
+                                          DiagnosisAssociation_Profile = "Default",
+                                          FeatureObligations_Profile = "Default"),
                           OutputName = "CurationOutput",
-                          RuleProfile_RawDataHarmonization = "Default",
-                          PerformDiagnosisRedundancyCheck = TRUE,
-                          RuleProfile_DiagnosisRedundancy = "Default",
-                          PerformDiagnosisAssociationCheck = TRUE,
-                          RuleProfile_DiagnosisAssociation = "Default",
                           DataSources = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
@@ -45,12 +54,9 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
     }
 
 
-    # For testing purposes only
-    # RawDataSetName = "RawDataSet"
-    # OutputName = "CurationOutput"
-    # RuleProfile_RawDataHarmonization = "Default"
-    # RuleProfile_DiagnosisRedundancy = "Default"
-    # RuleProfile_DiagnosisAssociation = "Default"
+    ### For testing purposes only
+    # RawDataSetName <- "RawDataSet"
+    # OutputName <- "CurationOutput"
     # DataSources <- CCPConnections
 
 
@@ -64,14 +70,10 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
     # 1) Trigger dsCCPhos::CurateDataDS()
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    # Construct the the server-side function call
+    # Construct the server-side function call
     ServerCall <- call("CurateDataDS",
                        RawDataSetName.S = RawDataSetName,
-                       RuleProfile_RawDataHarmonization.S = RuleProfile_RawDataHarmonization,
-                       PerformDiagnosisRedundancyCheck.S = PerformDiagnosisRedundancyCheck,
-                       RuleProfile_DiagnosisRedundancy.S = RuleProfile_DiagnosisRedundancy,
-                       PerformDiagnosisAssociationCheck.S = PerformDiagnosisAssociationCheck,
-                       RuleProfile_DiagnosisAssociation.S = RuleProfile_DiagnosisAssociation)
+                       Settings.S = Settings)
 
     # Execute the server-side function call
     DSI::datashield.assign(conns = DataSources,
@@ -157,7 +159,7 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
 
 
 
-    # Print messages and return Messages object
+    # Print messages and return output
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Print messages on console
