@@ -16,8 +16,8 @@ ds.GetCurationReport <- function(DataSources = NULL)
     require(dplyr)
     require(purrr)
 
-    # For testing purposes
-    #DataSources <- CCPConnections
+    ### For testing purposes
+    # DataSources <- CCPConnections
 
     if (is.null(DataSources))
     {
@@ -42,7 +42,9 @@ ds.GetCurationReport <- function(DataSources = NULL)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # 2) Cumulation of site-specific reports
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    #   a) Ineligible Entries
+    #   a) Excluded Entries
+    #         i) Primary exclusion
+    #         ii) Secondary exclusion
     #   b) Transformation Monitor objects
     #         i) Detailed monitors
     #         ii) Eligibility overviews
@@ -51,16 +53,24 @@ ds.GetCurationReport <- function(DataSources = NULL)
     #---------------------------------------------------------------------------
 
 
-    # 2 a) Ineligible Entries
+    # 2 a) Excluded Entries
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    # First, turn sublist 'inside-out' again
+    ExcludedEntries <- CurationReports$ExcludedEntries %>% list_transpose()
+
     # Bind rows of site-specific vectors
-    IneligibleEntries_Sites <- as_tibble(do.call(rbind, CurationReports$IneligibleEntries))
+    ExcludedEntries_Primary <- as_tibble(do.call(rbind, ExcludedEntries$PrimaryExclusion))
+    ExcludedEntries_Secondary <- as_tibble(do.call(rbind, ExcludedEntries$SecondaryExclusion))
 
     # Add row with column sums and add site name feature
-    IneligibleEntriesTable <- colSums(IneligibleEntries_Sites) %>%
-                                  bind_rows(IneligibleEntries_Sites) %>%
-                                  mutate(SiteName = c("All", names(DataSources)), .before = 1)
+    ExcludedEntriesTable_Primary <- colSums(ExcludedEntries_Primary) %>%
+                                        bind_rows(ExcludedEntries_Primary) %>%
+                                        mutate(SiteName = c("All", names(DataSources)), .before = 1)
+
+    ExcludedEntriesTable_Secondary <- colSums(ExcludedEntries_Secondary) %>%
+                                          bind_rows(ExcludedEntries_Secondary) %>%
+                                          mutate(SiteName = c("All", names(DataSources)), .before = 1)
 
 
     # 2 b) Transformation objects
@@ -299,7 +309,8 @@ ds.GetCurationReport <- function(DataSources = NULL)
     # Return list
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    return(list(IneligibleEntries = IneligibleEntriesTable,
+    return(list(ExcludedEntries = list(PrimaryExclusion = ExcludedEntriesTable_Primary,
+                                       SecondaryExclusion = ExcludedEntriesTable_Secondary),
                 Transformation = c(list(All = list(Monitors = TransformationMonitorsCumulated,
                                                    EligibilityOverviews = EligibilityOverviewsCumulated,
                                                    ValueSetOverviews = ValueSetOverviewsCumulated)),
