@@ -83,7 +83,21 @@ ds.GetCurationReport <- function(DataSources = NULL)
     # Row-binding site-specific and cumulated entry counts to get one coherent data.frame
     AllEntryCounts <- EntryCountsCumulated %>%
                           bind_rows(AllSitesEntryCounts) %>%
-                          relocate(Site, .after = 1)
+                          mutate(ExcludedPrimary_Proportion = ExcludedPrimary / InitialCount,
+                                 AfterPrimaryExclusion_Proportion = AfterPrimaryExclusion / InitialCount,
+                                 ExcludedSecondary_Proportion = ExcludedSecondary / AfterPrimaryExclusion,
+                                 AfterSecondaryExclusion_Proportion = AfterSecondaryExclusion / InitialCount) %>%
+                          select(Table,
+                                 Site,
+                                 InitialCount,
+                                 ExcludedPrimary,
+                                 ExcludedPrimary_Proportion,
+                                 AfterPrimaryExclusion,
+                                 AfterPrimaryExclusion_Proportion,
+                                 ExcludedSecondary,
+                                 ExcludedSecondary_Proportion,
+                                 AfterSecondaryExclusion,
+                                 AfterSecondaryExclusion_Proportion)
 
     # Create list of data.frames (one per RDS table) containing data on entry counts, comparing all sites
     EntryCounts <- split(AllEntryCounts, AllEntryCounts$Table) %>%
