@@ -108,7 +108,7 @@ Messages <- ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
 # Get curation reports
 CurationReport <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
 
-View(CurationReport$ExcludedEntries$PrimaryExclusion)
+View(CurationReport$EntryCounts$BioSampling)
 
 # Exemplary look at a curation report table
 #View(CurationReport$Transformation$All$Monitors$Staging)

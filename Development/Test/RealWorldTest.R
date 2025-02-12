@@ -24,6 +24,9 @@ library(DSI)
 # MANUAL APPROACH (without app)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# Automatically print DataSHIELD errors
+options(datashield.errors.print = TRUE)
+
 
 # Read in CCP site specifications from uploaded file (first upload 'SiteSpecs.csv' using RStudio) ...
 Credentials <- read.csv(file = "SiteSpecs.csv")
@@ -38,16 +41,16 @@ Credentials <- Credentials %>%
   filter(SiteName %in% c(# "Sissi",
     # "Franz"      # Not available
     "Berlin",
-    "Dresden"
-    # "Mainz",
-    # "Mannheim",      # Instabil, Connection möglich, danach nicht testbar
-    # "MunichLMU"
-    # "MunichTU"      # Instabil, Connection möglich, danach nicht testbar
-    # "Essen",      # Instabil
-    # "Freiburg",      # Kein Export?
-    # "Ulm",      # Not available
-    # "Wuerzburg",      # Instabil
-    # "Hannover"
+    "Dresden",
+    "Mainz",
+    # "Mannheim",   # No connection
+    "MunichLMU",
+    "MunichTU",
+    "Essen",
+    # "Freiburg",   # No Opal tables
+    # "Ulm",   # No connection
+    "Wuerzburg",
+    "Hannover"
   ))
 
 # Establish connection to servers using convenience funtion 'ConnectToCCP'
@@ -86,14 +89,19 @@ RDSTableCheck <- ds.CheckRDSTables(DataSources = CCPConnections)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ds.DrawSample(RawDataSetName = "RawDataSet",
-              SampleSize = "2000")
+              SampleSize = "2000",
+              SampleName = "RDSSample",
+              DataSources = CCPConnections)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # DATA CURATION: Transform Raw Data Set (RDS) into Curated Data Set (CDS)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ds.CurateData(DataSources = CCPConnections)
+ds.CurateData(DataSources = CCPConnections,
+              Settings = list(DiagnosisRedundancy_Check = FALSE,
+                              DiagnosisAssociation_Check = FALSE),
+              RawDataSetName = "RawDataSet")
 
 
 
