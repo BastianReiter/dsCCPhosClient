@@ -16,16 +16,18 @@
 #'                          \item DiagnosisAssociation_RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_DiagnosisAssociation}
 #'                          \item DiagnosisAssociation_Profile \code{character} - Profile name defining rule set to be used for classification of diagnosis associations. Profile name must be stated in \code{DiagnosisAssociation_RuleSet} - Default: 'Default'
 #'                          \item FeatureObligations_RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_FeatureObligations}
-#'                          \item FeatureObligations_Profile \code{character} - Profile name defining strict and trans-feature rules for obligatory feature content. Profile name must be stated in \code{FeatureObligations_RuleSet} - Default: 'Default'}
+#'                          \item FeatureObligations_Profile \code{character} - Profile name defining strict and trans-feature rules for obligatory feature content. Profile name must be stated in \code{FeatureObligations_RuleSet} - Default: 'Default',
+#'                          \item FeatureTracking_RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_FeatureTracking}
+#'                          \item FeatureTracking_Profile \code{character} - Profile name defining which features should be tracked/monitored during curation process. Profile name must be stated in \code{FeatureTracking_RuleSet} - Default: 'Default'}
 #' @param OutputName \code{character} - Name of output object to be assigned on server | Default: 'CurationOutput'
 #' @param DataSources \code{list} of DSConnection objects
 #'
 #' @return \code{list} of following objects:
 #'         \itemize{\item 'Messages' - Info messages concerning completion of CurateDataDS() and assignment of the following objects on server:
 #'                  \itemize{\item CurationOutput (\code{list})
-#'                            \item CuratedDataSet (\code{list})
-#'                            \item CurationReport (\code{list})
-#'                            \item CurationMessages (\code{list})}
+#'                           \item CuratedDataSet (\code{list})
+#'                           \item CurationReport (\code{list})
+#'                           \item CurationMessages (\code{list})}
 #'                  \item 'CurationCompletionCheck'}
 #' @export
 #'
@@ -36,7 +38,8 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                                           DiagnosisRedundancy_Profile = "Default",
                                           DiagnosisAssociation_Check = TRUE,
                                           DiagnosisAssociation_Profile = "Default",
-                                          FeatureObligations_Profile = "Default"),
+                                          FeatureObligations_Profile = "Default",
+                                          FeatureTracking_Profile = "Default"),
                           OutputName = "CurationOutput",
                           DataSources = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
