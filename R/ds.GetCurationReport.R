@@ -85,7 +85,7 @@ ds.GetCurationReport <- function(DataSources = NULL)
                           bind_rows(AllSitesEntryCounts) %>%
                           mutate(ExcludedPrimary_Proportion = ExcludedPrimary / InitialCount,
                                  AfterPrimaryExclusion_Proportion = AfterPrimaryExclusion / InitialCount,
-                                 ExcludedSecondary_Proportion = ExcludedSecondary / AfterPrimaryExclusion,
+                                 ExcludedSecondary_Proportion = ExcludedSecondary / InitialCount,
                                  AfterSecondaryExclusion_Proportion = AfterSecondaryExclusion / InitialCount) %>%
                           select(Table,
                                  Site,
