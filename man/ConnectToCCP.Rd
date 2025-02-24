@@ -7,10 +7,10 @@
 ConnectToCCP(CCPSiteSpecifications, proxyurl = "http://localhost")
 }
 \arguments{
-\item{CCPSiteSpecifications}{\code{data.frame} | Login data of CCP sites}
+\item{CCPSiteSpecifications}{\code{data.frame} - Login data of CCP sites}
 }
 \value{
-A list of DSConnection-objects
+A list of \code{DSConnection}-objects
 }
 \description{
 Takes credentials of CCP sites and returns a list of DSConnection-objects. Has to be executed from within a CCP bridgehead R server session.
