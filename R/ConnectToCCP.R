@@ -16,8 +16,8 @@ ConnectToCCP <- function(CCPSiteSpecifications, proxyurl = "http://localhost")
     require(httr)
 
     # Beam settings
-    set_config(use_proxy(url = proxyurl, port = 8062))
-    set_config(config(ssl_verifyhost = 0L, ssl_verifypeer = 0L))
+    httr::set_config(use_proxy(url = proxyurl, port = 8062))
+    httr::set_config(config(ssl_verifyhost = 0L, ssl_verifypeer = 0L))
 
     # Create an environment
     LoginBuilder <- DSI::newDSLoginBuilder(.silent = FALSE)

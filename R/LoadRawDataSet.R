@@ -4,9 +4,9 @@
 #' Load raw data set from Opal data base into R session on servers.
 #'
 #' @param CCPSiteSpecifications \code{data.frame} | Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). | Default: NULL for virtual project
-#' @param DataSources List of DSConnection objects
+#' @param DataSources \code{list} of \code{DSConnection} objects
 #'
-#' @return A list of messages
+#' @return A \code{list} of messages
 #' @export
 #'
 #' @author Bastian Reiter
