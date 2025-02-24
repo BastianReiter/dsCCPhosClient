@@ -3,9 +3,9 @@
 #'
 #' Takes credentials of CCP sites and returns a list of DSConnection-objects. Has to be executed from within a CCP bridgehead R server session.
 #'
-#' @param CCPSiteSpecifications \code{data.frame} | Login data of CCP sites
+#' @param CCPSiteSpecifications \code{data.frame} - Login data of CCP sites
 #'
-#' @return A list of DSConnection-objects
+#' @return A list of \code{DSConnection}-objects
 #' @export
 #'
 #' @author Bastian Reiter
@@ -16,8 +16,8 @@ ConnectToCCP <- function(CCPSiteSpecifications, proxyurl = "http://localhost")
     require(httr)
 
     # Beam settings
-    httr::set_config(use_proxy(url = proxyurl, port = 8062))
-    httr::set_config(config(ssl_verifyhost = 0L, ssl_verifypeer = 0L))
+    httr::set_config(httr::use_proxy(url = proxyurl, port = 8062))
+    httr::set_config(httr::config(ssl_verifyhost = 0L, ssl_verifypeer = 0L))
 
     # Create an environment
     LoginBuilder <- DSI::newDSLoginBuilder(.silent = FALSE)
