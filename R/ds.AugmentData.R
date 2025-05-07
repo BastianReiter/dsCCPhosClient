@@ -1,6 +1,7 @@
 
 #' ds.AugmentData
 #'
+#' `r lifecycle::badge("stable")` \cr\cr
 #' Transforms curated CCP core data set (CDM) into augmented data set (ADM)
 #'
 #' Linked to server-side ASSIGN method AugmentDataDS()
@@ -9,6 +10,10 @@
 #' @param OutputName String | Name of output object to be assigned on server | Default: 'AugmentationOutput'
 #' @param DataSources List of DSConnection objects
 #'
+#' #'                          \item DiagnosisAssociation_Check \code{logical} - Whether or not to classify associated diagnosis entries
+#'                          \item DiagnosisAssociation_RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_DiagnosisAssociation}
+#'                          \item DiagnosisAssociation_Profile \code{character} - Profile name defining rule set to be used for classification of diagnosis associations. Profile name must be stated in \code{DiagnosisAssociation_RuleSet} - Default: 'Default'
+#'
 #' @return A list of variables containing messages about object assignment for monitoring purposes.
 #' @export
 #'
@@ -16,7 +21,8 @@
 #' @author Bastian Reiter
 ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
                            OutputName = "AugmentationOutput",
-                           DataSources = NULL)
+                           DataSources = NULL
+                           )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
     # Look for DS connections
@@ -32,7 +38,7 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
     }
 
 
-    # For testing purposes
+    ### For testing purposes
     # CuratedDataSetName <- "CuratedDataSet"
     # OutputName <- "AugmentationOutput"
     # DataSources <- CCPConnections

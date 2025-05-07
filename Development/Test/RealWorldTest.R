@@ -53,6 +53,53 @@ Credentials <- Credentials %>%
     "Hannover"
   ))
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Optional during test phase: Loop through servers and get Curation Reports
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+PerformanceTable <- tibble(Site = character(),
+                           DurationConnection = double(),
+                           DurationLoading = double(),
+                           DurationCuration = double())
+
+for (i in 1:nrow(Credentials))
+{
+    CurrentCredentials <- Credentials[i,]
+
+    TimeInitial <- Sys.time()
+
+    try(CCPConnections <- ConnectToCCP(CCPSiteSpecifications = CurrentCredentials))
+
+    TimePastConnect <- Sys.time()
+
+    try(Messages <- LoadRawDataSet(CCPSiteSpecifications = Credentials,
+                               DataSources = CCPConnections))
+
+    TimePastLoading <- Sys.time()
+
+    try(ds.CurateData(DataSources = CCPConnections))
+
+    TimePastCuration <- Sys.time()
+
+    try(CurationReport <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections))
+    try(saveRDS(CurationReport, file = paste0("CurationReport_", Credentials[i,]$SiteName, lubridate::today(), ".rds")))
+
+    PerformanceTable <- PerformanceTable %>%
+      add_row(Site = Credentials[i,]$SiteName,
+              DurationConnection = as.double(lubridate::as.duration(TimePastConnect - TimeInitial)),
+              DurationLoading = as.double(lubridate::as.duration(TimePastLoading - TimePastConnect)),
+              DurationCuration = as.double(lubridate::as.duration(TimePastCuration - TimePastLoading)))
+
+    DSI::datashield.logout(CCPConnections)
+}
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Connect
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # Establish connection to servers using convenience funtion 'ConnectToCCP'
 CCPConnections <- ConnectToCCP(CCPSiteSpecifications = Credentials)
 

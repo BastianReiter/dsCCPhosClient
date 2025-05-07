@@ -15,6 +15,10 @@
 ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
                                       DataSources = NULL)
 {
+    ### For testing purposes
+    # AugmentedDataSetName <- "AugmentedDataSet"
+    # DataSources <- CCPConnections
+
     # Look for DS connections
     if (is.null(DataSources))
     {
@@ -33,7 +37,7 @@ ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
     Messages$Assignment <- list()
 
 
-    CCPTableNames_ADS <- c("Patients", "Diagnoses", "Events")
+    CCPTableNames_ADS <- c("Patients", "Diagnoses", "Therapies", "DiseaseCourse", "Events")
 
     AssignmentInfo <- list()
 

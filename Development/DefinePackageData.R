@@ -52,7 +52,7 @@ use_data(CCPhosColors, overwrite = TRUE)
 
 Meta_Tables <- dsCCPhos::Meta_Tables
 Meta_Features <- dsCCPhos::Meta_Features
-Meta_ValueSets <- dsCCPhos::Meta_ValueSets
+Meta_Values <- dsCCPhos::Meta_Values
 Meta_DataHarmonization <- dsCCPhos::Meta_DataHarmonization
 Meta_DiagnosisRedundancy <- dsCCPhos::Meta_DiagnosisRedundancy
 Meta_DiagnosisAssociation <- dsCCPhos::Meta_DiagnosisAssociation
@@ -60,7 +60,7 @@ Meta_FeatureObligations <- dsCCPhos::Meta_FeatureObligations
 
 use_data(Meta_Tables, overwrite = TRUE)
 use_data(Meta_Features, overwrite = TRUE)
-use_data(Meta_ValueSets, overwrite = TRUE)
+use_data(Meta_Values, overwrite = TRUE)
 use_data(Meta_DataHarmonization, overwrite = TRUE)
 use_data(Meta_DiagnosisRedundancy, overwrite = TRUE)
 use_data(Meta_DiagnosisAssociation, overwrite = TRUE)

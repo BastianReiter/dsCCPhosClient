@@ -23,7 +23,7 @@ ConnectToVirtualCCP <- function(CCPTestData,
     require(DSI)
     require(DSOpal)
 
-    # For testing purposes
+    ### For testing purposes
     # CCPTestData <- TestData
     # NumberOfSites <- 3
     # NumberOfPatientsPerSite <- 1000

@@ -11,7 +11,6 @@
 #' @return A list of tibbles containing output of validation
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 ds.GetRDSValidationReport <- function(DataSources = NULL,
                                       RawDataSetName = "RawDataSet")

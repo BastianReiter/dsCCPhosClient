@@ -5,13 +5,12 @@
 #'
 #' Linked to server-side ASSIGN method ExtractFromListDS()
 #'
-#' @param CuratedDataSetName String | Name of Curated Data Set object (list) on server | Default: 'CuratedDataSet'
+#' @param CuratedDataSetName \code{string} - Name of Curated Data Set object (list) on server | Default: 'CuratedDataSet'
 #' @param DataSources List of DSConnection objects
 #'
 #' @return A list of messages about object assignment for monitoring purposes
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
                                     DataSources = NULL)
