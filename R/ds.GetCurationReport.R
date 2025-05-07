@@ -29,7 +29,7 @@ ds.GetCurationReport <- function(DataSources = NULL)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     SiteCall <- call("GetReportingObjectDS",
-                       ObjectName.S = "CurationReport")
+                      ObjectName.S = "CurationReport")
 
     CurationReports <- DSI::datashield.aggregate(conns = DataSources,
                                                  expr = SiteCall)
@@ -86,7 +86,9 @@ ds.GetCurationReport <- function(DataSources = NULL)
                           mutate(ExcludedPrimary_Proportion = ExcludedPrimary / InitialCount,
                                  AfterPrimaryExclusion_Proportion = AfterPrimaryExclusion / InitialCount,
                                  ExcludedSecondary_Proportion = ExcludedSecondary / InitialCount,
-                                 AfterSecondaryExclusion_Proportion = AfterSecondaryExclusion / InitialCount) %>%
+                                 AfterSecondaryExclusion_Proportion = AfterSecondaryExclusion / InitialCount,
+                                 ExcludedSecondaryRedundancy_Proportion = ExcludedSecondaryRedundancy / InitialCount,
+                                 AfterSecondaryRedundancyExclusion_Proportion = AfterSecondaryRedundancyExclusion / InitialCount) %>%
                           select(Table,
                                  Site,
                                  InitialCount,
@@ -97,7 +99,11 @@ ds.GetCurationReport <- function(DataSources = NULL)
                                  ExcludedSecondary,
                                  ExcludedSecondary_Proportion,
                                  AfterSecondaryExclusion,
-                                 AfterSecondaryExclusion_Proportion)
+                                 AfterSecondaryExclusion_Proportion,
+                                 ExcludedSecondaryRedundancy,
+                                 ExcludedSecondaryRedundancy_Proportion,
+                                 AfterSecondaryRedundancyExclusion,
+                                 AfterSecondaryRedundancyExclusion_Proportion)
 
     # Create list of data.frames (one per RDS table) containing data on entry counts, comparing all sites
     EntryCounts <- split(AllEntryCounts, AllEntryCounts$Table) %>%
@@ -326,18 +332,6 @@ ds.GetCurationReport <- function(DataSources = NULL)
     names(TransformationMonitorsCumulated) <- names(CurationReports$Transformation[[1]]$ValueSetOverviews)
 
 
-    # 2 c) Summarize site-specific reports: Diagnosis Classification
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    # Bind rows of site-specific vectors
-    DiagnosisClassification_Sites <- as_tibble(do.call(rbind, CurationReports$DiagnosisClassification))
-
-    # Add row with column sums and add site name feature
-    DiagnosisClassificationTable <- colSums(DiagnosisClassification_Sites) %>%
-                                        bind_rows(DiagnosisClassification_Sites) %>%
-                                        mutate(SiteName = c("All", names(DataSources)), .before = 1)
-
-
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Return list
@@ -347,6 +341,5 @@ ds.GetCurationReport <- function(DataSources = NULL)
                 Transformation = c(list(All = list(Monitors = TransformationMonitorsCumulated,
                                                    EligibilityOverviews = EligibilityOverviewsCumulated,
                                                    ValueSetOverviews = ValueSetOverviewsCumulated)),
-                                   CurationReports$Transformation),
-                DiagnosisClassification = DiagnosisClassificationTable))
+                                   CurationReports$Transformation)))
 }

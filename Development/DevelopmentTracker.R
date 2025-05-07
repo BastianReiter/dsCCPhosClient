@@ -64,6 +64,7 @@ library(dplyr)
 # Linked to dataSHIELD AGGREGATE functions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_r("ds.CheckRDSTables.R")
+# use_r("ds.GetAugmentationReport.R")
 # use_r("ds.GetCurationReport.R")
 # use_r("ds.GetFeatureInfo.R")
 # use_r("ds.GetFrequencyTable.R")

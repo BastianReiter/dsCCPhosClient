@@ -1,27 +1,31 @@
 
+install.packages("devtools")
 
 # Install CCPhos R packages
 #devtools::install_github(repo = "BastianReiter/dsCCPhos")
-#devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
+devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
 #devtools::install_github(repo = "BastianReiter/CCPhosApp")
 
 library(dplyr)
 library(dsCCPhosClient)
 library(DSI)
-library(CCPhosApp)
+# library(CCPhosApp)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # USING CCPHOS APP (look for manual approach below)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-StartCCPhosApp()
+# StartCCPhosApp()
 
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # MANUAL APPROACH (without app)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Automatically print DataSHIELD errors
+options(datashield.errors.print = TRUE)
 
 
 # Read in CCP site specifications from uploaded file (first upload 'SiteSpecs.csv' using RStudio) ...
@@ -34,13 +38,21 @@ Credentials <- read.csv(file = "SiteSpecs.csv")
 
 # Filtering for sites that work
 Credentials <- Credentials %>%
-                    filter(SiteName %in% c(#"Berlin",
-                                           #"Dresden",
-                                           #"Mainz",      # Problem: 'The input data is not of the same class in all studies! ...'
-                                           "Mannheim",
-                                           "MunichLMU"
-                                           #"MunichTU"     # Problem: 'The input data is not of the same class in all studies! ...'
-                                           ))
+  filter(SiteName %in% c(# "Sissi",
+    # "Franz"      # Not available
+    "Berlin",
+    "Dresden",
+    "Mainz",
+    # "Mannheim",   # No connection
+    "MunichLMU",
+    "MunichTU",
+    "Essen",
+    # "Freiburg",   # No Opal tables
+    # "Ulm",   # No connection
+    "Wuerzburg",
+    "Hannover"
+  ))
+
 
 # Establish connection to servers using convenience funtion 'ConnectToCCP'
 CCPConnections <- ConnectToCCP(CCPSiteSpecifications = Credentials)
@@ -50,7 +62,8 @@ CCPConnections <- ConnectToCCP(CCPSiteSpecifications = Credentials)
 # Check server requirements using dsCCPhosClient::CheckServerRequirements()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Messages_ServerRequirements <- CheckServerRequirements(DataSources = CCPConnections)
+ServerRequirements <- CheckServerRequirements(CCPSiteSpecifications = Credentials,
+                                              DataSources = CCPConnections)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -61,11 +74,63 @@ Messages <- LoadRawDataSet(CCPSiteSpecifications = Credentials,
                            DataSources = CCPConnections)
 
 
+# Collect comprehensive information about all workspace objects
+ServerWorkspaceInfo <- GetServerWorkspaceInfo(DataSources = CCPConnections)
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Use dsCCPhos functionality to process data
+# Check RDS tables for existence and completeness
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ds.CurateData(DataSources = CCPConnections)
+RDSTableCheck <- ds.CheckRDSTables(DataSources = CCPConnections)
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Get random samples from Raw Data Set on servers for easier testing
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ds.DrawSample(RawDataSetName = "RawDataSet",
+              SampleSize = "2000",
+              SampleName = "RDSSample",
+              DataSources = CCPConnections)
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# DATA CURATION: Transform Raw Data Set (RDS) into Curated Data Set (CDS)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ds.CurateData(DataSources = CCPConnections,
+              Settings = list(DiagnosisRedundancy_Check = FALSE,
+                              DiagnosisAssociation_Check = FALSE),
+              RawDataSetName = "RawDataSet")
+
+
+
+# Make tables from Curated Data Set directly addressable by unpacking them into R server session
+Messages <- ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
+                                    DataSources = CCPConnections)
+
+# Get curation reports
+CurationReport <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
+
+View(CurationReport$IneligibleEntries)
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# DATA AUGMENTATION: Transform Curated Data Set (CDS) into Augmented Data Set (ADS)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Run ds.AugmentData
+Messages <- ds.AugmentData(CuratedDataSetName = "CuratedDataSet",
+                           OutputName = "AugmentationOutput",
+                           DataSources = CCPConnections)
+
+
+# Make tables from Augmented Data Set directly addressable by unpacking them into R server session
+Messages <- ds.UnpackAugmentedDataSet(AugmentedDataSetName = "AugmentedDataSet",
+                                      DataSources = CCPConnections)
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -73,6 +138,3 @@ ds.CurateData(DataSources = CCPConnections)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 DSI::datashield.logout(CCPConnections)
-
-
-

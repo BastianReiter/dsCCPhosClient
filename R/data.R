@@ -212,26 +212,28 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Meta_ValueSets.rda
+# Meta_Values.rda
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#' CCP meta data: Value sets
+#' CCP meta data: Values
 #'
-#' A tibble containing meta data about eligible data values in Curated Data Model (CDM)
+#' A tibble containing meta data about data values
 #'
-#' @format ## `Meta_ValueSets`
-#' Tibble
+#' @format ## `Meta_Values`
+#' \code{tibble}
 #' \describe{
-#'   \item{TableName_Curated}{Table selector}
-#'   \item{FeatureName}{Feature name}
+#'   \item{FeatureID}{}
+#'   \item{Table}{Table name}
+#'   \item{Feature}{Feature name}
 #'   \item{ScaleLevel}{Scale level of feature}
 #'   \item{Value_Raw}{Value in original / raw data}
 #'   \item{Value_Curated}{Value as preferred}
 #'   \item{Label_Curated}{Label for coded feature values}
 #'   \item{Label_Raw}{Label in original data}
 #'   \item{FactorRank}{Used to determine order in values}
+#'   \item{ComparatorCode}{Assignment of numeric value to certain non-numeric values to enable comparison operations}
 #' }
 #' @source <https://github.com/BastianReiter/dsCCPhos/blob/main/Development/MetaData>
 #' @author Bastian Reiter
-"Meta_ValueSets"
+"Meta_Values"
 
