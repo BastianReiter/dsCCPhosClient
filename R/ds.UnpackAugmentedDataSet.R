@@ -37,7 +37,7 @@ ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
     Messages$Assignment <- list()
 
 
-    CCPTableNames_ADS <- c("Patients", "Diagnoses", "Therapies", "DiseaseCourse", "Events")
+    CCPTableNames_ADS <- c("Patient", "Diagnosis", "Therapy", "DiseaseCourse", "Events")
 
     AssignmentInfo <- list()
 

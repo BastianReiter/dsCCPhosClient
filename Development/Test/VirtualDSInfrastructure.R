@@ -222,7 +222,7 @@ Test <- ds.GetFeatureInfo(DataSources = CCPConnections,
                           FeatureName = "TNM_T")
 
 Test <- ds.GetSampleStatistics(DataSources = CCPConnections,
-                               TableName = "ADS_Patients",
+                               TableName = "ADS_Patient",
                                MetricFeatureName = "PatientAgeAtDiagnosis")
 
 Test <- ds.GetFrequencyTable(DataSources = CCPConnections,
