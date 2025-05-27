@@ -7,7 +7,7 @@
 GetServerWorkspaceInfo(DataSources = NULL)
 }
 \arguments{
-\item{DataSources}{List of DSConnection objects}
+\item{DataSources}{\code{list} of \code{DSConnection} objects}
 }
 \value{
 A list

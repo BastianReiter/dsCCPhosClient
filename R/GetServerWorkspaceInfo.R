@@ -78,7 +78,7 @@ GetServerWorkspaceInfo <- function(DataSources = NULL)
                                  RowCount = ifelse(!is.null(MetaData[[Object]]$RowCount), MetaData[[Object]]$RowCount, NA),
                                  .after = Object) %>%
                           ungroup() %>%
-                          mutate(ServerName = ServerNames[i])
+                          mutate(ServerName = ServerNames[i], .before = 1)
 
         ObjectInfoComplete <- rbind(ObjectInfoComplete, ObjectInfo)
         MetaDataComplete[[i]] <- MetaData

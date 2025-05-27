@@ -5,8 +5,8 @@
 #'
 #' Linked to server-side AGGREGATE method GetObjectMetaDataDS()
 #'
-#' @param ObjectName String | Name of object on server
-#' @param DataSources List of DSConnection objects
+#' @param ObjectName \code{string} - Name of object on server
+#' @param DataSources \code{list} of DSConnection objects
 #'
 #' @return A list of server returns
 #' @export
@@ -31,8 +31,8 @@ ds.GetObjectMetaData <- function(ObjectName,
 # Call GetObjectMetaDataDS() on every server
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# For testing purposes
-# ObjectName <- "ADS_Patients"
+### For testing purposes
+# ObjectName <- "CurationReport"
 # DataSources <- CCPConnections
 
 

@@ -10,7 +10,7 @@ ds.UnpackCuratedDataSet(
 )
 }
 \arguments{
-\item{CuratedDataSetName}{String | Name of Curated Data Set object (list) on server | Default: 'CuratedDataSet'}
+\item{CuratedDataSetName}{\code{string} - Name of Curated Data Set object (list) on server | Default: 'CuratedDataSet'}
 
 \item{DataSources}{List of DSConnection objects}
 }

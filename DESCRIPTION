@@ -1,6 +1,6 @@
 Package: dsCCPhosClient
 Title: Enabling Data Science with the DKTK-CCP
-Version: 0.1.72
+Version: 0.1.73
 Authors@R: 
     person("Bastian", "Reiter", , "b.reiter@med.uni-frankfurt.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1088-0502"))
@@ -9,11 +9,13 @@ URL: https://ccphos.netlify.app/, https://github.com/BastianReiter/dsCCPhosClien
 License: CC BY 4.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Imports:
     cli,
     dplyr,
     dsBaseClient (>= 6.3.0),
+    dsTidyverse,
+    dsTidyverseClient,
     DSI,
     DSOpal,
     httr,
@@ -31,7 +33,7 @@ Suggests:
     sysfonts,
     utils
 Depends: 
-    R (>= 2.10)
+    R (>= 4.5.0)
 LazyData: true
 Remotes: 
     BastianReiter/CCPhosApp,
