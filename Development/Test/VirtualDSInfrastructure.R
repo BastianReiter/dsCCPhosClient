@@ -3,19 +3,27 @@
 #   - Virtual dataSHIELD infrastructure for testing purposes -
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# Install newest base dataSHIELD packages
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# devtools::install_github(repo = "datashield/dsBase")
+# devtools::install_github(repo = "datashield/dsBaseClient")
+
 # Install own dataSHIELD packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#devtools::install_github(repo = "BastianReiter/dsCCPhos")
-#devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
-#devtools::install_github(repo = "BastianReiter/CCPhosApp")
+# devtools::install_github(repo = "BastianReiter/dsCCPhos")
+# devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
+# devtools::install_github(repo = "BastianReiter/CCPhosApp")
 
 # Install additional datashield-packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#devtools::install_github("tombisho/dsSynthetic", dependencies = TRUE)
-#devtools::install_github("tombisho/dsSyntheticClient", dependencies = TRUE)
-
-#devtools::install_github("neelsoumya/dsSurvival")
-#devtools::install_github("neelsoumya/dsSurvivalClient")
+# install.packages("dsTidyverse")
+# install.packages("dsTidyverseClient")
+#
+# devtools::install_github("tombisho/dsSynthetic", dependencies = TRUE)
+# devtools::install_github("tombisho/dsSyntheticClient", dependencies = TRUE)
+#
+# devtools::install_github("neelsoumya/dsSurvival")
+# devtools::install_github("neelsoumya/dsSurvivalClient")
 
 
 
@@ -25,7 +33,10 @@
 
 library(dsBaseClient)
 library(dsCCPhosClient)
+library(dsTidyverseClient)
 
+# Print DataSHIELD errors right away
+options(datashield.errors.print = TRUE)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -34,19 +45,12 @@ library(dsCCPhosClient)
 
 #TestData <- readRDS("../dsCCPhos/Development/Data/RealData/CCPRealData_Frankfurt.rds")
 TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
-#TestData_WithEmptyTables <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData_WithEmptyTables.rds")
-
-
-# TestData$sample <- data.frame()
-# TestData$`molecular-marker` <- data.frame()
-#
-# saveRDS(TestData, file = "../dsCCPhos/Development/Data/TestData/CCPTestData_WithEmptyTables.rds")
 
 
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
-                                      NumberOfPatientsPerSite = 5000)
-                                      #AddedDsPackages = "dsSurvivalFix")
+                                      NumberOfPatientsPerSite = 2000,
+                                      AddedDsPackages = "dsTidyverse")
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -76,11 +80,26 @@ Messages <- LoadRawDataSet(CCPSiteSpecifications = NULL,
 RDSTableCheck <- ds.CheckRDSTables(DataSources = CCPConnections)
 
 
+TableData <- RDSTableCheck$Table
+
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Validate RDS data
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-RDSValidationReport <- ds.GetRDSValidationReport(DataSources = CCPConnections)
+RDSValidationReports <- ds.GetRDSValidationReport(DataSources = CCPConnections)
+
+# ValidationSummaries <- RDSValidationReports %>%
+#                             map(function(Site)
+#                                 {
+#                                     map()
+#                                 })summary(report))
+
+
+# ValidationReportTables <- ValidationSummaries %>%
+#                               map(\(summary) as.data.frame(summary, check.names = FALSE))
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -189,14 +208,34 @@ ServerWorkspaceInfo <- GetServerWorkspaceInfo(DataSources = CCPConnections)
 View(ServerWorkspaceInfo$Overview)
 
 # Detailed meta data of a particular object (also part of ServerWorkspaceInfo)
-ObjectMetaData <- ds.GetObjectMetaData(ObjectName = "ADS_Patients",
+ObjectMetaData <- ds.GetObjectMetaData(ObjectName = "ADS_Patient",
                                        DataSources = CCPConnections)
 
 # Explore Object meta data: Structural overview
-View(ObjectMetaData$FirstEligible$Structure)
+View(ObjectMetaData$SiteA$Structure)
 
 # Get type of feature 'PatientID'
 ObjectMetaData$FirstEligible$DataTypes["PatientID"]
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Process ADS tables
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+ds.filter(df.name = "ADS_Patient",
+          tidy_expr = list(CountDiagnoses == 1),
+          newobj = "ADS_Patient_OneDiagnosis",
+          datasources = CCPConnections)
+
+
+Messages <- ds.JoinTables(TableNameA = "ADS_Patient_OneDiagnosis",
+                          TableNameB = "ADS_Diagnosis",
+                          ByStatement = "PatientID",
+                          OutputName = "AnalysisDataSet",
+                          DataSources = CCPConnections)
+
 
 
 
@@ -206,19 +245,23 @@ ObjectMetaData$FirstEligible$DataTypes["PatientID"]
 
 
 Test <- ds.GetTTEModel(DataSources = CCPConnections,
-                       TableName = "ADS_Patients",
+                       TableName = "AnalysisDataSet",
                        TimeFeature = "TimeFollowUp",
                        EventFeature = "IsDocumentedDeceased",
-                       ModelType = "coxph",
+                       ModelType = "survfit",
                        CovariateA = "UICCStageCategory",
                        #CovariateB = "UICCStageCategory",
                        MinFollowUpTime = 20)
 
+library(ggplot2)
+library(ggsurvfit)
 
+Test$SiteC %>%
+    ggsurvfit()
 
 
 Test <- ds.GetFeatureInfo(DataSources = CCPConnections,
-                          TableName = "ADS_Patients",
+                          TableName = "ADS_Patient",
                           FeatureName = "TNM_T")
 
 Test <- ds.GetSampleStatistics(DataSources = CCPConnections,

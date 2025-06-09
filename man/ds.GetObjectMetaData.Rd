@@ -7,9 +7,9 @@
 ds.GetObjectMetaData(ObjectName, DataSources)
 }
 \arguments{
-\item{ObjectName}{String | Name of object on server}
+\item{ObjectName}{\code{string} - Name of object on server}
 
-\item{DataSources}{List of DSConnection objects}
+\item{DataSources}{\code{list} of DSConnection objects}
 }
 \value{
 A list of server returns

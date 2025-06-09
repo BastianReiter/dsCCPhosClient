@@ -15,12 +15,17 @@ ds.AugmentData(
 
 \item{OutputName}{String | Name of output object to be assigned on server | Default: 'AugmentationOutput'}
 
-\item{DataSources}{List of DSConnection objects}
+\item{DataSources}{List of DSConnection objects
+
+#'                          \item DiagnosisAssociation_Check \code{logical} - Whether or not to classify associated diagnosis entries
+\item DiagnosisAssociation_RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_DiagnosisAssociation}
+\item DiagnosisAssociation_Profile \code{character} - Profile name defining rule set to be used for classification of diagnosis associations. Profile name must be stated in \code{DiagnosisAssociation_RuleSet} - Default: 'Default'}
 }
 \value{
 A list of variables containing messages about object assignment for monitoring purposes.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
 Transforms curated CCP core data set (CDM) into augmented data set (ADM)
 }
 \details{

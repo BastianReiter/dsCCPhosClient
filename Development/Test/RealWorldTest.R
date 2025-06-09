@@ -1,10 +1,10 @@
 
-install.packages("devtools")
+# install.packages("devtools")
 
 # Install CCPhos R packages
-#devtools::install_github(repo = "BastianReiter/dsCCPhos")
-devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
-#devtools::install_github(repo = "BastianReiter/CCPhosApp")
+# devtools::install_github(repo = "BastianReiter/dsCCPhos")
+# devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
+# devtools::install_github(repo = "BastianReiter/CCPhosApp")
 
 library(dplyr)
 library(dsCCPhosClient)

@@ -5,9 +5,14 @@
 #'
 #' Linked to server-side AGGREGATE method CheckRDSTablesDS()
 #'
-#' @param DataSources List of DSConnection objects
+#' @param DataSources \code{list} of \code{DSConnection} objects
 #'
-#' @return A list
+#' @return A \code{list} containing compiled meta data about RDS table:
+#'          \itemize{ \item TableStatus
+#'                    \item TableRowCounts
+#'                    \item FeatureStatus
+#'                    \item FeatureTypes
+#'                    \item NonMissingValueRates }
 #' @export
 #'
 #' @author Bastian Reiter
@@ -16,8 +21,10 @@ ds.CheckRDSTables <- function(DataSources = NULL,
 {
     require(dplyr)
     require(purrr)
+    require(stringr)
+    require(tidyr)
 
-    # For testing purposes
+    ### For testing purposes
     # DataSources <- CCPConnections
     # RawDataSetName <- "RawDataSet"
 
@@ -64,32 +71,78 @@ ds.CheckRDSTables <- function(DataSources = NULL,
                                                                   else if (TableInfo$TableExists == TRUE & TableInfo$TableComplete == TRUE) { Status <- "green" }
                                                                   else if (TableInfo$TableExists == TRUE & TableInfo$TableComplete == FALSE) { Status <- "yellow" }
 
+                                                                  CountExistingFeatures <- sum(TableInfo$FeatureCheck$Exists)
+                                                                  CountTotalFeatures <- nrow(TableInfo$FeatureCheck)
+
+                                                                  if (Status != "grey") { Status <- paste0(Status, " (", CountExistingFeatures, "/", CountTotalFeatures, ")") }
+
                                                               }) %>%
                                                       rbind() %>%
                                                       as_tibble()
                             }) %>%
                         list_rbind(names_to = "SiteName") %>%
-                        mutate(CheckRDSTables = case_when(if_all(-SiteName, ~ .x == "green") ~ "green",
-                                                          if_any(-SiteName, ~ .x == "red") ~ "red",
-                                                          if_any(-SiteName, ~ .x == "yellow") ~ "yellow",
+                        mutate(CheckRDSTables = case_when(if_all(-SiteName, ~ str_starts(.x, "green")) ~ "green",
+                                                          if_any(-SiteName, ~ str_starts(.x, "red")) ~ "red",
+                                                          if_any(-SiteName, ~ str_starts(.x, "yellow")) ~ "yellow",
                                                           TRUE ~ "grey"))
 
-    # Create list of data frames (one per RDS table) containing info about existence of table features
-    FeatureStatus <- TableCheck %>%
+
+    # Create list of data frames (one per RDS table) containing table row counts at different sites
+    TableRowCounts <- TableCheck %>%
                           list_transpose() %>%
                           map(function(TableInfo)
                               {
                                   TableInfo %>%
-                                      map(\(SiteTableInfo) SiteTableInfo$FeatureExistence)  %>%
-                                      list_rbind(names_to = "SiteName") %>%
-                                      pivot_wider(names_from = FeatureName,
-                                                  values_from = Exists)
+                                       map(\(SiteTableInfo) tibble(RowCount = SiteTableInfo$RowCount)) %>%
+                                       list_rbind(names_to = "SiteName")
                               })
+
+
+    # Create list of data frames (one per RDS table) containing info about existence of table features
+    FeatureExistence <- TableCheck %>%
+                            list_transpose() %>%
+                            map(function(TableInfo)
+                                {
+                                    TableInfo %>%
+                                        map(\(SiteTableInfo) SiteTableInfo$FeatureCheck %>% select(Feature, Exists)) %>%
+                                        list_rbind(names_to = "SiteName") %>%
+                                        pivot_wider(names_from = Feature,
+                                                    values_from = Exists)
+                                })
+
+
+    # Create list of data frames (one per RDS table) containing table's feature types
+    FeatureTypes <- TableCheck %>%
+                        list_transpose() %>%
+                        map(function(TableInfo)
+                            {
+                                TableInfo %>%
+                                    map(\(SiteTableInfo) SiteTableInfo$FeatureCheck %>% select(Feature, Type)) %>%
+                                    list_rbind(names_to = "SiteName") %>%
+                                    pivot_wider(names_from = Feature,
+                                                values_from = Type)
+                            })
+
+
+    # Create list of data frames (one per RDS table) containing feature-specific non-missing value rates
+    NonMissingValueRates <- TableCheck %>%
+                                list_transpose() %>%
+                                map(function(TableInfo)
+                                    {
+                                        TableInfo %>%
+                                            map(\(SiteTableInfo) SiteTableInfo$FeatureCheck %>% select(Feature, NonMissingValueRate)) %>%
+                                            list_rbind(names_to = "SiteName") %>%
+                                            pivot_wider(names_from = Feature,
+                                                        values_from = NonMissingValueRate)
+                                    })
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Return statement
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     return(list(TableStatus = TableStatus,
-                FeatureStatus = FeatureStatus))
+                TableRowCounts = TableRowCounts,
+                FeatureExistence = FeatureExistence,
+                FeatureTypes = FeatureTypes,
+                NonMissingValueRates = NonMissingValueRates))
 }

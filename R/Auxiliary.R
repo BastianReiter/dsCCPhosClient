@@ -4,7 +4,6 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-
 #' MakeFunctionMessage
 #'
 #' Turn function message into named vector to enable classification of feedback
