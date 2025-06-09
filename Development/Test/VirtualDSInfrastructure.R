@@ -49,7 +49,7 @@ TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
-                                      NumberOfPatientsPerSite = 10000,
+                                      NumberOfPatientsPerSite = 2000,
                                       AddedDsPackages = "dsTidyverse")
 
 
@@ -80,11 +80,26 @@ Messages <- LoadRawDataSet(CCPSiteSpecifications = NULL,
 RDSTableCheck <- ds.CheckRDSTables(DataSources = CCPConnections)
 
 
+TableData <- RDSTableCheck$Table
+
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Validate RDS data
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-RDSValidationReport <- ds.GetRDSValidationReport(DataSources = CCPConnections)
+RDSValidationReports <- ds.GetRDSValidationReport(DataSources = CCPConnections)
+
+# ValidationSummaries <- RDSValidationReports %>%
+#                             map(function(Site)
+#                                 {
+#                                     map()
+#                                 })summary(report))
+
+
+# ValidationReportTables <- ValidationSummaries %>%
+#                               map(\(summary) as.data.frame(summary, check.names = FALSE))
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
