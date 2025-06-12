@@ -77,10 +77,12 @@ Messages <- LoadRawDataSet(CCPSiteSpecifications = NULL,
 # Check RDS tables for existence and completeness
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-RDSTableCheck <- ds.CheckRDSTables(DataSources = CCPConnections)
+RDSTableCheck <- ds.CheckDataSet(DataSources = CCPConnections,
+                                 DataSetName = "RawDataSet",
+                                 AssumeCCPDataSet = TRUE)
 
 
-TableData <- RDSTableCheck$Table
+RDSTableCheck$TableStatus
 
 
 
@@ -118,6 +120,10 @@ ds.DrawSample(RawDataSetName = "RawDataSet",
 Curation <- ds.CurateData(RawDataSetName = "RawDataSet",
                           OutputName = "CurationOutput",
                           DataSources = CCPConnections)
+
+CDSTableCheck <- ds.CheckDataSet(DataSources = CCPConnections,
+                                 DataSetName = "CuratedDataSet",
+                                 AssumeCCPDataSet = TRUE)
 
 # Make tables from Curated Data Set directly addressable by unpacking them into R server session
 Messages <- ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
