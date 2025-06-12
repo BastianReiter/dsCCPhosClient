@@ -1,11 +1,14 @@
 
-#' ds.CheckRDSTables
+#' ds.CheckDataSet
 #'
-#' Check Raw Data Set (RDS) tables on servers on existence and completeness and return a coherent summary across servers.
+#' Check out a data set (list of data.frames) on servers and return a coherent summary across servers.
 #'
-#' Linked to server-side AGGREGATE method CheckRDSTablesDS()
+#' Linked to server-side AGGREGATE method CheckDataSetDS()
 #'
 #' @param DataSources \code{list} of \code{DSConnection} objects
+#' @param DataSetName \code{string} - Name of Data Set object (list) on server, usually "RawDataSet", "CuratedDataSet" or "AugmentedDataSet"
+#' @param RequiredTableNames \code{character vector} - Names of tables that are expected/required to be in the data set - Default: Names of elements in list evaluated from \code{DataSetName.S}
+#' @param RequiredFeatureNames \code{list} of \code{character vectors} - Features that are expected/required in each table of the data set - Default: Names of features in respective table
 #'
 #' @return A \code{list} containing compiled meta data about RDS table:
 #'          \itemize{ \item TableStatus
@@ -16,8 +19,9 @@
 #' @export
 #'
 #' @author Bastian Reiter
-ds.CheckRDSTables <- function(DataSources = NULL,
-                              RawDataSetName = "RawDataSet")
+ds.CheckDataSet <- function(DataSources = NULL,
+                            DataSetName,
+                            AssumeCCPDataSet = FALSE)
 {
     require(dplyr)
     require(purrr)
@@ -26,15 +30,20 @@ ds.CheckRDSTables <- function(DataSources = NULL,
 
     ### For testing purposes
     # DataSources <- CCPConnections
-    # RawDataSetName <- "RawDataSet"
+    # DataSetName <- "CuratedDataSet"
+    # AssumeCCPDataSet <- TRUE
+    # RequiredTableNames = paste0("RDS_", dsCCPhos::Meta_Tables$TableName_Curated)
+    # RequiredFeatureNames = RequiredTableNames.S %>%
+    #                             map(\(tablename) filter(dsCCPhos::Meta_Features, TableName_Curated == str_remove(tablename, "RDS_"))$FeatureName_Raw) %>%
+    #                             set_names(RequiredTableNames.S)
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Check argument eligibility
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    if (!(is.character(RawDataSetName)))
+    if (!(is.character(DataSetName)))
     {
-        stop("Error: Argument 'RawDataSetName' must be a character string.", call. = FALSE)
+        stop("Error: Argument 'DataSetName' must be a character string.", call. = FALSE)
     }
 
     if (is.null(DataSources))
@@ -47,8 +56,9 @@ ds.CheckRDSTables <- function(DataSources = NULL,
     # Server function call to get list of lists
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    ServerCall <- call("CheckRDSTablesDS",
-                       RawDataSetName.S = RawDataSetName)
+    ServerCall <- call("CheckDataSetDS",
+                       DataSetName.S = DataSetName,
+                       AssumeCCPDataSet.S = AssumeCCPDataSet)
 
     TableCheck <- DSI::datashield.aggregate(conns = DataSources,
                                             expr = ServerCall)

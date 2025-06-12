@@ -3,7 +3,7 @@
 #'
 #' Load raw data set from Opal data base into R session on servers.
 #'
-#' @param CCPSiteSpecifications \code{data.frame} | Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). | Default: NULL for virtual project
+#' @param CCPSiteSpecifications \code{data.frame} - Same data.frame used for login. Used here only for akquisition of site-specific project names (in case they are differing) - Default: NULL for virtual project
 #' @param DataSources \code{list} of \code{DSConnection} objects
 #'
 #' @return A \code{list} of messages
@@ -19,9 +19,9 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
     require(purrr)
     require(tidyr)
 
-    # For testing purposes
-    #CCPSiteSpecifications <- NULL
-    #DataSources <- CCPConnections
+    ### For testing purposes
+    # CCPSiteSpecifications <- NULL
+    # DataSources <- CCPConnections
 
 
     # Initiate output messaging objects

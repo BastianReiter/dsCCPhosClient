@@ -7,7 +7,7 @@
 LoadRawDataSet(CCPSiteSpecifications = NULL, DataSources)
 }
 \arguments{
-\item{CCPSiteSpecifications}{\code{data.frame} | Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). | Default: NULL for virtual project}
+\item{CCPSiteSpecifications}{\code{data.frame} - Same data.frame used for login. Used here only for akquisition of site-specific project names (in case they are differing) - Default: NULL for virtual project}
 
 \item{DataSources}{\code{list} of \code{DSConnection} objects}
 }
