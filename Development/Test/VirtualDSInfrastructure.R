@@ -194,10 +194,12 @@ Messages <- ds.AugmentData(CuratedDataSetName = "CuratedDataSet",
                            OutputName = "AugmentationOutput",
                            DataSources = CCPConnections)
 
-
 # Make tables from Augmented Data Set directly addressable by unpacking them into R server session
 Messages <- ds.UnpackAugmentedDataSet(AugmentedDataSetName = "AugmentedDataSet",
                                       DataSources = CCPConnections)
+
+ADSTableCheck <- ds.CheckDataSet(DataSources = CCPConnections,
+                                 DataSetName = "AugmentedDataSet")
 
 
 
