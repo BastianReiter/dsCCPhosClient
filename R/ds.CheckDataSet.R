@@ -11,11 +11,11 @@
 #' @param RequiredFeatureNames \code{list} of \code{character vectors} - Features that are expected/required in each table of the data set - Default: Names of features in respective table
 #'
 #' @return A \code{list} containing compiled meta data about RDS table:
-#'          \itemize{ \item TableStatus
-#'                    \item TableRowCounts
-#'                    \item FeatureStatus
-#'                    \item FeatureTypes
-#'                    \item NonMissingValueRates }
+#'         \itemize{\item TableStatus
+#'                  \item TableRowCounts
+#'                  \item FeatureStatus
+#'                  \item FeatureTypes
+#'                  \item NonMissingValueRates }
 #' @export
 #'
 #' @author Bastian Reiter

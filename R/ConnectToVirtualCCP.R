@@ -1,22 +1,23 @@
 
 #' ConnectToVirtualCCP
 #'
-#' Sets up a virtual dataSHIELD infrastructure that enables trying out real dsCCPhos functionality on test data.
+#' Sets up a virtual DataSHIELD infrastructure that enables trying out real dsCCPhos functionality on test data.
 #'
-#' @param CCPTestData List of CCP test data
-#' @param NumberOfSites Integer | The number of virtual sites to install
-#' @param NumberOfPatientsPerSite Integer | Optional value to restrict size of data set for faster testing | Default: NULL
-#' @param AddedDsPackages Character vector | Server-side dataSHIELD packages to be added to default (dsBase, dsCCPhos) | Default: NULL
+#' @param CCPTestData \code{Named list} of \code{data.frames} - CCP test data
+#' @param NumberOfSites \code{integer} - The number of virtual sites to install
+#' @param NumberOfPatientsPerSite \code{integer} - Optional value to restrict size of data set for faster testing - Default: NULL
+#' @param AddedDsPackages \code{character vector} - Server-side DataSHIELD packages to be added to default (dsBase, dsCCPhos) - Default: NULL
+#' @param Resources \code{Named list} of \code{resourcer::Resource} objects - Default: NULL
 #'
-#' @return A list of DSConnection-objects
+#' @return A list of \code{DSConnection}-objects
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 ConnectToVirtualCCP <- function(CCPTestData,
                                 NumberOfSites = 1,
                                 NumberOfPatientsPerSite = NULL,
-                                AddedDsPackages = NULL)
+                                AddedDsPackages = NULL,
+                                Resources = NULL)
 {
     require(dplyr)
     require(DSLite)
@@ -28,6 +29,9 @@ ConnectToVirtualCCP <- function(CCPTestData,
     # NumberOfSites <- 3
     # NumberOfPatientsPerSite <- 1000
     # AddedDsPackages <- NULL
+    Resources <- list(TestResource = resourcer::newResource(name = "TestResource",
+                                                            url = "file:///Development/Test/TestResource.csv",
+                                                            format = "csv"))
 
     # Check value of NumberOfSites
     if (NumberOfSites > 26) { stop("Maximum value for 'NumberOfSites' is 26.", call. = FALSE) }
@@ -59,7 +63,7 @@ ConnectToVirtualCCP <- function(CCPTestData,
     for (i in 1:NumberOfSites)
     {
         # 1) Prepare site data
-        #~~~~~~~~~~~~~~~~~~~~~~
+        #~~~~~~~~~~~~~~~~~~~~~
 
         # Get a random sample of PatientIDs
         SitePatientIDs <- sample(AllPatientIDs,
@@ -118,10 +122,12 @@ ConnectToVirtualCCP <- function(CCPTestData,
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         assign(x = paste0("Server_", SiteNames[i]),
                value = newDSLiteServer(tables = SiteTestData,
+                                       resources = Resources,
                                        config = DSLite::defaultDSConfiguration(include = c("dsBase",
                                                                                            "dsCCPhos",
                                                                                            AddedDsPackages))),
                envir = .GlobalEnv)
+
 
         # 3) Add login data to login builder
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -130,13 +136,13 @@ ConnectToVirtualCCP <- function(CCPTestData,
                             driver = "DSLiteDriver")
 
 
-        # 3) Update AllPatientIDs: Delete used-up PatientIDs
+        # 4) Update AllPatientIDs: Delete used-up PatientIDs
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         AllPatientIDs <- AllPatientIDs[!(AllPatientIDs %in% SitePatientIDs)]
     }
 
 
-    # Returns a data frame of login data
+    # Returns a data.frame of login data
     LoginData <- LoginBuilder$build()
 
     # Get list of DSConnection objects of all servers

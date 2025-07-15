@@ -9,7 +9,8 @@
 #' @export
 #'
 #' @author Bastian Reiter
-ConnectToCCP <- function(CCPSiteSpecifications, proxyurl = "http://localhost")
+ConnectToCCP <- function(CCPSiteSpecifications,
+                         proxyurl = "http://localhost")
 {
     require(DSI)
     require(DSOpal)

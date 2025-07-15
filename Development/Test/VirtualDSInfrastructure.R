@@ -13,6 +13,7 @@
 # devtools::install_github(repo = "BastianReiter/dsCCPhos")
 # devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
 # devtools::install_github(repo = "BastianReiter/CCPhosApp")
+# devtools::install_github(repo = "BastianReiter/TinkerLab")
 
 # Install additional datashield-packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -51,6 +52,29 @@ CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
                                       NumberOfPatientsPerSite = 2000,
                                       AddedDsPackages = "dsTidyverse")
+
+
+DSI::datashield.resources(conns = CCPConnections)
+
+DSI::datashield.resource_status(conns = CCPConnections,
+                                resource = "TestResource")
+
+DSI::datashield.assign.resource(conns = CCPConnections,
+                                symbol = "TestData",
+                                resource = "TestResource")
+
+
+
+# Resource definition
+TestResource.res <- resourcer::newResource(name = "TestResource",
+                                       url = "file://./Development/Test/DummyData.csv",
+                                       format = "csv")
+
+as.data.frame(TestResource.res)
+
+
+TestResource.client <- resourcer::newResourceClient(TestResource.res)
+class(TestResource.client)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -244,6 +268,36 @@ Messages <- ds.JoinTables(TableNameA = "ADS_Patient_OneDiagnosis",
                           OutputName = "AnalysisDataSet",
                           DataSources = CCPConnections)
 
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Data Exploration
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+CohortDescription <- ds.GetCohortDescription(DataSetName = "AugmentedDataSet",
+                                             CCPDataSetType = "ADS",
+                                             DataSources = CCPConnections)
+
+
+# Transform data into display-friendly time series tables using auxiliary function 'DisplayTimeSeries()'
+PatientCount_TimeSeries <- DisplayTimeSeries(TimeSeriesData = CohortDescription$CohortSize_OverTime,
+                                             TimePointFeature = DiagnosisYear,
+                                             ValueFeature = PatientCount,
+                                             GroupingFeature = Site,
+                                             IncludeMissingTimePoints = TRUE)
+
+Plot <- CohortDescription$CohortSize_OverTime %>%
+            filter(Site != "All") %>%
+            MakeColumnPlot(XFeature = DiagnosisYear,
+                           YFeature = PatientCount,
+                           GroupingFeature = Site)
+
+
+Plot <- CohortDescription$AgeDistribution %>%
+            filter(Site != "All") %>%
+            MakeColumnPlot(XFeature = AgeGroup,
+                           YFeature = N,
+                           GroupingFeature = Site)
 
 
 

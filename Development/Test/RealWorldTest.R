@@ -74,7 +74,7 @@ for (i in 1:nrow(Credentials))
     TimePastConnect <- Sys.time()
 
     try(Messages <- LoadRawDataSet(CCPSiteSpecifications = Credentials,
-                               DataSources = CCPConnections))
+                                   DataSources = CCPConnections))
 
     TimePastLoading <- Sys.time()
 
@@ -86,10 +86,10 @@ for (i in 1:nrow(Credentials))
     try(saveRDS(CurationReport, file = paste0("CurationReport_", Credentials[i,]$SiteName, lubridate::today(), ".rds")))
 
     PerformanceTable <- PerformanceTable %>%
-      add_row(Site = Credentials[i,]$SiteName,
-              DurationConnection = as.double(lubridate::as.duration(TimePastConnect - TimeInitial)),
-              DurationLoading = as.double(lubridate::as.duration(TimePastLoading - TimePastConnect)),
-              DurationCuration = as.double(lubridate::as.duration(TimePastCuration - TimePastLoading)))
+                            add_row(Site = Credentials[i,]$SiteName,
+                                    DurationConnection = as.double(lubridate::as.duration(TimePastConnect - TimeInitial)),
+                                    DurationLoading = as.double(lubridate::as.duration(TimePastLoading - TimePastConnect)),
+                                    DurationCuration = as.double(lubridate::as.duration(TimePastCuration - TimePastLoading)))
 
     DSI::datashield.logout(CCPConnections)
 }

@@ -7,11 +7,11 @@
 ExploreFeature(DataSources = NULL, TableName, FeatureName, ...)
 }
 \arguments{
-\item{DataSources}{List of DSConnection objects}
+\item{DataSources}{\code{list} of \code{DSConnection} objects}
 
-\item{TableName}{\code{string} | Name of the table containing the feature of concern}
+\item{TableName}{\code{string} - Name of the table containing the feature of concern}
 
-\item{FeatureName}{\code{string} | Name of feature}
+\item{FeatureName}{\code{string} - Name of feature}
 }
 \description{
 Get characterizing statistics about a feature of arbitrary data type.
