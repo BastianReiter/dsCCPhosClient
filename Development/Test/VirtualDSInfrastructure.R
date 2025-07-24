@@ -13,7 +13,6 @@
 # devtools::install_github(repo = "BastianReiter/dsCCPhos")
 # devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
 # devtools::install_github(repo = "BastianReiter/CCPhosApp")
-# devtools::install_github(repo = "BastianReiter/TinkerLab")
 
 # Install additional datashield-packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,6 +34,7 @@
 library(dsBaseClient)
 library(dsCCPhosClient)
 library(dsTidyverseClient)
+library(resourcer)
 
 # Print DataSHIELD errors right away
 options(datashield.errors.print = TRUE)
@@ -47,34 +47,19 @@ options(datashield.errors.print = TRUE)
 #TestData <- readRDS("../dsCCPhos/Development/Data/RealData/CCPRealData_Frankfurt.rds")
 TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 
+# Definition of test resource, exemplary with local csv-file
+TestResource <- resourcer::newResource(name = "TestResource",
+                                       #url = "file://./Development/Test/DummyData.csv",
+                                       url = "file://localhost/C:/Users/Basti/ARBEIT Lokal/dsCCPhosClient/Development/Test/DummyData.csv",
+                                       format = "csv")
+
 
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
                                       NumberOfPatientsPerSite = 2000,
-                                      AddedDsPackages = "dsTidyverse")
+                                      AddedDsPackages = "dsTidyverse",
+                                      Resources = list(TestResource = TestResource))
 
-
-DSI::datashield.resources(conns = CCPConnections)
-
-DSI::datashield.resource_status(conns = CCPConnections,
-                                resource = "TestResource")
-
-DSI::datashield.assign.resource(conns = CCPConnections,
-                                symbol = "TestData",
-                                resource = "TestResource")
-
-
-
-# Resource definition
-TestResource.res <- resourcer::newResource(name = "TestResource",
-                                       url = "file://./Development/Test/DummyData.csv",
-                                       format = "csv")
-
-as.data.frame(TestResource.res)
-
-
-TestResource.client <- resourcer::newResourceClient(TestResource.res)
-class(TestResource.client)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,6 +80,35 @@ Requirements <- CheckServerRequirements(DataSources = CCPConnections)
 
 Messages <- LoadRawDataSet(CCPSiteSpecifications = NULL,
                            DataSources = CCPConnections)
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Optionally load additional data from a Resource to R sessions on servers
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# List all resources at servers
+DSI::datashield.resources(conns = CCPConnections)
+
+# Status/Accessibility of a specific resource
+DSI::datashield.resource_status(conns = CCPConnections,
+                                resource = "TestResource")
+
+# We know that there is a resource (class 'resource') on the servers pointing to a local csv-file
+# Note: Currently, if unkown, there is no way to find out from client-side what exactly a specific resource points at (CSV, DB, Computational resource...)
+# First step is to create a 'ResourceClient' on the servers to handle the resource:
+
+DSI::datashield.assign.resource(conns = CCPConnections,
+                                symbol = "TestResourceClient",
+                                resource = "TestResource")
+
+# The first step requires a suitable 'ResourceResolver' to be registered on the servers. For csv-files this is already given by loading the 'resourcer' package.
+
+# Then we can actually load the data of the resource into the server R session by calling 'as.resource.data.frame' on it
+datashield.assign.expr(conns = CCPConnections,
+                       symbol = "TestDataFrame",
+                       expr = quote(as.resource.data.frame(TestResourceClient, strict = 'TRUE')))
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

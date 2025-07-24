@@ -8,8 +8,9 @@
 #' @param NumberOfPatientsPerSite \code{integer} - Optional value to restrict size of data set for faster testing - Default: NULL
 #' @param AddedDsPackages \code{character vector} - Server-side DataSHIELD packages to be added to default (dsBase, dsCCPhos) - Default: NULL
 #' @param Resources \code{Named list} of \code{resourcer::Resource} objects - Default: NULL
+#' @param WorkingDirectory \code{string} - Optional custom working directory for virtual servers - Default: Hidden folder in R session's temporary directory (see \code{?DSLite::newDSLiteServer()})
 #'
-#' @return A list of \code{DSConnection}-objects
+#' @return A \code{list} of \code{DSConnection}-objects
 #' @export
 #'
 #' @author Bastian Reiter
@@ -17,7 +18,9 @@ ConnectToVirtualCCP <- function(CCPTestData,
                                 NumberOfSites = 1,
                                 NumberOfPatientsPerSite = NULL,
                                 AddedDsPackages = NULL,
-                                Resources = NULL)
+                                Resources = NULL,
+                                WorkingDirectory = file.path(tempdir(), ".dslite"))
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
     require(dplyr)
     require(DSLite)
@@ -29,9 +32,9 @@ ConnectToVirtualCCP <- function(CCPTestData,
     # NumberOfSites <- 3
     # NumberOfPatientsPerSite <- 1000
     # AddedDsPackages <- NULL
-    Resources <- list(TestResource = resourcer::newResource(name = "TestResource",
-                                                            url = "file:///Development/Test/TestResource.csv",
-                                                            format = "csv"))
+    # Resources <- list(TestResource = resourcer::newResource(name = "TestResource",
+    #                                                         url = "file:///Development/Test/TestResource.csv",
+    #                                                         format = "csv"))
 
     # Check value of NumberOfSites
     if (NumberOfSites > 26) { stop("Maximum value for 'NumberOfSites' is 26.", call. = FALSE) }
@@ -124,8 +127,10 @@ ConnectToVirtualCCP <- function(CCPTestData,
                value = newDSLiteServer(tables = SiteTestData,
                                        resources = Resources,
                                        config = DSLite::defaultDSConfiguration(include = c("dsBase",
+                                                                                           "resourcer",
                                                                                            "dsCCPhos",
-                                                                                           AddedDsPackages))),
+                                                                                           AddedDsPackages)),
+                                       home = WorkingDirectory),
                envir = .GlobalEnv)
 
 

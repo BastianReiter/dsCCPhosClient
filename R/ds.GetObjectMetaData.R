@@ -32,7 +32,7 @@ ds.GetObjectMetaData <- function(ObjectName,
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### For testing purposes
-# ObjectName <- "CurationReport"
+# ObjectName <- "TestData"
 # DataSources <- CCPConnections
 
 
