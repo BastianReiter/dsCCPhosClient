@@ -3,10 +3,10 @@
 #'
 #' Check if tables are available in server Opal data bases
 #'
-#' @param CCPSiteSpecifications \code{data.frame} | Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). | Default: NULL for virtual project
-#' @param DataSources List of DSConnection objects
+#' @param CCPSiteSpecifications \code{data.frame} - Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). - Default: NULL for virtual project
+#' @param DataSources \code{list} of \code{DSConnection} objects
 #'
-#' @return A tibble
+#' @return A \code{tibble}
 #' @export
 #'
 #' @author Bastian Reiter
@@ -16,7 +16,7 @@ GetServerOpalInfo <- function(CCPSiteSpecifications = NULL,
     require(dplyr)
     require(DSI)
 
-    # For testing purposes
+    #--- For testing purposes ---
     # CCPSiteSpecifications = NULL
     # DataSources = CCPConnections
 

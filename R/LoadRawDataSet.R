@@ -19,7 +19,7 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
     require(purrr)
     require(tidyr)
 
-    ### For testing purposes
+    #--- For testing purposes ---
     # CCPSiteSpecifications <- NULL
     # DataSources <- CCPConnections
 
@@ -35,6 +35,9 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
     CCPTableNames_Raw <- dsCCPhosClient::Meta_Tables$TableName_Raw
     CCPTableNames_Curated <- dsCCPhosClient::Meta_Tables$TableName_Curated
 
+    # Check Opal table availability before assignment
+    TableAvailability <- GetServerOpalInfo(CCPSiteSpecifications = CCPSiteSpecifications,
+                                           DataSources = DataSources)
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Assignment in R server sessions
@@ -65,14 +68,22 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
             ServerTableNames <- paste0(ServerProjectName, CCPTableNames_Raw)
         }
 
+        # Get vector of all Opal table names that are available on the current server
+        AvailableTables <- TableAvailability %>%
+                                rename(IsAvailable = ServerNames[i]) %>%
+                                filter(IsAvailable == TRUE) %>%
+                                pull(TableName)
+
         # Loop through all tables from Opal DB and assign their content to objects (data.frames) in R session
         for (j in 1:length(ServerTableNames))
         {
-            try({ datashield.assign(conns = DataSources[[i]],
-                                    symbol = paste0("RDS_", CCPTableNames_Curated[j]),
-                                    value = ServerTableNames[j],
-                                    id.name = "_id") },
-                silent = TRUE)
+            if (ServerTableNames[j] %in% AvailableTables)
+            {
+                datashield.assign(conns = DataSources[[i]],
+                                        symbol = paste0("RDS_", CCPTableNames_Curated[j]),
+                                        value = ServerTableNames[j],
+                                        id.name = "_id")
+            }
         }
     }
 
