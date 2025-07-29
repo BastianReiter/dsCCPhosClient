@@ -31,7 +31,7 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
     require(DSI)
     require(tidyr)
 
-    ### For testing purposes
+    #--- For testing purposes ---
     # DataSources <- CCPConnections
     # RequiredPackages = c("dsBase", "dsCCPhos")
     # RequiredFunctions = c(aggregate = "GetReportingObjectDS",

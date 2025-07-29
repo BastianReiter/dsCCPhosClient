@@ -28,7 +28,7 @@ ds.GetObjectStatus <- function(ObjectName,
     }
 
 
-    # For testing purposes only
+    #--- For testing purposes only ---
     # ObjectName <- "RDS_GeneralCondition"
     # DataSources <- CCPConnections
 
@@ -51,6 +51,7 @@ ds.GetObjectStatus <- function(ObjectName,
 
     # Initiate output messaging objects
     Messages <- list()
+    Messages$ObjectExistence <- character()
     Messages$ObjectValidity <- character()
 
 
@@ -78,17 +79,14 @@ ds.GetObjectStatus <- function(ObjectName,
     # ...and in case object creation did not succeed on all servers
     if (!(ObjectExistsEverywhere && ObjectNotNullEverywhere))
     {
-        MessageExistence <- MakeFunctionMessage(Text = paste0("Error: A valid data object '", ObjectName, "' does NOT exist on ALL specified servers.",
-                                                              "\n",
-                                                              "It is either ABSENT and/or has no valid content/class, see return.info above.",
-                                                              "\n",
+        MessageExistence <- MakeFunctionMessage(Text = paste0("Error: A valid data object '", ObjectName, "' does NOT exist on ALL specified servers. ",
+                                                              "It is either ABSENT and/or has no valid content/class, see return.info above. ",
                                                               "Please use ds.ls() to identify servers where the object is missing."),
                                                 IsClassWarning = TRUE)
     }
 
     # Add message to list
-    Messages$ObjectValidity <- c(Messages$ObjectValidity,
-                                 MessageExistence)
+    Messages$ObjectExistence <- MessageExistence
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,19 +115,17 @@ ds.GetObjectStatus <- function(ObjectName,
         ValidityMessage <- MakeFunctionMessage(Text = paste0("'", ObjectName, "' appears valid on all servers."),
                                                IsClassSuccess = TRUE)
 
-        Messages$ObjectValidity <- c(Messages$ObjectValidity,
-                                     ValidityMessage)
+        Messages$ObjectValidity <- ValidityMessage
 
         return(Messages)
     }
 
     if (NoErrors == FALSE)
     {
-    	  ValidityMessage <- MakeFunctionMessage(Text = paste0("'",ObjectName,"' seems to be invalid in at least one source."),
+    	  ValidityMessage <- MakeFunctionMessage(Text = paste0("'", ObjectName, "' seems to be invalid in at least one source."),
     	                                         IsClassWarning = TRUE)
 
-    	  Messages$ObjectValidity <- c(Messages$ObjectValidity,
-                                     ValidityMessage)
+    	  Messages$ObjectValidity <- ValidityMessage
 
     	  Messages$ServerMessage <- ServerMessage
 
