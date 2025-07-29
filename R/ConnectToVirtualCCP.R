@@ -27,10 +27,10 @@ ConnectToVirtualCCP <- function(CCPTestData,
     require(DSI)
     require(DSOpal)
 
-    ### For testing purposes
+    #--- For testing purposes ---
     # CCPTestData <- TestData
     # NumberOfSites <- 3
-    # NumberOfPatientsPerSite <- 1000
+    # NumberOfPatientsPerSite <- 2000
     # AddedDsPackages <- NULL
     # Resources <- list(TestResource = resourcer::newResource(name = "TestResource",
     #                                                         url = "file:///Development/Test/TestResource.csv",
