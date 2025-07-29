@@ -57,8 +57,8 @@ TestResource <- resourcer::newResource(name = "TestResource",
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
                                       NumberOfPatientsPerSite = 2000,
-                                      AddedDsPackages = "dsTidyverse",
-                                      Resources = list(TestResource = TestResource))
+                                      AddedDsPackages = "dsTidyverse")
+                                      #Resources = list(TestResource = TestResource))
 
 
 
@@ -119,6 +119,12 @@ RDSTableCheck <- ds.CheckDataSet(DataSources = CCPConnections,
                                  DataSetName = "RawDataSet",
                                  AssumeCCPDataSet = TRUE)
 
+View(RDSTableCheck$TableStatus)
+
+View(RDSTableCheck$TableRowCounts$RDS_Diagnosis)
+View(RDSTableCheck$FeatureExistence$RDS_Diagnosis)
+View(RDSTableCheck$FeatureTypes$RDS_Diagnosis)
+View(RDSTableCheck$NonMissingValueRates$RDS_Diagnosis)
 
 RDSTableCheck$TableStatus
 
@@ -168,7 +174,7 @@ Messages <- ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
                                     DataSources = CCPConnections)
 
 # Get curation reports
-CurationReport <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
+CurationReport <- ds.GetCurationReport(DataSources = CCPConnections)
 
 View(CurationReport$EntryCounts$BioSampling)
 
@@ -264,14 +270,21 @@ View(ObjectMetaData$SiteA$Structure)
 ObjectMetaData$FirstEligible$DataTypes["PatientID"]
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Process ADS tables
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ds.table("ADS_Patient$Gender")
 
+# dsTidyverse
 ds.filter(df.name = "ADS_Patient",
           tidy_expr = list(CountDiagnoses == 1),
+          newobj = "ADS_Patient_OneDiagnosis",
+          datasources = CCPConnections)
+
+
+ds.filter(df.name = "ADS_Patient",
+          tidy_expr = list(Gender == "Female"),
           newobj = "ADS_Patient_OneDiagnosis",
           datasources = CCPConnections)
 
@@ -307,6 +320,12 @@ Plot <- CohortDescription$CohortSize_OverTime %>%
                            GroupingFeature = Site)
 
 
+Plot <- CohortDescription$GenderDistribution %>%
+            filter(Site != "All") %>%
+            MakeColumnPlot(XFeature = Gender,
+                           YFeature = N,
+                           GroupingFeature = Site)
+
 Plot <- CohortDescription$AgeDistribution %>%
             filter(Site != "All") %>%
             MakeColumnPlot(XFeature = AgeGroup,
@@ -315,9 +334,23 @@ Plot <- CohortDescription$AgeDistribution %>%
 
 
 
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Perform exemplary analyses
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+ds.names("AnalysisDataSet")
+
+
+Test <- dsBaseClient::ds.corTest(x = "AnalysisDataSet$PatientAgeAtDiagnosis",
+                                 y = "AnalysisDataSet$TimeDiagnosisToDeath")
+
+
+Test <- dsBaseClient::ds.glm()
+
+
+
 
 
 Test <- ds.GetTTEModel(DataSources = CCPConnections,
@@ -337,17 +370,17 @@ Test$SiteC %>%
 
 
 Test <- ds.GetFeatureInfo(DataSources = CCPConnections,
-                          TableName = "ADS_Patient",
+                          TableName = "AnalysisDataSet",
                           FeatureName = "TNM_T")
 
 Test <- ds.GetSampleStatistics(DataSources = CCPConnections,
-                               TableName = "ADS_Patient",
+                               TableName = "AnalysisDataSet",
                                MetricFeatureName = "PatientAgeAtDiagnosis")
 
 Test <- ds.GetFrequencyTable(DataSources = CCPConnections,
-                             TableName = "ADS_Patients",
+                             TableName = "AnalysisDataSet",
                              FeatureName = "TNM_T",
-                             MaxNumberCategories = 5)
+                             MaxNumberCategories = 20)
 
 RelativeFrequencies <- Test$RelativeFrequencies %>%
                             mutate(across(-Site, ~ paste0("(", round(.x * 100, 0), "%)")))
@@ -382,7 +415,7 @@ Plot <- MakeColumnPlot(DataFrame = PlotData,
 
 
 Test <- ExploreFeature(DataSources = CCPConnections,
-                       TableName = "ADS_Patients",
+                       TableName = "AnalysisDataSet",
                        FeatureName = "TimeDiagnosisToDeath")
 
 
