@@ -36,8 +36,8 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
     CCPTableNames_Curated <- dsCCPhosClient::Meta_Tables$TableName_Curated
 
     # Check Opal table availability before assignment
-    TableAvailability <- GetServerOpalInfo(CCPSiteSpecifications = CCPSiteSpecifications,
-                                           DataSources = DataSources)
+    OpalTableAvailability <- GetServerOpalInfo(CCPSiteSpecifications = CCPSiteSpecifications,
+                                               DataSources = DataSources)
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Assignment in R server sessions
@@ -69,20 +69,20 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
         }
 
         # Get vector of all Opal table names that are available on the current server
-        AvailableTables <- TableAvailability %>%
-                                rename(IsAvailable = ServerNames[i]) %>%
-                                filter(IsAvailable == TRUE) %>%
-                                pull(TableName)
+        AvailableOpalTables <- OpalTableAvailability %>%
+                                    rename(IsAvailable = ServerNames[i]) %>%
+                                    filter(IsAvailable == TRUE) %>%
+                                    pull(TableName)
 
         # Loop through all tables from Opal DB and assign their content to objects (data.frames) in R session
         for (j in 1:length(ServerTableNames))
         {
-            if (ServerTableNames[j] %in% AvailableTables)
+            if (ServerTableNames[j] %in% AvailableOpalTables)
             {
                 datashield.assign(conns = DataSources[[i]],
-                                        symbol = paste0("RDS_", CCPTableNames_Curated[j]),
-                                        value = ServerTableNames[j],
-                                        id.name = "_id")
+                                  symbol = paste0("RDS_", CCPTableNames_Curated[j]),
+                                  value = ServerTableNames[j],
+                                  id.name = "_id")
             }
         }
     }
@@ -104,7 +104,7 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
 
         # Add info about table assignment to Messages
         BundledMessages <- c(BundledMessages,
-                             ObjectStatus_Table$ObjectValidity)
+                             ObjectStatus_Table["ObjectValidity"])   # Must select list element 'ObjectValidity' this way to keep naming of vector and thus class 'Success', 'Warning' and so forth
     }
 
     # Turn list into (named) vector and add it to Messages
@@ -117,12 +117,12 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
     # Assign list 'RawDataSet' on all servers
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    # Create list of vectors (one for each site) containing names of data.frames that are not of class "NULL"
+    # Create list of vectors (one for each site) containing names of actually existing data.frames
     ExistingRDSTables <- paste0("RDS_", CCPTableNames_Curated) %>%
-                              map(\(tablename) unlist(ds.class(x = tablename, datasources = DataSources))) %>%
+                              map(\(tablename) unlist(ds.exists(x = tablename, datasources = DataSources))) %>%
                               set_names(paste0("RDS_", CCPTableNames_Curated)) %>%
                               list_transpose() %>%
-                              map(\(TableNames) names(TableNames[TableNames != "NULL"]))
+                              map(\(TableNames) names(TableNames[TableNames == TRUE]))
 
     # For every site, consolidate all existing Raw Data Set tables in one list object called "RawDataSet"
     ExistingRDSTables %>%
@@ -140,7 +140,7 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
 
     # Add info about RawDataSet assignment to Messages
     Messages$Assignment <- c(Messages$Assignment,
-                             purrr::list_c(ObjectStatus_RawDataSet$ObjectValidity))
+                             ObjectStatus_RawDataSet$ObjectValidity)
 
 
 
