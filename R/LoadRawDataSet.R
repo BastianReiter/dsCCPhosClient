@@ -104,7 +104,7 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
 
         # Add info about table assignment to Messages
         BundledMessages <- c(BundledMessages,
-                             ObjectStatus_Table)
+                             ObjectStatus_Table$ObjectValidity)
     }
 
     # Turn list into (named) vector and add it to Messages
@@ -140,7 +140,7 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
 
     # Add info about RawDataSet assignment to Messages
     Messages$Assignment <- c(Messages$Assignment,
-                             purrr::list_c(ObjectStatus_RawDataSet))
+                             purrr::list_c(ObjectStatus_RawDataSet$ObjectValidity))
 
 
 
