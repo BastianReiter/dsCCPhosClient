@@ -48,6 +48,7 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
     {
         # In case CCPSiteSpecifications are NULL, server Opal table names are just raw CCP table names
         ServerTableNames <- CCPTableNames_Raw
+        ServerProjectName <- NULL
 
         # If CCPSiteSpecifications are assigned, there can be server-specific project names and therefore server-specific Opal table names
         if (!is.null(CCPSiteSpecifications))
@@ -72,7 +73,8 @@ LoadRawDataSet <- function(CCPSiteSpecifications = NULL,
         AvailableOpalTables <- OpalTableAvailability %>%
                                     rename(IsAvailable = ServerNames[i]) %>%
                                     filter(IsAvailable == TRUE) %>%
-                                    pull(TableName)
+                                    pull(TableName) %>%
+                                    paste0(ServerProjectName, .)
 
         # Loop through all tables from Opal DB and assign their content to objects (data.frames) in R session
         for (j in 1:length(ServerTableNames))
