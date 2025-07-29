@@ -4,12 +4,7 @@
 \alias{ds.CheckDataSet}
 \title{ds.CheckDataSet}
 \usage{
-ds.CheckDataSet(
-  DataSources = NULL,
-  DataSetName,
-  RequiredTableNames = NULL,
-  RequiredFeatureNames = NULL
-)
+ds.CheckDataSet(DataSources = NULL, DataSetName, AssumeCCPDataSet = FALSE)
 }
 \arguments{
 \item{DataSources}{\code{list} of \code{DSConnection} objects}
@@ -22,7 +17,7 @@ ds.CheckDataSet(
 }
 \value{
 A \code{list} containing compiled meta data about RDS table:
-\itemize{ \item TableStatus
+\itemize{\item TableStatus
 \item TableRowCounts
 \item FeatureStatus
 \item FeatureTypes

@@ -59,7 +59,7 @@ MakeColumnPlot <- function(DataFrame,
                            ggTheme = function(...) dsCCPhosClient::ggTheme_CCP(...),
                            ThemeArguments = list(),
                            FillPalette = NULL,
-                           ColorPrimary = TinkerLab::Colors$Primary,
+                           ColorPrimary = dsCCPhosClient::CCPhosColors$Primary,
                            AlphaPalette = NULL,
                            ColumnWidth = 0.95,
                            ...)

@@ -8,23 +8,26 @@ ConnectToVirtualCCP(
   CCPTestData,
   NumberOfSites = 1,
   NumberOfPatientsPerSite = NULL,
-  AddedDsPackages = NULL
+  AddedDsPackages = NULL,
+  Resources = NULL
 )
 }
 \arguments{
-\item{CCPTestData}{List of CCP test data}
+\item{CCPTestData}{\code{Named list} of \code{data.frames} - CCP test data}
 
-\item{NumberOfSites}{Integer | The number of virtual sites to install}
+\item{NumberOfSites}{\code{integer} - The number of virtual sites to install}
 
-\item{NumberOfPatientsPerSite}{Integer | Optional value to restrict size of data set for faster testing | Default: NULL}
+\item{NumberOfPatientsPerSite}{\code{integer} - Optional value to restrict size of data set for faster testing - Default: NULL}
 
-\item{AddedDsPackages}{Character vector | Server-side dataSHIELD packages to be added to default (dsBase, dsCCPhos) | Default: NULL}
+\item{AddedDsPackages}{\code{character vector} - Server-side DataSHIELD packages to be added to default (dsBase, dsCCPhos) - Default: NULL}
+
+\item{Resources}{\code{Named list} of \code{resourcer::Resource} objects - Default: NULL}
 }
 \value{
-A list of DSConnection-objects
+A list of \code{DSConnection}-objects
 }
 \description{
-Sets up a virtual dataSHIELD infrastructure that enables trying out real dsCCPhos functionality on test data.
+Sets up a virtual DataSHIELD infrastructure that enables trying out real dsCCPhos functionality on test data.
 }
 \author{
 Bastian Reiter

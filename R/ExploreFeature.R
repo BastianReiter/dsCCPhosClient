@@ -3,14 +3,13 @@
 #'
 #' Get characterizing statistics about a feature of arbitrary data type.
 #'
-#' @param DataSources List of DSConnection objects
-#' @param TableName \code{string} | Name of the table containing the feature of concern
-#' @param FeatureName \code{string} | Name of feature
+#' @param DataSources \code{list} of \code{DSConnection} objects
+#' @param TableName \code{string} - Name of the table containing the feature of concern
+#' @param FeatureName \code{string} - Name of feature
 #'
 #' @return
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 ExploreFeature <- function(DataSources = NULL,
                            TableName,

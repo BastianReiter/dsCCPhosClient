@@ -34,6 +34,7 @@
 library(dsBaseClient)
 library(dsCCPhosClient)
 library(dsTidyverseClient)
+library(resourcer)
 
 # Print DataSHIELD errors right away
 options(datashield.errors.print = TRUE)
@@ -46,11 +47,19 @@ options(datashield.errors.print = TRUE)
 #TestData <- readRDS("../dsCCPhos/Development/Data/RealData/CCPRealData_Frankfurt.rds")
 TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 
+# Definition of test resource, exemplary with local csv-file
+TestResource <- resourcer::newResource(name = "TestResource",
+                                       #url = "file://./Development/Test/DummyData.csv",
+                                       url = "file://localhost/C:/Users/Basti/ARBEIT Lokal/dsCCPhosClient/Development/Test/DummyData.csv",
+                                       format = "csv")
+
 
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfSites = 3,
                                       NumberOfPatientsPerSite = 2000,
                                       AddedDsPackages = "dsTidyverse")
+                                      #Resources = list(TestResource = TestResource))
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -73,6 +82,35 @@ Messages <- LoadRawDataSet(CCPSiteSpecifications = NULL,
                            DataSources = CCPConnections)
 
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Optionally load additional data from a Resource to R sessions on servers
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# List all resources at servers
+DSI::datashield.resources(conns = CCPConnections)
+
+# Status/Accessibility of a specific resource
+DSI::datashield.resource_status(conns = CCPConnections,
+                                resource = "TestResource")
+
+# We know that there is a resource (class 'resource') on the servers pointing to a local csv-file
+# Note: Currently, if unkown, there is no way to find out from client-side what exactly a specific resource points at (CSV, DB, Computational resource...)
+# First step is to create a 'ResourceClient' on the servers to handle the resource:
+
+DSI::datashield.assign.resource(conns = CCPConnections,
+                                symbol = "TestResourceClient",
+                                resource = "TestResource")
+
+# The first step requires a suitable 'ResourceResolver' to be registered on the servers. For csv-files this is already given by loading the 'resourcer' package.
+
+# Then we can actually load the data of the resource into the server R session by calling 'as.resource.data.frame' on it
+datashield.assign.expr(conns = CCPConnections,
+                       symbol = "TestDataFrame",
+                       expr = quote(as.resource.data.frame(TestResourceClient, strict = 'TRUE')))
+
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Check RDS tables for existence and completeness
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,6 +119,12 @@ RDSTableCheck <- ds.CheckDataSet(DataSources = CCPConnections,
                                  DataSetName = "RawDataSet",
                                  AssumeCCPDataSet = TRUE)
 
+View(RDSTableCheck$TableStatus)
+
+View(RDSTableCheck$TableRowCounts$RDS_Diagnosis)
+View(RDSTableCheck$FeatureExistence$RDS_Diagnosis)
+View(RDSTableCheck$FeatureTypes$RDS_Diagnosis)
+View(RDSTableCheck$NonMissingValueRates$RDS_Diagnosis)
 
 RDSTableCheck$TableStatus
 
@@ -130,7 +174,7 @@ Messages <- ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
                                     DataSources = CCPConnections)
 
 # Get curation reports
-CurationReport <- dsCCPhosClient::ds.GetCurationReport(DataSources = CCPConnections)
+CurationReport <- ds.GetCurationReport(DataSources = CCPConnections)
 
 View(CurationReport$EntryCounts$BioSampling)
 
@@ -226,14 +270,21 @@ View(ObjectMetaData$SiteA$Structure)
 ObjectMetaData$FirstEligible$DataTypes["PatientID"]
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Process ADS tables
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ds.table("ADS_Patient$Gender")
 
+# dsTidyverse
 ds.filter(df.name = "ADS_Patient",
           tidy_expr = list(CountDiagnoses == 1),
+          newobj = "ADS_Patient_OneDiagnosis",
+          datasources = CCPConnections)
+
+
+ds.filter(df.name = "ADS_Patient",
+          tidy_expr = list(Gender == "Female"),
           newobj = "ADS_Patient_OneDiagnosis",
           datasources = CCPConnections)
 
@@ -246,10 +297,60 @@ Messages <- ds.JoinTables(TableNameA = "ADS_Patient_OneDiagnosis",
 
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Data Exploration
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+CohortDescription <- ds.GetCohortDescription(DataSetName = "AugmentedDataSet",
+                                             CCPDataSetType = "ADS",
+                                             DataSources = CCPConnections)
+
+
+# Transform data into display-friendly time series tables using auxiliary function 'DisplayTimeSeries()'
+PatientCount_TimeSeries <- DisplayTimeSeries(TimeSeriesData = CohortDescription$CohortSize_OverTime,
+                                             TimePointFeature = DiagnosisYear,
+                                             ValueFeature = PatientCount,
+                                             GroupingFeature = Site,
+                                             IncludeMissingTimePoints = TRUE)
+
+Plot <- CohortDescription$CohortSize_OverTime %>%
+            filter(Site != "All") %>%
+            MakeColumnPlot(XFeature = DiagnosisYear,
+                           YFeature = PatientCount,
+                           GroupingFeature = Site)
+
+
+Plot <- CohortDescription$GenderDistribution %>%
+            filter(Site != "All") %>%
+            MakeColumnPlot(XFeature = Gender,
+                           YFeature = N,
+                           GroupingFeature = Site)
+
+Plot <- CohortDescription$AgeDistribution %>%
+            filter(Site != "All") %>%
+            MakeColumnPlot(XFeature = AgeGroup,
+                           YFeature = N,
+                           GroupingFeature = Site)
+
+
+
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Perform exemplary analyses
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+ds.names("AnalysisDataSet")
+
+
+Test <- dsBaseClient::ds.corTest(x = "AnalysisDataSet$PatientAgeAtDiagnosis",
+                                 y = "AnalysisDataSet$TimeDiagnosisToDeath")
+
+
+Test <- dsBaseClient::ds.glm()
+
+
+
 
 
 Test <- ds.GetTTEModel(DataSources = CCPConnections,
@@ -269,17 +370,17 @@ Test$SiteC %>%
 
 
 Test <- ds.GetFeatureInfo(DataSources = CCPConnections,
-                          TableName = "ADS_Patient",
+                          TableName = "AnalysisDataSet",
                           FeatureName = "TNM_T")
 
 Test <- ds.GetSampleStatistics(DataSources = CCPConnections,
-                               TableName = "ADS_Patient",
+                               TableName = "AnalysisDataSet",
                                MetricFeatureName = "PatientAgeAtDiagnosis")
 
 Test <- ds.GetFrequencyTable(DataSources = CCPConnections,
-                             TableName = "ADS_Patients",
+                             TableName = "AnalysisDataSet",
                              FeatureName = "TNM_T",
-                             MaxNumberCategories = 5)
+                             MaxNumberCategories = 20)
 
 RelativeFrequencies <- Test$RelativeFrequencies %>%
                             mutate(across(-Site, ~ paste0("(", round(.x * 100, 0), "%)")))
@@ -314,7 +415,7 @@ Plot <- MakeColumnPlot(DataFrame = PlotData,
 
 
 Test <- ExploreFeature(DataSources = CCPConnections,
-                       TableName = "ADS_Patients",
+                       TableName = "AnalysisDataSet",
                        FeatureName = "TimeDiagnosisToDeath")
 
 

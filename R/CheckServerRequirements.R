@@ -4,8 +4,8 @@
 #' Check if technical requirements are met on every participating CCP server.
 #'
 #' @param CCPSiteSpecifications \code{data.frame} | Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). | Default: NULL for virtual project
-#' @param RequiredPackages A character vector naming required packages
-#' @param RequiredFunctions A named character vector containing names of required functions. Their type ('aggregate' or 'assign') is defined by the correspondent element names.
+#' @param RequiredPackages A \code{character vector} naming required packages
+#' @param RequiredFunctions A named \code{character vector} containing names of required functions. Their type ('aggregate' or 'assign') is defined by the correspondent element names.
 #' @param DataSources List of DSConnection objects
 #'
 #' @return A list of data frames containing gathered info and messages
@@ -31,7 +31,7 @@ CheckServerRequirements <- function(CCPSiteSpecifications = NULL,
     require(DSI)
     require(tidyr)
 
-    # For testing purposes
+    ### For testing purposes
     # DataSources <- CCPConnections
     # RequiredPackages = c("dsBase", "dsCCPhos")
     # RequiredFunctions = c(aggregate = "GetReportingObjectDS",

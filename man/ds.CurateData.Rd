@@ -16,15 +16,18 @@ ds.CurateData(
 \item{RawDataSetName}{\code{character} - Name of Raw Data Set object (list) on server - Default: 'RawDataSet'}
 
 \item{Settings}{\code{list} - Settings passed to function
-\itemize{\item DataHarmonization \code{list}
-\itemize{\item RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_DataHarmonization}
+\itemize{  \item DataHarmonization \code{list}
+\itemize{\item Run \code{logical} - Whether or not to perform data harmonization - Default: \code{TRUE}
+\item RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_DataHarmonization}
 \item Profile \code{character} - Profile name defining rule set to be used for data harmonization. Profile name must be stated in \code{DataHarmonization$RuleSet} - Default: 'Default'}
 \item FeatureObligations \code{list}
 \itemize{\item RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_FeatureObligations}
 \item Profile \code{character} - Profile name defining strict and trans-feature rules for obligatory feature content. Profile name must be stated in \code{FeatureObligations$RuleSet} - Default: 'Default'}
 \item FeatureTracking \code{list}
 \itemize{\item RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_FeatureTracking}
-\item Profile \code{character} - Profile name defining which features should be tracked/monitored during curation process. Profile name must be stated in \code{FeatureTracking$RuleSet} - Default: 'Default'}}}
+\item Profile \code{character} - Profile name defining which features should be tracked/monitored during curation process. Profile name must be stated in \code{FeatureTracking$RuleSet} - Default: 'Default'}
+\item TableCleaning \code{list}
+\itemize{\item Run \code{logical} - Whether or not to perform table cleaning (removal of redundant and ineligible entries) - Default: \code{TRUE}}}}
 
 \item{OutputName}{\code{character} - Name of output object to be assigned on server - Default: 'CurationOutput'}
 
