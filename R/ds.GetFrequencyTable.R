@@ -64,8 +64,8 @@ ds.GetFrequencyTable <- function(TableName,
   # Separate returns
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # SiteReturns: Obtain sample statistics for each server calling dsCCPhos::GetFrequencyTableDS()
-  ls_SiteReturns <- DSI::datashield.aggregate(conns = DSConnections,
+  # ServerReturns: Obtain sample statistics for each server calling dsCCPhos::GetFrequencyTableDS()
+  ls_ServerReturns <- DSI::datashield.aggregate(conns = DSConnections,
                                               expr = call("GetFrequencyTableDS",
                                                           TableName.S = TableName,
                                                           FeatureName.S = FeatureName,
@@ -79,16 +79,16 @@ ds.GetFrequencyTable <- function(TableName,
   # Cumulation
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  SiteNames <- names(DSConnections)
+  ServerNames <- names(DSConnections)
 
-  # Convert site returns into tibble containing separate frequency tables
-  df_FrequencyTable <- ls_SiteReturns %>%
-                            list_rbind(names_to = "Site") %>%
-                            pivot_wider(names_from = Site,
-                                        names_glue = "{Site}_{.value}",
+  # Convert Server returns into tibble containing separate frequency tables
+  df_FrequencyTable <- ls_ServerReturns %>%
+                            list_rbind(names_to = "Server") %>%
+                            pivot_wider(names_from = Server,
+                                        names_glue = "{Server}_{.value}",
                                         names_vary = "slowest",
                                         values_from = c(AbsoluteFrequency, RelativeFrequency)) %>%
-                            mutate(All_AbsoluteFrequency = rowSums(pick(paste0(SiteNames, "_AbsoluteFrequency")), na.rm = TRUE),
+                            mutate(All_AbsoluteFrequency = rowSums(pick(paste0(ServerNames, "_AbsoluteFrequency")), na.rm = TRUE),
                                    All_RelativeFrequency = All_AbsoluteFrequency / sum(All_AbsoluteFrequency),
                                    .after = Value) %>%
                             arrange(desc(All_AbsoluteFrequency))
@@ -125,7 +125,7 @@ ds.GetFrequencyTable <- function(TableName,
                                 rename_with(.fn = \(colnames) str_remove(colnames, "_AbsoluteFrequency"),
                                             .cols = contains("AbsoluteFrequency")) %>%
                                 pivot_longer(cols = -Value,
-                                             names_to = "Site") %>%
+                                             names_to = "Server") %>%
                                 pivot_wider(names_from = Value,
                                             values_from = value)
 
@@ -136,7 +136,7 @@ ds.GetFrequencyTable <- function(TableName,
                                 rename_with(.fn = \(colnames) str_remove(colnames, "_RelativeFrequency"),
                                             .cols = contains("RelativeFrequency")) %>%
                                 pivot_longer(cols = -Value,
-                                             names_to = "Site",
+                                             names_to = "Server",
                                              values_to = "RelativeFrequency") %>%
                                 pivot_wider(names_from = Value,
                                             values_from = RelativeFrequency)

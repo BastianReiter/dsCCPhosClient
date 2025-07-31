@@ -4,7 +4,7 @@
 #' `r lifecycle::badge("stable")` \cr\cr
 #' Load raw data set from Opal data base into R session on servers.
 #'
-#' @param SiteSpecifications \code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of site-specific project names (in case they are differing) - Default: \code{NULL} for virtual project
+#' @param ServerSpecifications \code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of server-specific project names (in case they are differing) - Default: \code{NULL} for virtual project
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{list} of messages
@@ -12,7 +12,7 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-LoadRawDataSet <- function(SiteSpecifications = NULL,
+LoadRawDataSet <- function(ServerSpecifications = NULL,
                            DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
@@ -23,7 +23,7 @@ LoadRawDataSet <- function(SiteSpecifications = NULL,
   require(tidyr)
 
   # --- For testing purposes ---
-  # SiteSpecifications <- NULL
+  # ServerSpecifications <- NULL
   # DSConnections <- CCPConnections
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
@@ -43,26 +43,26 @@ LoadRawDataSet <- function(SiteSpecifications = NULL,
   CCPTableNames_Curated <- dsCCPhosClient::Meta_Tables$TableName_Curated
 
   # Check Opal table availability before assignment
-  OpalTableAvailability <- GetServerOpalInfo(SiteSpecifications = SiteSpecifications,
+  OpalTableAvailability <- GetServerOpalInfo(ServerSpecifications = ServerSpecifications,
                                              DSConnections = DSConnections)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Assignment in R server sessions
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # Loop through all participating sites / servers
+  # Loop through all participating servers
   for (i in 1:length(ServerNames))
   {
-      # In case SiteSpecifications are NULL, server Opal table names are just raw CCP table names
+      # In case ServerSpecifications are NULL, server Opal table names are just raw CCP table names
       ServerTableNames <- CCPTableNames_Raw
       ServerProjectName <- NULL
 
-      # If SiteSpecifications are assigned, there can be server-specific project names and therefore server-specific Opal table names
-      if (!is.null(SiteSpecifications))
+      # If ServerSpecifications are assigned, there can be server-specific project names and therefore server-specific Opal table names
+      if (!is.null(ServerSpecifications))
       {
           # Get server-specific project name
-          ServerProjectName <- SiteSpecifications %>%
-                                    filter(SiteName == ServerNames[i]) %>%
+          ServerProjectName <- ServerSpecifications %>%
+                                    filter(ServerName == ServerNames[i]) %>%
                                     select(ProjectName) %>%
                                     pull()
 
@@ -126,14 +126,14 @@ LoadRawDataSet <- function(SiteSpecifications = NULL,
   # Assign list 'RawDataSet' on all servers
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # Create list of vectors (one for each site) containing names of actually existing data.frames
+  # Create list of vectors (one for each server) containing names of actually existing data.frames
   ExistingRDSTables <- paste0("RDS_", CCPTableNames_Curated) %>%
                             map(function(tablename) { if (!is.na(tablename)) { unlist(ds.exists(x = tablename, datasources = DSConnections)) } else { return(NULL) } }) %>%
                             set_names(paste0("RDS_", CCPTableNames_Curated)) %>%
                             list_transpose() %>%
                             map(\(TableNames) names(TableNames[TableNames == TRUE]))
 
-  # For every site, consolidate all existing Raw Data Set tables in one list object called "RawDataSet"
+  # For every server, consolidate all existing Raw Data Set tables in one list object called "RawDataSet"
   ExistingRDSTables %>%
       purrr::iwalk(function(RDSTableNames, servername)
                    {

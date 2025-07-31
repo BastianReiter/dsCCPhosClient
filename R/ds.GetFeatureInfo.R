@@ -41,15 +41,15 @@ ds.GetFeatureInfo <- function(TableName,
   if (TableMetaData$FirstEligible$Class != "data.frame") { stop("Error: The referred table object does not seem to be a data.frame.", call. = FALSE)}
 
 
-  # SiteReturns: Obtain feature meta data for each server calling dsCCPhos::GetFeatureInfoDS()
-  ls_SiteReturns <- DSI::datashield.aggregate(conns = DSConnections,
+  # ServerReturns: Obtain feature meta data for each server calling dsCCPhos::GetFeatureInfoDS()
+  ls_ServerReturns <- DSI::datashield.aggregate(conns = DSConnections,
                                               expr = call("GetFeatureInfoDS",
                                                           TableName.S = TableName,
                                                           FeatureName.S = FeatureName))
 
-  # Convert site returns into tibble containing separate feature meta data
-  df_SeparateMetaData <- ls_SiteReturns %>%
-                              list_rbind(names_to = "Site")
+  # Convert Server returns into tibble containing separate feature meta data
+  df_SeparateMetaData <- ls_ServerReturns %>%
+                              list_rbind(names_to = "Server")
 
   # Obtaining return value for cumulated feature data type
   ReturnedFeatureDataTypes <- unique(df_SeparateMetaData$DataType[!is.na(df_SeparateMetaData$DataType)])
@@ -58,7 +58,7 @@ ds.GetFeatureInfo <- function(TableName,
   if (length(ReturnedFeatureDataTypes) > 1) { CumulatedDataType <- "Inconclusive"}
 
   # Obtain cumulated feature meta data
-  df_CumulatedMetaData <- tibble(Site = "All",
+  df_CumulatedMetaData <- tibble(Server = "All",
                                  DataType = CumulatedDataType,
                                  N_Total = sum(df_SeparateMetaData$N_Total),
                                  N_Valid = sum(df_SeparateMetaData$N_Valid),

@@ -4,7 +4,7 @@
 #' `r lifecycle::badge("stable")` \cr\cr
 #' Check if technical requirements are met on every participating server.
 #'
-#' @param SiteSpecifications \code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of site-specific project names (in case they are differing). - Default: \code{NULL} for virtual project
+#' @param ServerSpecifications \code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of server-specific project names (in case they are differing). - Default: \code{NULL} for virtual project
 #' @param RequiredPackages A \code{character vector} naming required packages
 #' @param RequiredFunctions A named \code{character vector} containing names of required functions. Their type ('aggregate' or 'assign') is defined by the correspondent element names.
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
@@ -14,7 +14,7 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-CheckServerRequirements <- function(SiteSpecifications = NULL,
+CheckServerRequirements <- function(ServerSpecifications = NULL,
                                     RequiredPackages = c("dsBase",
                                                          "dsCCPhos",
                                                          "dsTidyverse"),
@@ -99,11 +99,11 @@ CheckServerRequirements <- function(SiteSpecifications = NULL,
                                       select(-IsAvailableEverywhere,
                                              -NotAvailableAt) %>%
                                       pivot_longer(!PackageName,
-                                                   names_to = "SiteName",
+                                                   names_to = "ServerName",
                                                    values_to = "IsAvailable") %>%
                                       pivot_wider(names_from = PackageName,
                                                   values_from = IsAvailable) %>%
-                                      mutate(CheckPackageAvailability = case_when(if_all(-SiteName, ~ .x == TRUE) ~ "green",
+                                      mutate(CheckPackageAvailability = case_when(if_all(-ServerName, ~ .x == TRUE) ~ "green",
                                                                                   TRUE ~ "red"))
 
 
@@ -150,7 +150,7 @@ CheckServerRequirements <- function(SiteSpecifications = NULL,
   # Transform / Transpose data frame into more handy return object
   VersionOfdsCCPhos <- VersionOfdsCCPhos %>%
                             pivot_longer(everything(),
-                                         names_to = "SiteName",
+                                         names_to = "ServerName",
                                          values_to = "dsCCPhosVersion")
 
 
@@ -206,11 +206,11 @@ CheckServerRequirements <- function(SiteSpecifications = NULL,
                                              -IsAvailableEverywhere,
                                              -NotAvailableAt) %>%
                                       pivot_longer(!FunctionName,
-                                                   names_to = "SiteName",
+                                                   names_to = "ServerName",
                                                    values_to = "IsAvailable") %>%
                                       pivot_wider(names_from = FunctionName,
                                                   values_from = IsAvailable) %>%
-                                      mutate(CheckFunctionAvailability = case_when(if_all(-SiteName, ~ .x == TRUE) ~ "green",
+                                      mutate(CheckFunctionAvailability = case_when(if_all(-ServerName, ~ .x == TRUE) ~ "green",
                                                                                    TRUE ~ "red"))
 
 
@@ -219,7 +219,7 @@ CheckServerRequirements <- function(SiteSpecifications = NULL,
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # Get info on Opal table availability with dsCCPhosClient::GetServerOpalDBInfo()
-  RequiredOpalTableAvailability <- GetServerOpalInfo(SiteSpecifications,
+  RequiredOpalTableAvailability <- GetServerOpalInfo(ServerSpecifications,
                                                      DSConnections)
 
   # Compile output message concerning one table each and add it to Messages
@@ -248,11 +248,11 @@ CheckServerRequirements <- function(SiteSpecifications = NULL,
                                       select(-IsAvailableEverywhere,
                                              -NotAvailableAt) %>%
                                       pivot_longer(!TableName,
-                                                   names_to = "SiteName",
+                                                   names_to = "ServerName",
                                                    values_to = "IsAvailable") %>%
                                       pivot_wider(names_from = TableName,
                                                   values_from = IsAvailable) %>%
-                                      mutate(CheckOpalTableAvailability = case_when(if_all(-SiteName, ~ .x == TRUE) ~ "green",
+                                      mutate(CheckOpalTableAvailability = case_when(if_all(-ServerName, ~ .x == TRUE) ~ "green",
                                                                                     TRUE ~ "red"))
 
 

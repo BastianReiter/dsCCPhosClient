@@ -75,9 +75,9 @@ ds.CheckDataSet <- function(DataSetName,
 
   # Create data frame containing "traffic light" info about existence/completeness of RDS tables
   TableStatus <- TableCheck %>%
-                      map(function(SiteTableCheck)
+                      map(function(ServerTableCheck)
                           {
-                              SiteTableStatus <- SiteTableCheck %>%
+                              ServerTableStatus <- ServerTableCheck %>%
                                                     map_chr(function(TableInfo)
                                                             {
                                                                 Status <- "grey"
@@ -95,21 +95,21 @@ ds.CheckDataSet <- function(DataSetName,
                                                     rbind() %>%
                                                     as_tibble()
                           }) %>%
-                      list_rbind(names_to = "SiteName") %>%
-                      mutate(CheckRDSTables = case_when(if_all(-SiteName, ~ str_starts(.x, "green")) ~ "green",
-                                                        if_any(-SiteName, ~ str_starts(.x, "red")) ~ "red",
-                                                        if_any(-SiteName, ~ str_starts(.x, "yellow")) ~ "yellow",
+                      list_rbind(names_to = "ServerName") %>%
+                      mutate(CheckRDSTables = case_when(if_all(-ServerName, ~ str_starts(.x, "green")) ~ "green",
+                                                        if_any(-ServerName, ~ str_starts(.x, "red")) ~ "red",
+                                                        if_any(-ServerName, ~ str_starts(.x, "yellow")) ~ "yellow",
                                                         TRUE ~ "grey"))
 
 
-  # Create list of data frames (one per RDS table) containing table row counts at different sites
+  # Create list of data frames (one per RDS table) containing table row counts at different servers
   TableRowCounts <- TableCheck %>%
                         list_transpose() %>%
                         map(function(TableInfo)
                             {
                                 TableInfo %>%
-                                     map(\(SiteTableInfo) tibble(RowCount = SiteTableInfo$RowCount)) %>%
-                                     list_rbind(names_to = "SiteName")
+                                     map(\(ServerTableInfo) tibble(RowCount = ServerTableInfo$RowCount)) %>%
+                                     list_rbind(names_to = "ServerName")
                             })
 
 
@@ -119,8 +119,8 @@ ds.CheckDataSet <- function(DataSetName,
                           map(function(TableInfo)
                               {
                                   TableInfo %>%
-                                      map(\(SiteTableInfo) SiteTableInfo$FeatureCheck %>% select(Feature, Exists)) %>%
-                                      list_rbind(names_to = "SiteName") %>%
+                                      map(\(ServerTableInfo) ServerTableInfo$FeatureCheck %>% select(Feature, Exists)) %>%
+                                      list_rbind(names_to = "ServerName") %>%
                                       pivot_wider(names_from = Feature,
                                                   values_from = Exists)
                               })
@@ -132,8 +132,8 @@ ds.CheckDataSet <- function(DataSetName,
                       map(function(TableInfo)
                           {
                               TableInfo %>%
-                                  map(\(SiteTableInfo) SiteTableInfo$FeatureCheck %>% select(Feature, Type)) %>%
-                                  list_rbind(names_to = "SiteName") %>%
+                                  map(\(ServerTableInfo) ServerTableInfo$FeatureCheck %>% select(Feature, Type)) %>%
+                                  list_rbind(names_to = "ServerName") %>%
                                   pivot_wider(names_from = Feature,
                                               values_from = Type)
                           })
@@ -145,8 +145,8 @@ ds.CheckDataSet <- function(DataSetName,
                               map(function(TableInfo)
                                   {
                                       TableInfo %>%
-                                          map(\(SiteTableInfo) SiteTableInfo$FeatureCheck %>% select(Feature, NonMissingValueRate)) %>%
-                                          list_rbind(names_to = "SiteName") %>%
+                                          map(\(ServerTableInfo) ServerTableInfo$FeatureCheck %>% select(Feature, NonMissingValueRate)) %>%
+                                          list_rbind(names_to = "ServerName") %>%
                                           pivot_wider(names_from = Feature,
                                                       values_from = NonMissingValueRate)
                                   })

@@ -37,15 +37,12 @@ ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
 
   for(i in 1:length(CCPTableNames_ADS))
   {
-      # Construct the server-side function call
-      ServerCall <- call("ExtractFromListDS",
-                         ListName.S = AugmentedDataSetName,
-                         ObjectName.S = CCPTableNames_ADS[i])
-
       # Execute server-side assign function
       DSI::datashield.assign(conns = DSConnections,
                              symbol = paste0("ADS_", CCPTableNames_ADS[i]),      # E.g. 'ADS_Events'
-                             value = ServerCall)
+                             value = call("ExtractFromListDS",
+                                          ListName.S = AugmentedDataSetName,
+                                          ObjectName.S = CCPTableNames_ADS[i]))
 
       # Call helper function to check if object assignment succeeded
       Messages$Assignment <- c(Messages$Assignment,

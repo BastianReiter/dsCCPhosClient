@@ -4,10 +4,10 @@
 \alias{GetServerOpalInfo}
 \title{GetServerOpalInfo}
 \usage{
-GetServerOpalInfo(SiteSpecifications = NULL, DSConnections = NULL)
+GetServerOpalInfo(ServerSpecifications = NULL, DSConnections = NULL)
 }
 \arguments{
-\item{SiteSpecifications}{\code{data.frame} - Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). - Default: NULL for virtual project}
+\item{ServerSpecifications}{\code{data.frame} - Same data frame used for login. Used here only for akquisition of server-specific project names (in case they are differing). - Default: NULL for virtual project}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }

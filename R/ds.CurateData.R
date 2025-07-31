@@ -61,6 +61,7 @@
 #' @export
 #'
 #' @author Bastian Reiter
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.CurateData <- function(RawDataSetName = "RawDataSet",
                           Settings = list(DataHarmonization = list(Profile = "Default"),
                                           FeatureObligations = list(Profile = "Default"),
@@ -153,23 +154,23 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
 
   # Create table object for output
   CurationCompletionCheck <- CurationMessages %>%
-                                map(\(SiteMessages) tibble(CheckCurationCompletion = SiteMessages$CheckCurationCompletion) ) %>%
-                                list_rbind(names_to = "SiteName")
+                                map(\(ServerMessages) tibble(CheckCurationCompletion = ServerMessages$CheckCurationCompletion) ) %>%
+                                list_rbind(names_to = "ServerName")
 
   # Create vector of messages informing about curation completion
   Messages$CurationCompletion <- CurationMessages %>%
-                                    imap(function(SiteMessages, sitename)
+                                    imap(function(ServerMessages, servername)
                                          {
-                                            case_when(SiteMessages$CheckCurationCompletion == "green" ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' performed successfully!"),
+                                            case_when(ServerMessages$CheckCurationCompletion == "green" ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' performed successfully!"),
                                                                                                                             IsClassSuccess = TRUE),
-                                                      SiteMessages$CheckCurationCompletion == "yellow" ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' performed with warnings! \n",
-                                                                                                                                           SiteMessages$FinalMessage),
+                                                      ServerMessages$CheckCurationCompletion == "yellow" ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' performed with warnings! \n",
+                                                                                                                                           ServerMessages$FinalMessage),
                                                                                                                              IsClassWarning = TRUE),
-                                                      SiteMessages$CheckCurationCompletion == "red" ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' could not be performed! \n",
-                                                                                                                                        SiteMessages$FinalMessage),
+                                                      ServerMessages$CheckCurationCompletion == "red" ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' could not be performed! \n",
+                                                                                                                                        ServerMessages$FinalMessage),
                                                                                                                           IsClassFailure = TRUE),
-                                                      TRUE ~ MakeFunctionMessage(Text = paste0("Curation on server '", sitename, "' could not be assessed. \n",
-                                                                                               SiteMessages$FinalMessage),
+                                                      TRUE ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' could not be assessed. \n",
+                                                                                               ServerMessages$FinalMessage),
                                                                                  IsClassFailure = TRUE))
                                          }) %>%
                                     list_c()

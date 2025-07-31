@@ -1,15 +1,15 @@
 
 #' ConnectToCCP
 #'
-#' Takes credentials of CCP sites and returns a list of DSConnection-objects. Has to be executed from within a CCP bridgehead R server session.
+#' Takes credentials of CCP servers and returns a list of DSConnection-objects. Has to be executed from within a CCP bridgehead R server session.
 #'
-#' @param CCPSiteSpecifications \code{data.frame} - Login data of CCP sites
+#' @param ServerSpecifications \code{data.frame} - Login data of CCP sites
 #'
 #' @return A list of \code{DSConnection}-objects
 #' @export
 #'
 #' @author Bastian Reiter
-ConnectToCCP <- function(CCPSiteSpecifications,
+ConnectToCCP <- function(ServerSpecifications,
                          proxyurl = "http://localhost")
 {
     require(DSI)
@@ -24,11 +24,11 @@ ConnectToCCP <- function(CCPSiteSpecifications,
     LoginBuilder <- DSI::newDSLoginBuilder(.silent = FALSE)
 
     # Append credentials of participating Sites
-    for (i in 1:nrow(CCPSiteSpecifications))
+    for (i in 1:nrow(ServerSpecifications))
     {
-        LoginBuilder$append(server = CCPSiteSpecifications$SiteName[i],
-                            url = CCPSiteSpecifications$URL[i],
-                            token = CCPSiteSpecifications$Token[i])
+        LoginBuilder$append(server = ServerSpecifications$SiteName[i],
+                            url = ServerSpecifications$URL[i],
+                            token = ServerSpecifications$Token[i])
     }
 
     # Returns a data frame of login data to CCP Sites

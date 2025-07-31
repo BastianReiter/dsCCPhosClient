@@ -4,7 +4,7 @@
 #' `r lifecycle::badge("stable")` \cr\cr
 #' Check if tables are available in server Opal data bases.
 #'
-#' @param SiteSpecifications \code{data.frame} - Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). - Default: NULL for virtual project
+#' @param ServerSpecifications \code{data.frame} - Same data frame used for login. Used here only for akquisition of server-specific project names (in case they are differing). - Default: NULL for virtual project
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{tibble}
@@ -12,7 +12,7 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-GetServerOpalInfo <- function(SiteSpecifications = NULL,
+GetServerOpalInfo <- function(ServerSpecifications = NULL,
                               DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
@@ -20,7 +20,7 @@ GetServerOpalInfo <- function(SiteSpecifications = NULL,
   require(DSI)
 
   # --- For testing purposes ---
-  # SiteSpecifications = NULL
+  # ServerSpecifications = NULL
   # DSConnections = CCPConnections
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
@@ -43,16 +43,16 @@ GetServerOpalInfo <- function(SiteSpecifications = NULL,
 
   for (i in 1:length(ServerNames))
   {
-      # When connecting to virtual servers 'SiteSpecifications' can be NULL or project name can be 'Virtual' (e.g. in CCPhosApp)
-      if (is.null(SiteSpecifications))
+      # When connecting to virtual servers 'ServerSpecifications' can be NULL or project name can be 'Virtual' (e.g. in CCPhosApp)
+      if (is.null(ServerSpecifications))
       {
           ServerProjectName <- "Virtual"
       }
       else
       {
           # Get server-specific project name
-          ServerProjectName <- SiteSpecifications %>%
-                                    filter(SiteName == ServerNames[i]) %>%
+          ServerProjectName <- ServerSpecifications %>%
+                                    filter(ServerName == ServerNames[i]) %>%
                                     select(ProjectName) %>%
                                     pull()
       }
@@ -66,7 +66,7 @@ GetServerOpalInfo <- function(SiteSpecifications = NULL,
           ServerTableNames <- paste0(ServerProjectName, ".", CCPTableNames_Raw)
       }
 
-      # For every server, check if CCP raw data tables with site-specific correspondent names are existent in 'TableAvailability'
+      # For every server, check if CCP raw data tables with server-specific correspondent names are existent in 'TableAvailability'
       RequiredTableAvailability <- RequiredTableAvailability %>%
                                         mutate(!!ServerNames[i] := ServerTableNames %in% TableAvailability[[ServerNames[i]]])
   }

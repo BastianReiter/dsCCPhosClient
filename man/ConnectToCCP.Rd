@@ -4,16 +4,16 @@
 \alias{ConnectToCCP}
 \title{ConnectToCCP}
 \usage{
-ConnectToCCP(CCPSiteSpecifications, proxyurl = "http://localhost")
+ConnectToCCP(ServerSpecifications, proxyurl = "http://localhost")
 }
 \arguments{
-\item{CCPSiteSpecifications}{\code{data.frame} - Login data of CCP sites}
+\item{ServerSpecifications}{\code{data.frame} - Login data of CCP sites}
 }
 \value{
 A list of \code{DSConnection}-objects
 }
 \description{
-Takes credentials of CCP sites and returns a list of DSConnection-objects. Has to be executed from within a CCP bridgehead R server session.
+Takes credentials of CCP servers and returns a list of DSConnection-objects. Has to be executed from within a CCP bridgehead R server session.
 }
 \author{
 Bastian Reiter

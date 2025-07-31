@@ -102,20 +102,20 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
 
   # Create table object for output
   AugmentationCompletionCheck <- AugmentationMessages %>%
-                                      map(\(SiteMessages) tibble(CheckAugmentationCompletion = SiteMessages$CheckAugmentationCompletion) ) %>%
-                                      list_rbind(names_to = "SiteName")
+                                      map(\(ServerMessages) tibble(CheckAugmentationCompletion = ServerMessages$CheckAugmentationCompletion) ) %>%
+                                      list_rbind(names_to = "ServerName")
 
   # Create vector of messages informing about Augmentation completion
   Messages$AugmentationCompletion <- AugmentationMessages %>%
-                                          imap(function(SiteMessages, sitename)
+                                          imap(function(ServerMessages, servername)
                                                {
-                                                  case_when(SiteMessages$CheckAugmentationCompletion == "green" ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", sitename, "' performed successfully!"),
+                                                  case_when(ServerMessages$CheckAugmentationCompletion == "green" ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' performed successfully!"),
                                                                                                                                  IsClassSuccess = TRUE),
-                                                            SiteMessages$CheckAugmentationCompletion == "yellow" ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", sitename, "' performed with warnings!"),
+                                                            ServerMessages$CheckAugmentationCompletion == "yellow" ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' performed with warnings!"),
                                                                                                                                   IsClassWarning = TRUE),
-                                                            SiteMessages$CheckAugmentationCompletion == "red" ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", sitename, "' could not be performed!"),
+                                                            ServerMessages$CheckAugmentationCompletion == "red" ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' could not be performed!"),
                                                                                                                                IsClassFailure = TRUE),
-                                                            TRUE ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", sitename, "' could not be assessed."),
+                                                            TRUE ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' could not be assessed."),
                                                                                        IsClassFailure = TRUE))
                                                }) %>%
                                           list_c()

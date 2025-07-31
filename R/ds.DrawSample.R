@@ -7,7 +7,7 @@
 #' Linked to server-side ASSIGN method \code{DrawSampleDS()}
 #'
 #' @param RawDataSetName \code{string} - Name of a \code{list} object on server
-#' @param SampleSize \code{string} - Number of patients per site
+#' @param SampleSize \code{string} - Number of patients per Server
 #' @param SampleName \code{string} - Option to assign subset of 'RawDataSet' a different object name on servers
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
