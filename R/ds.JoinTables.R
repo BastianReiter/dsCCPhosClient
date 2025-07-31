@@ -3,7 +3,7 @@
 #'
 #' Join tables on server, making use of \code{dplyr} mutating join operations.
 #'
-#' Linked to server-side ASSIGN method JoinTablesDS()
+#' Linked to server-side \code{ASSIGN} function \code{JoinTablesDS()}
 #'
 #' @param TableNameA \code{string} - Name of Table A on server
 #' @param TableNameB \code{string} - Name of Table B on server
@@ -14,8 +14,9 @@
 #'                              \item 'full_join'
 #'                              \item 'inner_join'}
 #' @param OutputName \code{string} - Name of resulting table on server
+#' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
-#' @return A list of messages about object assignment for monitoring purposes
+#' @return A \code{list} of messages about object assignment for monitoring purposes
 #' @export
 #'
 #' @author Bastian Reiter
@@ -25,44 +26,37 @@ ds.JoinTables <- function(TableNameA,
                           ByStatement,
                           JoinType = "left_join",
                           OutputName,
-                          DataSources = NULL)
+                          DSConnections = NULL)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
-    ### For testing purposes
-    # TableNameA <- "ADS_Patient"
-    # TableNameB <- "ADS_Diagnosis"
-    # ByStatement <- "PatientID"
-    # JoinType <- "left_join"
-    # OutputName <- "PatientAnalysis"
-    # DataSources <- CCPConnections
+  # --- For Testing Purposes ---
+  # TableNameA <- "ADS_Patient"
+  # TableNameB <- "ADS_Diagnosis"
+  # ByStatement <- "PatientID"
+  # JoinType <- "left_join"
+  # OutputName <- "PatientAnalysis"
+  # DSConnections <- CCPConnections
 
-    # Look for DS connections
-    if (is.null(DataSources))
-    {
-        DataSources <- DSI::datashield.connections_find()
-    }
+  # Check validity of 'DSConnections' or find them programmatically if none are passed
+  DSConnections <- CheckDSConnections(DSConnections)
 
-    # Ensure DataSources is a list of DSConnection-class
-    if (!(is.list(DataSources) && all(unlist(lapply(DataSources, function(d) {methods::is(d,"DSConnection")})))))
-    {
-        stop("'DataSources' were expected to be a list of DSConnection-class objects", call. = FALSE)
-    }
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  # Construct the server-side function call
+  ServerCall <- call("JoinTablesDS",
+                     TableNameA.S = TableNameA,
+                     TableNameB.S = TableNameB,
+                     ByStatement.S = ByStatement,
+                     JoinType.S = JoinType)
 
-    # Construct the server-side function call
-    ServerCall <- call("JoinTablesDS",
-                       TableNameA.S = TableNameA,
-                       TableNameB.S = TableNameB,
-                       ByStatement.S = ByStatement,
-                       JoinType.S = JoinType)
+  # Execute server-side assign function
+  DSI::datashield.assign(conns = DSConnections,
+                         symbol = OutputName,
+                         value = ServerCall)
 
-    # Execute server-side assign function
-    DSI::datashield.assign(conns = DataSources,
-                           symbol = OutputName,
-                           value = ServerCall)
+  # Call helper function to check if object assignment succeeded
+  AssignmentInfo <- ds.GetObjectStatus(OutputName,
+                                       DSConnections = DSConnections)
 
-    # Call helper function to check if object assignment succeeded
-    AssignmentInfo <- ds.GetObjectStatus(OutputName,
-                                         DataSources = DataSources)
-
-    return(AssignmentInfo)
+  return(AssignmentInfo)
 }

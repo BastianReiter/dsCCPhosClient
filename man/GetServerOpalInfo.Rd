@@ -4,18 +4,19 @@
 \alias{GetServerOpalInfo}
 \title{GetServerOpalInfo}
 \usage{
-GetServerOpalInfo(CCPSiteSpecifications = NULL, DataSources = NULL)
+GetServerOpalInfo(SiteSpecifications = NULL, DSConnections = NULL)
 }
 \arguments{
-\item{CCPSiteSpecifications}{\code{data.frame} | Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). | Default: NULL for virtual project}
+\item{SiteSpecifications}{\code{data.frame} - Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). - Default: NULL for virtual project}
 
-\item{DataSources}{List of DSConnection objects}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A tibble
+A \code{tibble}
 }
 \description{
-Check if tables are available in server Opal data bases
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
+Check if tables are available in server Opal data bases.
 }
 \author{
 Bastian Reiter

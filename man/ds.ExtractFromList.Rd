@@ -8,22 +8,23 @@ ds.ExtractFromList(
   ListName,
   ObjectName,
   AssignedObjectName = NULL,
-  DataSources = NULL
+  DSConnections = NULL
 )
 }
 \arguments{
-\item{ListName}{String | Name of a list object on server}
+\item{ListName}{\code{string} - Name of a \code{list} object on server}
 
-\item{ObjectName}{String | Name of object inside list}
+\item{ObjectName}{\code{string} - Name of object inside \code{list}}
 
-\item{DataSources}{List of DSConnection objects}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 
-\item{NewObjectName}{String | Optionally assigned name of object after extraction to server session | Default: NULL}
+\item{NewObjectName}{\code{string} - Optionally assigned name of object after extraction to server session - Default: \code{NULL}}
 }
 \value{
-A list of messages about object assignment for monitoring purposes
+A \code{list} of messages about object assignment for monitoring purposes
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
 Auxiliary function to trigger assignment of object extracted from a list on server
 }
 \details{

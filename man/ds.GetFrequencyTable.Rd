@@ -5,23 +5,23 @@
 \title{ds.GetFrequencyTable}
 \usage{
 ds.GetFrequencyTable(
-  DataSources = NULL,
   TableName,
   FeatureName,
   GroupingFeatureName = NULL,
-  MaxNumberCategories = 10
+  MaxNumberCategories = 10,
+  DSConnections = NULL
 )
 }
 \arguments{
-\item{DataSources}{List of DSConnection objects}
+\item{TableName}{\code{string} - Name of the table containing the feature of concern}
 
-\item{TableName}{String | Name of the table containing the feature of concern}
+\item{FeatureName}{\code{string} - Name of feature}
 
-\item{FeatureName}{String | Name of feature}
+\item{GroupingFeatureName}{\code{string} - Name of optional grouping feature from the same table}
 
-\item{GroupingFeatureName}{String | Name of optional grouping feature from the same table}
+\item{MaxNumberCategories}{\code{integer} - Maximum number of categories analyzed individually before frequencies are cumulated in 'Other' category. - Default: 10}
 
-\item{MaxNumberCategories}{\code{integer} | Maximum number of categories analyzed individually before frequencies are cumulated in 'Other' category. | Default: 10}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
 A \code{list} containing:
@@ -29,10 +29,11 @@ A \code{list} containing:
 \item RelativeFrequencies (\code{tibble}: Relative value frequencies)}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
 Get table of absolute and relative value frequencies for a nominal / ordinal feature.
 }
 \details{
-Linked to server-side \code{AGGREGATE} function \code{dsCCPhos::GetFrequencyTableDS()}.
+Linked to server-side \code{AGGREGATE} function \code{GetFrequencyTableDS()}.
 }
 \author{
 Bastian Reiter

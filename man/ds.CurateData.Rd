@@ -9,7 +9,7 @@ ds.CurateData(
   Settings = list(DataHarmonization = list(Profile = "Default"), FeatureObligations =
     list(Profile = "Default"), FeatureTracking = list(Profile = "Default")),
   OutputName = "CurationOutput",
-  DataSources = NULL
+  DSConnections = NULL
 )
 }
 \arguments{
@@ -31,7 +31,7 @@ ds.CurateData(
 
 \item{OutputName}{\code{character} - Name of output object to be assigned on server - Default: 'CurationOutput'}
 
-\item{DataSources}{\code{list} of DSConnection objects}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
 \code{list} of following objects:
@@ -71,10 +71,10 @@ ds.CurateData(
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
-Triggers transformation of Raw Data Set (RDS) into Curated Data Set (CDS) on server.
+Triggers transformation of Raw Data Set (RDS) into Curated Data Set (CDS) on servers.
 }
 \details{
-Linked to server-side ASSIGN methods dsCCPhos::CurateDataDS() and dsCCPhos::ExtractFromListDS()
+Linked to server-side ASSIGN methods \code{CurateDataDS()} and \code{ExtractFromListDS()}
 }
 \author{
 Bastian Reiter

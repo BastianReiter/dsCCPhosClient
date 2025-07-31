@@ -66,7 +66,7 @@ CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
 # Check server requirements using dsCCPhosClient::CheckServerRequirements()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Requirements <- CheckServerRequirements(DataSources = CCPConnections)
+Requirements <- CheckServerRequirements()
 
 
 # datashield.pkg_status(conns = CCPConnections)
@@ -78,8 +78,7 @@ Requirements <- CheckServerRequirements(DataSources = CCPConnections)
 # Load Raw Data Set (RDS) from Opal data base to R sessions on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Messages <- LoadRawDataSet(CCPSiteSpecifications = NULL,
-                           DataSources = CCPConnections)
+Messages <- LoadRawDataSet(SiteSpecifications = NULL)
 
 
 
@@ -115,8 +114,7 @@ datashield.assign.expr(conns = CCPConnections,
 # Check RDS tables for existence and completeness
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-RDSTableCheck <- ds.CheckDataSet(DataSources = CCPConnections,
-                                 DataSetName = "RawDataSet",
+RDSTableCheck <- ds.CheckDataSet(DataSetName = "RawDataSet",
                                  AssumeCCPDataSet = TRUE)
 
 View(RDSTableCheck$TableStatus)
@@ -134,7 +132,7 @@ RDSTableCheck$TableStatus
 # Validate RDS data
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-RDSValidationReports <- ds.GetRDSValidationReport(DataSources = CCPConnections)
+RDSValidationReports <- ds.GetRDSValidationReport()
 
 # ValidationSummaries <- RDSValidationReports %>%
 #                             map(function(Site)
@@ -162,19 +160,16 @@ ds.DrawSample(RawDataSetName = "RawDataSet",
 
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS) (using default settings)
 Curation <- ds.CurateData(RawDataSetName = "RawDataSet",
-                          OutputName = "CurationOutput",
-                          DataSources = CCPConnections)
+                          OutputName = "CurationOutput")
 
-CDSTableCheck <- ds.CheckDataSet(DataSources = CCPConnections,
-                                 DataSetName = "CuratedDataSet",
+CDSTableCheck <- ds.CheckDataSet(DataSetName = "CuratedDataSet",
                                  AssumeCCPDataSet = TRUE)
 
 # Make tables from Curated Data Set directly addressable by unpacking them into R server session
-Messages <- ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet",
-                                    DataSources = CCPConnections)
+Messages <- ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet")
 
 # Get curation reports
-CurationReport <- ds.GetCurationReport(DataSources = CCPConnections)
+CurationReport <- ds.GetCurationReport()
 
 View(CurationReport$EntryCounts$BioSampling)
 
@@ -235,15 +230,12 @@ plot_ly(data = filter(PlotData, Feature == "UICCStage")$data[[1]],
 
 # Run ds.AugmentData
 Messages <- ds.AugmentData(CuratedDataSetName = "CuratedDataSet",
-                           OutputName = "AugmentationOutput",
-                           DataSources = CCPConnections)
+                           OutputName = "AugmentationOutput")
 
 # Make tables from Augmented Data Set directly addressable by unpacking them into R server session
-Messages <- ds.UnpackAugmentedDataSet(AugmentedDataSetName = "AugmentedDataSet",
-                                      DataSources = CCPConnections)
+Messages <- ds.UnpackAugmentedDataSet(AugmentedDataSetName = "AugmentedDataSet")
 
-ADSTableCheck <- ds.CheckDataSet(DataSources = CCPConnections,
-                                 DataSetName = "AugmentedDataSet")
+ADSTableCheck <- ds.CheckDataSet(DataSetName = "AugmentedDataSet")
 
 
 
@@ -254,14 +246,13 @@ ADSTableCheck <- ds.CheckDataSet(DataSources = CCPConnections,
 #-------------------------------------------------------------------------------
 
 # Collect comprehensive information about all workspace objects
-ServerWorkspaceInfo <- GetServerWorkspaceInfo(DataSources = CCPConnections)
+ServerWorkspaceInfo <- GetServerWorkspaceInfo()
 
 # Overview of all objects in server R sessions
 View(ServerWorkspaceInfo$Overview)
 
 # Detailed meta data of a particular object (also part of ServerWorkspaceInfo)
-ObjectMetaData <- ds.GetObjectMetaData(ObjectName = "ADS_Patient",
-                                       DataSources = CCPConnections)
+ObjectMetaData <- ds.GetObjectMetaData(ObjectName = "ADS_Patient")
 
 # Explore Object meta data: Structural overview
 View(ObjectMetaData$SiteA$Structure)
@@ -279,21 +270,18 @@ ds.table("ADS_Patient$Gender")
 # dsTidyverse
 ds.filter(df.name = "ADS_Patient",
           tidy_expr = list(CountDiagnoses == 1),
-          newobj = "ADS_Patient_OneDiagnosis",
-          datasources = CCPConnections)
+          newobj = "ADS_Patient_OneDiagnosis")
 
 
 ds.filter(df.name = "ADS_Patient",
           tidy_expr = list(Gender == "Female"),
-          newobj = "ADS_Patient_OneDiagnosis",
-          datasources = CCPConnections)
+          newobj = "ADS_Patient_OneDiagnosis")
 
 
 Messages <- ds.JoinTables(TableNameA = "ADS_Patient_OneDiagnosis",
                           TableNameB = "ADS_Diagnosis",
                           ByStatement = "PatientID",
-                          OutputName = "AnalysisDataSet",
-                          DataSources = CCPConnections)
+                          OutputName = "AnalysisDataSet")
 
 
 
@@ -302,8 +290,7 @@ Messages <- ds.JoinTables(TableNameA = "ADS_Patient_OneDiagnosis",
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 CohortDescription <- ds.GetCohortDescription(DataSetName = "AugmentedDataSet",
-                                             CCPDataSetType = "ADS",
-                                             DataSources = CCPConnections)
+                                             CCPDataSetType = "ADS")
 
 
 # Transform data into display-friendly time series tables using auxiliary function 'DisplayTimeSeries()'
@@ -353,8 +340,7 @@ Test <- dsBaseClient::ds.glm()
 
 
 
-Test <- ds.GetTTEModel(DataSources = CCPConnections,
-                       TableName = "AnalysisDataSet",
+Test <- ds.GetTTEModel(TableName = "AnalysisDataSet",
                        TimeFeature = "TimeFollowUp",
                        EventFeature = "IsDocumentedDeceased",
                        ModelType = "survfit",
@@ -369,16 +355,13 @@ Test$SiteC %>%
     ggsurvfit()
 
 
-Test <- ds.GetFeatureInfo(DataSources = CCPConnections,
-                          TableName = "AnalysisDataSet",
+Test <- ds.GetFeatureInfo(TableName = "AnalysisDataSet",
                           FeatureName = "TNM_T")
 
-Test <- ds.GetSampleStatistics(DataSources = CCPConnections,
-                               TableName = "AnalysisDataSet",
+Test <- ds.GetSampleStatistics(TableName = "AnalysisDataSet",
                                MetricFeatureName = "PatientAgeAtDiagnosis")
 
-Test <- ds.GetFrequencyTable(DataSources = CCPConnections,
-                             TableName = "AnalysisDataSet",
+Test <- ds.GetFrequencyTable(TableName = "AnalysisDataSet",
                              FeatureName = "TNM_T",
                              MaxNumberCategories = 20)
 
@@ -414,30 +397,26 @@ Plot <- MakeColumnPlot(DataFrame = PlotData,
 
 
 
-Test <- ExploreFeature(DataSources = CCPConnections,
-                       TableName = "AnalysisDataSet",
+Test <- ExploreFeature(TableName = "AnalysisDataSet",
                        FeatureName = "TimeDiagnosisToDeath")
 
 
 
 
-ds.GetObjectMetaData(ObjectName = "AugmentationOutput",
-                     DataSources = CCPConnections)
+ds.GetObjectMetaData(ObjectName = "AugmentationOutput")
 
 
 ds.mean(x = "ADS_Patients$PatientAgeAtDiagnosis",
         datasources = CCPConnections)
 
 
-MetaData_ADS_Patients <- ds.GetObjectMetaData(ObjectName = "ADS_Patients",
-                                              DataSources = CCPConnections)
+MetaData_ADS_Patients <- ds.GetObjectMetaData(ObjectName = "ADS_Patients")
 
 View(MetaData_ADS_Patients$SiteA$ContentOverview)
 
 
 SampleStatistics <- ds.GetSampleStatistics(TableName = "ADS_Patients",
-                                           MetricFeatureName = "PatientAgeAtDiagnosis",
-                                           DataSources = CCPConnections)
+                                           MetricFeatureName = "PatientAgeAtDiagnosis")
 
 
 TestPlot <- MakeBoxPlot(SampleStatistics = SampleStatistics,

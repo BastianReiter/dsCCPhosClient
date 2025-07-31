@@ -4,21 +4,22 @@
 \alias{ds.GetObjectStatus}
 \title{ds.GetObjectStatus}
 \usage{
-ds.GetObjectStatus(ObjectName, DataSources)
+ds.GetObjectStatus(ObjectName, DSConnections = NULL)
 }
 \arguments{
-\item{ObjectName}{String | Name of object on server}
+\item{ObjectName}{\code{string} - Name of object on server}
 
-\item{DataSources}{List of DSConnection objects}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-\code{list}
+\code{list} of messages
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
 Checks if an object exists on every server in a valid form and returns appropriate messages.
 }
 \details{
-Linked to server-side AGGREGATE method GetObjectStatusDS()
+Linked to server-side \code{AGGREGATE} method \code{GetObjectStatusDS()}
 }
 \author{
 Bastian Reiter

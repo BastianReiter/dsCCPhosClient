@@ -4,14 +4,14 @@
 \alias{ExploreFeature}
 \title{ExploreFeature}
 \usage{
-ExploreFeature(DataSources = NULL, TableName, FeatureName, ...)
+ExploreFeature(TableName, FeatureName, DSConnections = NULL, ...)
 }
 \arguments{
-\item{DataSources}{\code{list} of \code{DSConnection} objects}
-
 \item{TableName}{\code{string} - Name of the table containing the feature of concern}
 
 \item{FeatureName}{\code{string} - Name of feature}
+
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \description{
 Get characterizing statistics about a feature of arbitrary data type.

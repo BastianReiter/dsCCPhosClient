@@ -4,21 +4,22 @@
 \alias{ds.GetReportingObject}
 \title{ds.GetReportingObject}
 \usage{
-ds.GetReportingObject(ObjectName, DataSources = NULL)
+ds.GetReportingObject(ObjectName, DSConnections = NULL)
 }
 \arguments{
-\item{ObjectName}{String | Name of reporting object on server. Must be on a list of permitted object names.}
+\item{ObjectName}{\code{string} - Name of reporting object on server. Must be on a list of permitted object names.}
 
-\item{DataSources}{List of DSConnection objects}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A list of reporting objects
+A \code{list} of reporting objects
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
 Receives a reporting object from servers. Its name must be on a list of permitted object names to ensure data privacy.
 }
 \details{
-Linked to server-side AGGREGATE method GetReportingObjectDS()
+Linked to server-side \code{AGGREGATE} function \code{GetReportingObjectDS()}
 }
 \author{
 Bastian Reiter

@@ -9,7 +9,8 @@ ConnectToVirtualCCP(
   NumberOfSites = 1,
   NumberOfPatientsPerSite = NULL,
   AddedDsPackages = NULL,
-  Resources = NULL
+  Resources = NULL,
+  WorkingDirectory = file.path(tempdir(), ".dslite")
 )
 }
 \arguments{
@@ -22,9 +23,11 @@ ConnectToVirtualCCP(
 \item{AddedDsPackages}{\code{character vector} - Server-side DataSHIELD packages to be added to default (dsBase, dsCCPhos) - Default: NULL}
 
 \item{Resources}{\code{Named list} of \code{resourcer::Resource} objects - Default: NULL}
+
+\item{WorkingDirectory}{\code{string} - Optional custom working directory for virtual servers - Default: Hidden folder in R session's temporary directory (see \code{?DSLite::newDSLiteServer()})}
 }
 \value{
-A list of \code{DSConnection}-objects
+A \code{list} of \code{DSConnection}-objects
 }
 \description{
 Sets up a virtual DataSHIELD infrastructure that enables trying out real dsCCPhos functionality on test data.

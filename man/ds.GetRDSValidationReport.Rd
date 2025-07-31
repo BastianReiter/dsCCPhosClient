@@ -4,21 +4,21 @@
 \alias{ds.GetRDSValidationReport}
 \title{ds.GetRDSValidationReport}
 \usage{
-ds.GetRDSValidationReport(DataSources = NULL, RawDataSetName = "RawDataSet")
+ds.GetRDSValidationReport(RawDataSetName = "RawDataSet", DSConnections = NULL)
 }
 \arguments{
-\item{DataSources}{List of DSConnection objects}
+\item{RawDataSetName}{\code{string} - Name of 'RawDataSet' object on server - Default: 'RawDataSet'}
 
-\item{RawDataSetName}{String | Name of Raw Data Set object (list) on server | Default: 'RawDataSet'}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A list of tibbles containing output of validation
+A \code{list} of \code{tibbles} containing output of validation
 }
 \description{
 Triggers validation of Raw Data Set on server and requests a report.
 }
 \details{
-Linked to server-side AGGREGATE method GetRDSValidationReportDS()
+Linked to server-side \code{AGGREGATE} method \code{GetRDSValidationReportDS()}
 }
 \author{
 Bastian Reiter

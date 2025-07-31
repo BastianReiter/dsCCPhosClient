@@ -4,19 +4,20 @@
 \alias{ds.GetCurationReport}
 \title{ds.GetCurationReport}
 \usage{
-ds.GetCurationReport(DataSources = NULL)
+ds.GetCurationReport(DSConnections = NULL)
 }
 \arguments{
-\item{DataSources}{List of DSConnection objects}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A list of Curation Reports
+A \code{list} of Curation Reports
 }
 \description{
-Receive Curation Reports from sites and create cumulated reporting objects.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
+Receive Curation Reports from servers and create cumulated reporting objects.
 }
 \details{
-Linked to server-side AGGREGATE method GetReportingObjectDS()
+Linked to server-side \code{AGGREGATE} method \code{GetReportingObjectDS()}
 }
 \author{
 Bastian Reiter

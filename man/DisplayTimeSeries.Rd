@@ -9,7 +9,7 @@ DisplayTimeSeries(
   TimePointFeature,
   ValueFeature,
   GroupingFeature = NULL,
-  IncludeMissingYears = FALSE
+  IncludeMissingTimePoints = FALSE
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ DisplayTimeSeries(
 
 \item{GroupingFeature}{\code{symbol} or \code{string} - Optional feature in 'TimeSeriesData' that contains grouping variable}
 
-\item{IncludeMissingYears}{\code{logical} - Indicates whether years with no data should be displayed in the time series - Default: \code{FALSE}}
+\item{IncludeMissingTimePoints}{\code{logical} - Indicates whether discrete time points (e.g. years) with no data should be displayed in the time series - Default: \code{FALSE}}
 }
 \value{
 A \code{data.frame} displaying time series data in horizontal form

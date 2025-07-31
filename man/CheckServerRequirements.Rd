@@ -5,27 +5,28 @@
 \title{CheckServerRequirements}
 \usage{
 CheckServerRequirements(
-  CCPSiteSpecifications = NULL,
+  SiteSpecifications = NULL,
   RequiredPackages = c("dsBase", "dsCCPhos", "dsTidyverse"),
   RequiredFunctions = c(aggregate = "GetReportingObjectDS", assign = "AugmentDataDS",
     assign = "CurateDataDS", assign = "ExtractFromListDS", assign = "DrawSampleDS"),
-  DataSources = NULL
+  DSConnections = NULL
 )
 }
 \arguments{
-\item{CCPSiteSpecifications}{\code{data.frame} | Same data frame used for login. Used here only for akquisition of site-specific project names (in case they are differing). | Default: NULL for virtual project}
+\item{SiteSpecifications}{\code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of site-specific project names (in case they are differing). - Default: \code{NULL} for virtual project}
 
-\item{RequiredPackages}{A character vector naming required packages}
+\item{RequiredPackages}{A \code{character vector} naming required packages}
 
-\item{RequiredFunctions}{A named character vector containing names of required functions. Their type ('aggregate' or 'assign') is defined by the correspondent element names.}
+\item{RequiredFunctions}{A named \code{character vector} containing names of required functions. Their type ('aggregate' or 'assign') is defined by the correspondent element names.}
 
-\item{DataSources}{List of DSConnection objects}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A list of data frames containing gathered info and messages
+A \code{list} of \code{data.frames} containing gathered info and messages
 }
 \description{
-Check if technical requirements are met on every participating CCP server.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
+Check if technical requirements are met on every participating server.
 }
 \author{
 Bastian Reiter
