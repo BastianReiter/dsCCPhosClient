@@ -26,7 +26,7 @@ ConnectToCCP <- function(ServerSpecifications,
     # Append credentials of participating Sites
     for (i in 1:nrow(ServerSpecifications))
     {
-        LoginBuilder$append(server = ServerSpecifications$SiteName[i],
+        LoginBuilder$append(server = ServerSpecifications$ServerName[i],
                             url = ServerSpecifications$URL[i],
                             token = ServerSpecifications$Token[i])
     }
