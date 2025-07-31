@@ -38,7 +38,7 @@ MakeBoxPlot <- function(SampleStatistics,
 
     #--- Process plot data -----------------------------------------------------
 
-    df_PlotData <- data.frame(x = SampleStatistics$Site,
+    df_PlotData <- data.frame(x = SampleStatistics$Server,
                               ymin = SampleStatistics$q5,
                               lower = SampleStatistics$Q1,
                               middle = SampleStatistics$Median,

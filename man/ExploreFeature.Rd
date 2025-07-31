@@ -13,6 +13,11 @@ ExploreFeature(TableName, FeatureName, DSConnections = NULL, ...)
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
+\value{
+\code{list}
+\itemize{ \item FeatureInfo
+\item Statistics }
+}
 \description{
 Get characterizing statistics about a feature of arbitrary data type.
 }

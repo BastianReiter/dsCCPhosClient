@@ -33,15 +33,12 @@ ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
 
     for(i in 1:length(CCPTableNames_CDS))
     {
-        # Construct the server-side function call
-        ServerCall <- call("ExtractFromListDS",
-                           ListName.S = CuratedDataSetName,
-                           ObjectName.S = CCPTableNames_CDS[i])
-
         # Execute server-side assign function
         DSI::datashield.assign(conns = DSConnections,
                                symbol = paste0("CDS_", CCPTableNames_CDS[i]),      # E.g. 'CDS_Metastasis'
-                               value = ServerCall)
+                               value = call("ExtractFromListDS",
+                                            ListName.S = CuratedDataSetName,
+                                            ObjectName.S = CCPTableNames_CDS[i]))
 
         # Call helper function to check if object assignment succeeded
         Messages$Assignment <- c(Messages$Assignment,

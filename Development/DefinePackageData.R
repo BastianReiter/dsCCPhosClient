@@ -89,22 +89,22 @@ use_data(Meta_ServerRequirements, overwrite = TRUE)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Template data frame: CCP site specifications
+# Template data frame: Server specifications
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Initiate tibble that holds credentials of participating CCP sites
-CCPSiteSpecifications <- tibble(SiteName = character(),
-                                URL = character(),
-                                ProjectName = character(),
-                                Token = character())
+# Initiate tibble that holds credentials of participating servers
+ServerSpecifications <- tibble(ServerName = character(),
+                               URL = character(),
+                               ProjectName = character(),
+                               Token = character())
 
 # Add site "Sissy"
-CCPSiteSpecifications <- add_row(CCPSiteSpecifications,
-                                 SiteName = "Sissi",
-                                 URL = "https://Sissi/",
-                                 ProjectName = "Project",
-                                 Token = "1234567890")
+ServerSpecifications <- add_row(ServerSpecifications,
+                                ServerName = "Sissi",
+                                URL = "https://Sissi/",
+                                ProjectName = "Project",
+                                Token = "1234567890")
 
 # Save data in .rda-file and make it part of package
-use_data(CCPSiteSpecifications, overwrite = TRUE)
+use_data(ServerSpecifications, overwrite = TRUE)
 

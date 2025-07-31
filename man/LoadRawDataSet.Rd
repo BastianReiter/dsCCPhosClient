@@ -4,10 +4,10 @@
 \alias{LoadRawDataSet}
 \title{LoadRawDataSet}
 \usage{
-LoadRawDataSet(SiteSpecifications = NULL, DSConnections = NULL)
+LoadRawDataSet(ServerSpecifications = NULL, DSConnections = NULL)
 }
 \arguments{
-\item{SiteSpecifications}{\code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of site-specific project names (in case they are differing) - Default: \code{NULL} for virtual project}
+\item{ServerSpecifications}{\code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of server-specific project names (in case they are differing) - Default: \code{NULL} for virtual project}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }

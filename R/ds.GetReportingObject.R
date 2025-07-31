@@ -22,11 +22,9 @@ ds.GetReportingObject <- function(ObjectName,
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  ServerCall <- call("GetReportingObjectDS",
-                     ObjectName.S = ObjectName)
-
   ReportingObjects <- DSI::datashield.aggregate(conns = DSConnections,
-                                                expr = ServerCall)
+                                                expr = call("GetReportingObjectDS",
+                                                            ObjectName.S = ObjectName))
 
   return(ReportingObjects)
 }

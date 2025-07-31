@@ -16,6 +16,7 @@
 #' @export
 #'
 #' @author Bastian Reiter
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.GetSampleStatistics <- function(TableName,
                                    MetricFeatureName,
                                    GroupingFeatureName = NULL,
@@ -61,8 +62,8 @@ ds.GetSampleStatistics <- function(TableName,
   # Separate returns
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # SiteReturns: Obtain sample statistics for each server calling dsCCPhos::GetSampleStatisticsDS()
-  ls_SiteReturns <- DSI::datashield.aggregate(conns = DSConnections,
+  # ServerReturns: Obtain sample statistics for each server calling dsCCPhos::GetSampleStatisticsDS()
+  ls_ServerReturns <- DSI::datashield.aggregate(conns = DSConnections,
                                               expr = call("GetSampleStatisticsDS",
                                                           TableName.S = TableName,
                                                           MetricFeatureName.S = MetricFeatureName,
@@ -72,9 +73,9 @@ ds.GetSampleStatistics <- function(TableName,
   # --- TO DO --- : Implement grouping on server and execute functions below on grouped vectors
 
 
-  # Convert site returns into tibble containing separate statistics
-  df_SeparateStatistics <- ls_SiteReturns %>%
-                                list_rbind(names_to = "Site")
+  # Convert Server returns into tibble containing separate statistics
+  df_SeparateStatistics <- ls_ServerReturns %>%
+                                list_rbind(names_to = "Server")
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -92,7 +93,7 @@ ds.GetSampleStatistics <- function(TableName,
                                                           datasources = DSConnections)
 
   # Compiling cumulated statistics
-  df_CumulatedStatistics <- tibble(Site = "All",
+  df_CumulatedStatistics <- tibble(Server = "All",
                                    N = ls_CumulatedStatistics_Parametric$Nvalid_gp_study[1, "COMBINE"],
                                    q5 = vc_CumulatedStatistics_Nonparametric["5%"],
                                    Q1 = vc_CumulatedStatistics_Nonparametric["25%"],

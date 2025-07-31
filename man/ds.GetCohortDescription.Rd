@@ -26,7 +26,7 @@ A \code{list} containing descriptive statistics characterizing patient cohort:
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
-Obtain site-specific and aggregated descriptive characteristics about the patient cohort to be analyzed.
+Obtain Server-specific and aggregated descriptive characteristics about the patient cohort to be analyzed.
 }
 \details{
 Linked to server-side \code{AGGREGATE} function \code{GetCohortDescriptionDS()}.

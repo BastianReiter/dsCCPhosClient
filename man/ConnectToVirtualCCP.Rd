@@ -6,8 +6,8 @@
 \usage{
 ConnectToVirtualCCP(
   CCPTestData,
-  NumberOfSites = 1,
-  NumberOfPatientsPerSite = NULL,
+  NumberOfServers = 1,
+  NumberOfPatientsPerServer = NULL,
   AddedDsPackages = NULL,
   Resources = NULL,
   WorkingDirectory = file.path(tempdir(), ".dslite")
@@ -16,9 +16,9 @@ ConnectToVirtualCCP(
 \arguments{
 \item{CCPTestData}{\code{Named list} of \code{data.frames} - CCP test data}
 
-\item{NumberOfSites}{\code{integer} - The number of virtual sites to install}
+\item{NumberOfServers}{\code{integer} - The number of virtual servers to install}
 
-\item{NumberOfPatientsPerSite}{\code{integer} - Optional value to restrict size of data set for faster testing - Default: NULL}
+\item{NumberOfPatientsPerServer}{\code{integer} - Optional value to restrict size of data set for faster testing - Default: NULL}
 
 \item{AddedDsPackages}{\code{character vector} - Server-side DataSHIELD packages to be added to default (dsBase, dsCCPhos) - Default: NULL}
 

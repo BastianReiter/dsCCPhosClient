@@ -22,6 +22,7 @@
 #'
 #' @export
 #' @author Bastian Reiter
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.GetTTEModel <- function(TableName,
                            TimeFeature,
                            EventFeature,
@@ -67,8 +68,8 @@ ds.GetTTEModel <- function(TableName,
   # Separate returns
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # SiteReturns: Obtain survival model for each server calling dsCCPhos::GetSurvModelDS()
-  ls_SiteReturns <- DSI::datashield.aggregate(conns = DSConnections,
+  # ServerReturns: Obtain survival model for each server calling dsCCPhos::GetSurvModelDS()
+  ls_ServerReturns <- DSI::datashield.aggregate(conns = DSConnections,
                                               expr = call("GetTTEModelDS",
                                                           TableName.S = TableName,
                                                           TimeFeature.S = TimeFeature,
@@ -84,7 +85,7 @@ ds.GetTTEModel <- function(TableName,
   # Cumulation
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  SiteNames <- names(DSConnections)
+  ServerNames <- names(DSConnections)
 
 
 
@@ -92,5 +93,5 @@ ds.GetTTEModel <- function(TableName,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return statement
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  return(ls_SiteReturns)
+  return(ls_ServerReturns)
 }

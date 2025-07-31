@@ -7,7 +7,9 @@
 #' @param FeatureName \code{string} - Name of feature
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
-#' @return
+#' @return \code{list}
+#'            \itemize{ \item FeatureInfo
+#'                      \item Statistics }
 #' @export
 #'
 #' @author Bastian Reiter
@@ -27,7 +29,6 @@ ExploreFeature <- function(TableName,
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Check if addressed table object is a data.frame
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # Get meta data of table object
@@ -42,9 +43,9 @@ ExploreFeature <- function(TableName,
   # Get feature meta data (total and effective/valid sample size)
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  df_FeatureInfo <- ds.GetFeatureInfo(DSConnections = DSConnections,
-                                      TableName = TableName,
-                                      FeatureName = FeatureName)
+  df_FeatureInfo <- ds.GetFeatureInfo(TableName = TableName,
+                                      FeatureName = FeatureName,
+                                      DSConnections = DSConnections)
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -55,30 +56,30 @@ ExploreFeature <- function(TableName,
   df_Statistics <- tibble()
 
   # Get data type of feature in question
-  FeatureType <- filter(df_FeatureInfo, Site == "All")$DataType
+  FeatureType <- filter(df_FeatureInfo, Server == "All")$DataType
 
 
   if (FeatureType == "numeric")
   {
-      df_Statistics <- ds.GetSampleStatistics(DSConnections = DSConnections,
-                                              TableName = TableName,
+      df_Statistics <- ds.GetSampleStatistics(TableName = TableName,
                                               MetricFeatureName = FeatureName,
+                                              DSConnections = DSConnections,
                                               ...)
   }
 
   if (FeatureType %in% c("character", "logical"))
   {
-      df_Statistics <- ds.GetFrequencyTable(DSConnections = DSConnections,
-                                            TableName = TableName,
+      df_Statistics <- ds.GetFrequencyTable(TableName = TableName,
                                             FeatureName = FeatureName,
+                                            DSConnections = DSConnections,
                                             ...)
   }
 
   if (FeatureType == "Date")
   {
-      df_Statistics <- ds.GetSampleStatistics(DSConnections = DSConnections,
-                                              TableName = TableName,
+      df_Statistics <- ds.GetSampleStatistics(TableName = TableName,
                                               MetricFeatureName = FeatureName,
+                                              DSConnections = DSConnections,
                                               ...)
   }
 

@@ -2,7 +2,7 @@
 #' ds.GetCohortDescription
 #'
 #' `r lifecycle::badge("stable")` \cr\cr
-#' Obtain site-specific and aggregated descriptive characteristics about the patient cohort to be analyzed.
+#' Obtain Server-specific and aggregated descriptive characteristics about the patient cohort to be analyzed.
 #'
 #' Linked to server-side \code{AGGREGATE} function \code{GetCohortDescriptionDS()}.
 #'
@@ -18,6 +18,7 @@
 #' @export
 #'
 #' @author Bastian Reiter
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
                                     CCPDataSetType = "ADS",
                                     DSConnections = NULL)
@@ -38,18 +39,18 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Site returns
+# Server returns
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # SiteReturns: Obtain descriptive data for each server calling dsCCPhos::GetCohortDescriptionDS()
-  SiteReturns <- DSI::datashield.aggregate(conns = DSConnections,
+  # ServerReturns: Obtain descriptive data for each server calling dsCCPhos::GetCohortDescriptionDS()
+  ServerReturns <- DSI::datashield.aggregate(conns = DSConnections,
                                            expr = call("GetCohortDescriptionDS",
                                                        DataSetName.S = DataSetName,
                                                        CCPDataSetType.S = CCPDataSetType))
 
 
   # Transpose list (turning 'inside-out') for easier processing
-  SiteReturns <- SiteReturns %>% list_transpose(simplify = FALSE)
+  ServerReturns <- ServerReturns %>% list_transpose(simplify = FALSE)
 
 
 
@@ -59,52 +60,52 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
 
 # Cohort Size Summary (Cumulated Patient and Diagnosis Count)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  CohortSize_Sites <- SiteReturns$CohortSize %>%
-                          list_rbind(names_to = "Site")
+  CohortSize_Servers <- ServerReturns$CohortSize %>%
+                          list_rbind(names_to = "Server")
 
-  CohortSize_All <- CohortSize_Sites %>%
+  CohortSize_All <- CohortSize_Servers %>%
                         summarize(PatientCount = sum(PatientCount),
                                   DiagnosisCount = sum(DiagnosisCount)) %>%
-                        mutate(Site = "All",
+                        mutate(Server = "All",
                                DiagnosesPerPatient = DiagnosisCount / PatientCount)
 
-  CohortSize <- CohortSize_Sites %>%
+  CohortSize <- CohortSize_Servers %>%
                     bind_rows(CohortSize_All)
 
 
 # Cohort Size Time Series
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # Create coherent data.frame with site-specific data
-  CohortSize_OverTime_Sites <- SiteReturns$CohortSize_OverTime %>%
-                                  list_rbind(names_to = "Site")
+  # Create coherent data.frame with Server-specific data
+  CohortSize_OverTime_Servers <- ServerReturns$CohortSize_OverTime %>%
+                                  list_rbind(names_to = "Server")
 
   # Get cumulated values
-  CohortSize_OverTime_All <- CohortSize_OverTime_Sites %>%
+  CohortSize_OverTime_All <- CohortSize_OverTime_Servers %>%
                                   group_by(DiagnosisYear) %>%
                                       summarize(across(c(PatientCount, DiagnosisCount), ~ sum(.x, na.rm = TRUE))) %>%
                                   ungroup() %>%
                                   mutate(DiagnosesPerPatient = DiagnosisCount / PatientCount,
-                                         Site = "All")
+                                         Server = "All")
 
-  # # Get time-point-specific median values across sites
-  # CohortSize_OverTime_Mean <- CohortSize_OverTime_Sites %>%
+  # # Get time-point-specific median values across Servers
+  # CohortSize_OverTime_Mean <- CohortSize_OverTime_Servers %>%
   #                                   group_by(DiagnosisYear) %>%
   #                                       summarize(across(c(PatientCount, DiagnosisCount), ~ mean(.x, na.rm = TRUE))) %>%
   #                                   ungroup() %>%
   #                                   mutate(DiagnosesPerPatient = DiagnosisCount / PatientCount,
-  #                                          Site = "Mean")
+  #                                          Server = "Mean")
   #
-  # # Get time-point-specific median values across sites
-  # CohortSize_OverTime_Median <- CohortSize_OverTime_Sites %>%
+  # # Get time-point-specific median values across Servers
+  # CohortSize_OverTime_Median <- CohortSize_OverTime_Servers %>%
   #                                   group_by(DiagnosisYear) %>%
   #                                       summarize(across(c(PatientCount, DiagnosisCount), ~ round(median(.x, na.rm = TRUE)))) %>%
   #                                   ungroup() %>%
   #                                   mutate(DiagnosesPerPatient = DiagnosisCount / PatientCount,
-  #                                          Site = "Median")
+  #                                          Server = "Median")
 
-  # Row-bind site-specific and cumulated data
-  CohortSize_OverTime <- CohortSize_OverTime_Sites %>%
+  # Row-bind Server-specific and cumulated data
+  CohortSize_OverTime <- CohortSize_OverTime_Servers %>%
                               bind_rows(CohortSize_OverTime_All)
                               # bind_rows(CohortSize_OverTime_Mean) %>%
                               # bind_rows(CohortSize_OverTime_Median)
@@ -114,17 +115,17 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
 # Age
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  AgeDistribution_Sites <- SiteReturns$Age %>%
-                                list_rbind(names_to = "Site")
+  AgeDistribution_Servers <- ServerReturns$Age %>%
+                                list_rbind(names_to = "Server")
 
-  AgeDistribution_All <- AgeDistribution_Sites %>%
+  AgeDistribution_All <- AgeDistribution_Servers %>%
                               group_by(AgeGroup) %>%
                                   summarize(N = sum(N)) %>%
                               ungroup() %>%
-                              mutate(Site = "All",
+                              mutate(Server = "All",
                                      Proportion = N / sum(N))
 
-  AgeDistribution <- AgeDistribution_Sites %>%
+  AgeDistribution <- AgeDistribution_Servers %>%
                           bind_rows(AgeDistribution_All)
 
 
@@ -132,17 +133,17 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
 # Gender
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  GenderDistribution_Sites <- SiteReturns$Gender %>%
-                                  list_rbind(names_to = "Site")
+  GenderDistribution_Servers <- ServerReturns$Gender %>%
+                                  list_rbind(names_to = "Server")
 
-  GenderDistribution_All <- GenderDistribution_Sites %>%
+  GenderDistribution_All <- GenderDistribution_Servers %>%
                                 group_by(Gender) %>%
                                     summarize(N = sum(N)) %>%
                                 ungroup() %>%
-                                mutate(Site = "All",
+                                mutate(Server = "All",
                                        Proportion = N / sum(N))
 
-  GenderDistribution <- GenderDistribution_Sites %>%
+  GenderDistribution <- GenderDistribution_Servers %>%
                             bind_rows(GenderDistribution_All)
 
 

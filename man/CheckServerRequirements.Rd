@@ -5,7 +5,7 @@
 \title{CheckServerRequirements}
 \usage{
 CheckServerRequirements(
-  SiteSpecifications = NULL,
+  ServerSpecifications = NULL,
   RequiredPackages = c("dsBase", "dsCCPhos", "dsTidyverse"),
   RequiredFunctions = c(aggregate = "GetReportingObjectDS", assign = "AugmentDataDS",
     assign = "CurateDataDS", assign = "ExtractFromListDS", assign = "DrawSampleDS"),
@@ -13,7 +13,7 @@ CheckServerRequirements(
 )
 }
 \arguments{
-\item{SiteSpecifications}{\code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of site-specific project names (in case they are differing). - Default: \code{NULL} for virtual project}
+\item{ServerSpecifications}{\code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of server-specific project names (in case they are differing). - Default: \code{NULL} for virtual project}
 
 \item{RequiredPackages}{A \code{character vector} naming required packages}
 

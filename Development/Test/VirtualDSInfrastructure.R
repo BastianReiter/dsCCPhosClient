@@ -55,8 +55,8 @@ TestResource <- resourcer::newResource(name = "TestResource",
 
 
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
-                                      NumberOfSites = 3,
-                                      NumberOfPatientsPerSite = 2000,
+                                      NumberOfServers = 3,
+                                      NumberOfPatientsPerServer = 2000,
                                       AddedDsPackages = "dsTidyverse")
                                       #Resources = list(TestResource = TestResource))
 
@@ -78,7 +78,7 @@ Requirements <- CheckServerRequirements()
 # Load Raw Data Set (RDS) from Opal data base to R sessions on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Messages <- LoadRawDataSet(SiteSpecifications = NULL)
+Messages <- LoadRawDataSet(ServerSpecifications = NULL)
 
 
 
@@ -135,7 +135,7 @@ RDSTableCheck$TableStatus
 RDSValidationReports <- ds.GetRDSValidationReport()
 
 # ValidationSummaries <- RDSValidationReports %>%
-#                             map(function(Site)
+#                             map(function(Server)
 #                                 {
 #                                     map()
 #                                 })summary(report))
@@ -255,7 +255,7 @@ View(ServerWorkspaceInfo$Overview)
 ObjectMetaData <- ds.GetObjectMetaData(ObjectName = "ADS_Patient")
 
 # Explore Object meta data: Structural overview
-View(ObjectMetaData$SiteA$Structure)
+View(ObjectMetaData$ServerA$Structure)
 
 # Get type of feature 'PatientID'
 ObjectMetaData$FirstEligible$DataTypes["PatientID"]
@@ -297,27 +297,27 @@ CohortDescription <- ds.GetCohortDescription(DataSetName = "AugmentedDataSet",
 PatientCount_TimeSeries <- DisplayTimeSeries(TimeSeriesData = CohortDescription$CohortSize_OverTime,
                                              TimePointFeature = DiagnosisYear,
                                              ValueFeature = PatientCount,
-                                             GroupingFeature = Site,
+                                             GroupingFeature = Server,
                                              IncludeMissingTimePoints = TRUE)
 
 Plot <- CohortDescription$CohortSize_OverTime %>%
-            filter(Site != "All") %>%
+            filter(Server != "All") %>%
             MakeColumnPlot(XFeature = DiagnosisYear,
                            YFeature = PatientCount,
-                           GroupingFeature = Site)
+                           GroupingFeature = Server)
 
 
 Plot <- CohortDescription$GenderDistribution %>%
-            filter(Site != "All") %>%
+            filter(Server != "All") %>%
             MakeColumnPlot(XFeature = Gender,
                            YFeature = N,
-                           GroupingFeature = Site)
+                           GroupingFeature = Server)
 
 Plot <- CohortDescription$AgeDistribution %>%
-            filter(Site != "All") %>%
+            filter(Server != "All") %>%
             MakeColumnPlot(XFeature = AgeGroup,
                            YFeature = N,
-                           GroupingFeature = Site)
+                           GroupingFeature = Server)
 
 
 
@@ -351,7 +351,7 @@ Test <- ds.GetTTEModel(TableName = "AnalysisDataSet",
 library(ggplot2)
 library(ggsurvfit)
 
-Test$SiteC %>%
+Test$ServerC %>%
     ggsurvfit()
 
 
@@ -366,25 +366,25 @@ Test <- ds.GetFrequencyTable(TableName = "AnalysisDataSet",
                              MaxNumberCategories = 20)
 
 RelativeFrequencies <- Test$RelativeFrequencies %>%
-                            mutate(across(-Site, ~ paste0("(", round(.x * 100, 0), "%)")))
+                            mutate(across(-Server, ~ paste0("(", round(.x * 100, 0), "%)")))
 
 TableData <- Test$AbsoluteFrequencies %>%
                   mutate(across(everything(), as.character)) %>%
                   bind_rows(RelativeFrequencies) %>%
-                  group_by(Site) %>%
+                  group_by(Server) %>%
                       summarize(across(everything(), ~ paste0(.x, collapse = "  ")))
 
 
 library(ggplot2)
 
 PlotData <- Test$AbsoluteFrequencies %>%
-                pivot_longer(cols = -Site,
+                pivot_longer(cols = -Server,
                              names_to = "Value",
                              values_to = "AbsoluteFrequency") %>%
-                filter(Site != "All")
+                filter(Server != "All")
 
 Plot <- ggplot(data = as.data.frame(PlotData),
-               mapping = aes(fill = Site,
+               mapping = aes(fill = Server,
                              x = Value,
                              y = AbsoluteFrequency)) +
             geom_bar(position = "stack",
@@ -393,7 +393,7 @@ Plot <- ggplot(data = as.data.frame(PlotData),
 Plot <- MakeColumnPlot(DataFrame = PlotData,
                        XFeature = Value,
                        YFeature = AbsoluteFrequency,
-                       GroupingFeature = Site)
+                       GroupingFeature = Server)
 
 
 
@@ -412,7 +412,7 @@ ds.mean(x = "ADS_Patients$PatientAgeAtDiagnosis",
 
 MetaData_ADS_Patients <- ds.GetObjectMetaData(ObjectName = "ADS_Patients")
 
-View(MetaData_ADS_Patients$SiteA$ContentOverview)
+View(MetaData_ADS_Patients$ServerA$ContentOverview)
 
 
 SampleStatistics <- ds.GetSampleStatistics(TableName = "ADS_Patients",
@@ -422,9 +422,9 @@ SampleStatistics <- ds.GetSampleStatistics(TableName = "ADS_Patients",
 TestPlot <- MakeBoxPlot(SampleStatistics = SampleStatistics,
                         AxisTitle_y = "Patient age at diagnosis",
                         FillPalette = c("All" = CCPhosColors$MediumGrey,
-                                        "SiteA" = CCPhosColors$Primary,
-                                        "SiteB" = CCPhosColors$Secondary,
-                                        "SiteC" = CCPhosColors$Tertiary))
+                                        "ServerA" = CCPhosColors$Primary,
+                                        "ServerB" = CCPhosColors$Secondary,
+                                        "ServerC" = CCPhosColors$Tertiary))
 
 TestPlot
 
@@ -460,7 +460,7 @@ DSI::datashield.logout(CCPConnections)
 #                         m = 1,
 #                         seed = 123)
 #
-# SyntheticData <- SyntheticData$SiteTotal$Warning
+# SyntheticData <- SyntheticData$ServerTotal$Warning
 #
 #
 # SyntheticData
