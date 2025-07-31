@@ -6,22 +6,22 @@
 \usage{
 ds.UnpackCuratedDataSet(
   CuratedDataSetName = "CuratedDataSet",
-  DataSources = NULL
+  DSConnections = NULL
 )
 }
 \arguments{
-\item{CuratedDataSetName}{\code{string} - Name of Curated Data Set object (list) on server | Default: 'CuratedDataSet'}
+\item{CuratedDataSetName}{\code{string} - Name of Curated Data Set object (list) on server - Default: 'CuratedDataSet'}
 
-\item{DataSources}{List of DSConnection objects}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A list of messages about object assignment for monitoring purposes
+A \code{list} of messages about object assignment for monitoring purposes
 }
 \description{
-Make tables within Curated Data Set (list object) directly addressable in R server sessions
+Make tables within Curated Data Set (\code{list} object) directly addressable in R server sessions
 }
 \details{
-Linked to server-side ASSIGN method ExtractFromListDS()
+Linked to server-side \code{ASSIGN} function \code{ExtractFromListDS()}
 }
 \author{
 Bastian Reiter

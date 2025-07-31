@@ -6,22 +6,22 @@
 \usage{
 ds.UnpackAugmentedDataSet(
   AugmentedDataSetName = "AugmentedDataSet",
-  DataSources = NULL
+  DSConnections = NULL
 )
 }
 \arguments{
-\item{AugmentedDataSetName}{String | Name of Augmented Data Set object (list) on server | Default: 'AugmentedDataSet'}
+\item{AugmentedDataSetName}{\code{string} - Name of Augmented Data Set object (\code{list}) on server - Default: 'AugmentedDataSet'}
 
-\item{DataSources}{List of DSConnection objects}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A list of messages about object assignment for monitoring purposes
+A \code{list} of messages about object assignment for monitoring purposes
 }
 \description{
-Make tables within Augmented Data Set (list object) directly addressable in R server sessions
+Make tables within Augmented Data Set (\code{list} object) directly addressable in R server sessions.
 }
 \details{
-Linked to server-side ASSIGN method ExtractFromListDS()
+Linked to server-side \code{ASSIGN} method \code{ExtractFromListDS()}
 }
 \author{
 Bastian Reiter

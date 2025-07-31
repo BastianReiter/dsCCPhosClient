@@ -4,6 +4,51 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' CheckArguments
+#'
+CheckArguments <- function()
+{
+    if (!(is.character(TableName) & is.character(MetricFeatureName)))
+    {
+        stop("Error: Arguments 'TableName' and 'MetricFeatureName' must be character strings.", call. = FALSE)
+    }
+}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' CheckDSConnections
+#'
+#' This function checks if 'DSConnections' that are passed to a DataSHIELD client function are valid. If this object is not passed, the function will try to find an existing \code{list} programmatically (using \code{DSI} functionality) and return it.
+#'
+#' @param DSConnections Usually a \code{list} of \code{DSConnection} class objects. If this is set to \code{NULL} this function will try to find an existing \code{list} programmatically and return it.
+#' @keywords internal
+#' @export
+CheckDSConnections <- function(DSConnections)
+{
+    require(DSI)
+
+    # If no DataSHIELD connections are specified, assign them programmatically
+    if (is.null(DSConnections))
+    {
+        DSConnections <- datashield.connections_find()
+    }
+
+    # If 'DSConnections' is not valid, throw an error message
+    if (!(is.list(DSConnections) && all(unlist(lapply(DSConnections, function(d) { methods::is(d,"DSConnection") })))))
+    {
+        stop("'DSConnections' must be a list of DSConnection-class objects", call. = FALSE)
+    }
+
+    return(DSConnections)
+}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' MakeFunctionMessage
 #'
 #' Turn function message into named vector to enable classification of feedback
@@ -32,9 +77,11 @@ MakeFunctionMessage <- function(Text,
 
     return(Message)
 }
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' PrintMessages
 #'
 #' Take list of messages, add symbols and print them on console
@@ -83,4 +130,5 @@ PrintMessages <- function(Messages)
                           cat("\n")
                      })
 }
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

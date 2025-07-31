@@ -5,31 +5,32 @@
 \title{ds.GetSampleStatistics}
 \usage{
 ds.GetSampleStatistics(
-  DataSources = NULL,
   TableName,
   MetricFeatureName,
   GroupingFeatureName = NULL,
-  RemoveMissings = TRUE
+  RemoveMissings = TRUE,
+  DSConnections = NULL
 )
 }
 \arguments{
-\item{DataSources}{\code{list} of DSConnection objects}
+\item{TableName}{\code{string} - Name of the table containing the feature of concern}
 
-\item{TableName}{\code{string} | Name of the table containing the feature of concern}
+\item{MetricFeatureName}{\code{string} - Name of feature}
 
-\item{MetricFeatureName}{\code{string} | Name of feature}
+\item{GroupingFeatureName}{\code{string} - Name of optional grouping feature from the same table}
 
-\item{GroupingFeatureName}{\code{string} | Name of optional grouping feature from the same table}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
 A \code{tibble} containing parametric and non-parametric sample statistics
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
 Obtain common parametric and nonparametric statistics about a metric feature.
 Making use of \code{dsBaseClient::ds.meanSdGp()} and \code{dsBaseClient::ds.quantileMean()}.
 }
 \details{
-Linked to server-side \code{AGGREGATE} function \code{dsCCPhos::GetSampleStatisticsDS()}.
+Linked to server-side \code{AGGREGATE} function \code{GetSampleStatisticsDS()}.
 }
 \author{
 Bastian Reiter

@@ -1,60 +1,50 @@
 
 #' ds.GetObjectMetaData
 #'
+#' `r lifecycle::badge("stable")` \cr\cr
 #' Gathers meta data about an R object.
 #'
-#' Linked to server-side AGGREGATE method GetObjectMetaDataDS()
+#' Linked to server-side \code{AGGREGATE} method \code{GetObjectMetaDataDS()}
 #'
 #' @param ObjectName \code{string} - Name of object on server
-#' @param DataSources \code{list} of DSConnection objects
+#' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
-#' @return A list of server returns
+#' @return A \code{list} of server returns
 #' @export
 #'
 #' @author Bastian Reiter
 ds.GetObjectMetaData <- function(ObjectName,
-                                 DataSources)
+                                 DSConnections = NULL)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
-    # Look for DS connections
-    if (is.null(DataSources))
-    {
-        DataSources <- DSI::datashield.connections_find()
-    }
+  require(purrr)
 
-    # Ensure DataSources is a list of DSConnection-class
-    if (!(is.list(DataSources) && all(unlist(lapply(DataSources, function(d) {methods::is(d,"DSConnection")})))))
-    {
-        stop("'DataSources' were expected to be a list of DSConnection-class objects", call. = FALSE)
-    }
+  # --- For Testing Purposes ---
+  # ObjectName <- "TestData"
+  # DSConnections <- CCPConnections
+
+  # Check validity of 'DSConnections' or find them programmatically if none are passed
+  DSConnections <- CheckDSConnections(DSConnections)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Call GetObjectMetaDataDS() on every server
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-### For testing purposes
-# ObjectName <- "TestData"
-# DataSources <- CCPConnections
+  # Construct server-side function call
+  ServerCall <- call("GetObjectMetaDataDS",
+                     ObjectName.S = ObjectName)
 
+  # Get object meta data from every server
+  ObjectMetaData <- DSI::datashield.aggregate(conns = DSConnections,
+                                              expr = ServerCall)
 
-require(purrr)
+  # Get logical vector indicating existence of object on servers
+  ObjectExistence <- ObjectMetaData %>%
+                          map_lgl(\(metadatalist) metadatalist$ObjectExists)
 
-# Construct server-side function call
-ServerCall <- call("GetObjectMetaDataDS",
-                   ObjectName.S = ObjectName)
+  # Get names of all servers that host the object (so everywhere it exists)
+  EligibleServers <- names(DSConnections)[ObjectExistence]
 
-# Get object meta data from every server
-ObjectMetaData <- DSI::datashield.aggregate(conns = DataSources,
-                                            expr = ServerCall)
+  # Add to output list: Meta data from any (first eligible) server that hosts the object in question
+  ObjectMetaData$FirstEligible <- if(!is.null(EligibleServers)) { ObjectMetaData[[first(EligibleServers)]] } else { NULL }
 
-# Get logical vector indicating existence of object on servers
-ObjectExistence <- ObjectMetaData %>%
-                        map_lgl(\(metadatalist) metadatalist$ObjectExists)
-
-# Get names of all servers that host the object (so everywhere it exists)
-EligibleServers <- names(DataSources)[ObjectExistence]
-
-# Add to output list: Meta data from any (first eligible) server that hosts the object in question
-ObjectMetaData$FirstEligible <- if(!is.null(EligibleServers)) { ObjectMetaData[[first(EligibleServers)]] } else { NULL }
-
-return(ObjectMetaData)
+  return(ObjectMetaData)
 }

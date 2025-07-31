@@ -4,16 +4,24 @@
 \alias{ds.CheckDataSet}
 \title{ds.CheckDataSet}
 \usage{
-ds.CheckDataSet(DataSources = NULL, DataSetName, AssumeCCPDataSet = FALSE)
+ds.CheckDataSet(
+  DataSetName,
+  RequiredTableNames = NULL,
+  RequiredFeatureNames = NULL,
+  AssumeCCPDataSet = FALSE,
+  DSConnections = NULL
+)
 }
 \arguments{
-\item{DataSources}{\code{list} of \code{DSConnection} objects}
-
 \item{DataSetName}{\code{string} - Name of Data Set object (list) on server, usually "RawDataSet", "CuratedDataSet" or "AugmentedDataSet"}
 
 \item{RequiredTableNames}{\code{character vector} - Names of tables that are expected/required to be in the data set - Default: Names of elements in list evaluated from \code{DataSetName.S}}
 
 \item{RequiredFeatureNames}{\code{list} of \code{character vectors} - Features that are expected/required in each table of the data set - Default: Names of features in respective table}
+
+\item{AssumeCCPDataSet}{\code{logical} - Whether or not the data set to be checked out is one of the main data sets used in CCPhos - Default: FALSE}
+
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
 A \code{list} containing compiled meta data about RDS table:
@@ -24,10 +32,11 @@ A \code{list} containing compiled meta data about RDS table:
 \item NonMissingValueRates }
 }
 \description{
-Check out a data set (list of data.frames) on servers and return a coherent summary across servers.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
+Check out a data set (\code{list} of \code{data.frames}) on servers and return a coherent summary across servers.
 }
 \details{
-Linked to server-side AGGREGATE method CheckDataSetDS()
+Linked to server-side AGGREGATE method \code{CheckDataSetDS()}
 }
 \author{
 Bastian Reiter

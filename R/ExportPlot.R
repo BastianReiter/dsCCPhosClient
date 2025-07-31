@@ -1,7 +1,7 @@
 
 #' ExportPlot
 #'
-#' Helper function to save ggplot2 objects into graphic files, based on ggplot2::ggsave()
+#' Helper function to save \code{ggplot2} objects into graphic files, based on \code{ggplot2::ggsave()}
 #'
 #' @param Plot A ggplot2 object
 #' @param Directory Output directory
@@ -20,8 +20,8 @@
 #' @return No return; The function creates a plot file
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ExportPlot <- function(Plot,
                        Directory,
                        FileName = "default",

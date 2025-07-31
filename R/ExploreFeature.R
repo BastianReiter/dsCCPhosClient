@@ -3,101 +3,89 @@
 #'
 #' Get characterizing statistics about a feature of arbitrary data type.
 #'
-#' @param DataSources \code{list} of \code{DSConnection} objects
 #' @param TableName \code{string} - Name of the table containing the feature of concern
 #' @param FeatureName \code{string} - Name of feature
+#' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return
 #' @export
 #'
 #' @author Bastian Reiter
-ExploreFeature <- function(DataSources = NULL,
-                           TableName,
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ExploreFeature <- function(TableName,
                            FeatureName,
+                           DSConnections = NULL,
                            ...)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Check argument eligibility
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  require(dplyr)
 
-    if (!(is.character(TableName) & is.character(FeatureName)))
-    {
-        stop("Error: Arguments 'TableName' and 'FeatureName' must be character strings.", call. = FALSE)
-    }
+  # Check validity of 'DSConnections' or find them programmatically if none are passed
+  DSConnections <- CheckDSConnections(DSConnections)
 
-    if (is.null(DataSources))
-    {
-        DataSources <- DSI::datashield.connections_find()
-    }
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Package requirements
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Check if addressed table object is a data.frame
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    require(dplyr)
+  # Get meta data of table object
+  TableMetaData <- ds.GetObjectMetaData(ObjectName = TableName,
+                                        DSConnections = DSConnections)
 
-
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Check if addressed table object is a data.frame
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    # Get meta data of table object
-    TableMetaData <- ds.GetObjectMetaData(ObjectName = TableName,
-                                          DataSources = DataSources)
-
-    # Stop execution if referred table object is not a data.frame
-    if (TableMetaData$FirstEligible$Class != "data.frame") { stop("Error: The referred table object does not seem to be a data.frame.", call. = FALSE)}
+  # Stop execution if referred table object is not a data.frame
+  if (TableMetaData$FirstEligible$Class != "data.frame") { stop("Error: The referred table object does not seem to be a data.frame.", call. = FALSE)}
 
 
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Get feature meta data (total and effective/valid sample size)
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Get feature meta data (total and effective/valid sample size)
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    df_FeatureInfo <- ds.GetFeatureInfo(DataSources = DataSources,
-                                        TableName = TableName,
-                                        FeatureName = FeatureName)
-
-
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Get statistics depending on feature data type
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    # Initiate df_Statistics
-    df_Statistics <- tibble()
-
-    # Get data type of feature in question
-    FeatureType <- filter(df_FeatureInfo, Site == "All")$DataType
+  df_FeatureInfo <- ds.GetFeatureInfo(DSConnections = DSConnections,
+                                      TableName = TableName,
+                                      FeatureName = FeatureName)
 
 
-    if (FeatureType == "numeric")
-    {
-        df_Statistics <- ds.GetSampleStatistics(DataSources = DataSources,
-                                                TableName = TableName,
-                                                MetricFeatureName = FeatureName,
-                                                ...)
-    }
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Get statistics depending on feature data type
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    if (FeatureType %in% c("character", "logical"))
-    {
-        df_Statistics <- ds.GetFrequencyTable(DataSources = DataSources,
+  # Initiate df_Statistics
+  df_Statistics <- tibble()
+
+  # Get data type of feature in question
+  FeatureType <- filter(df_FeatureInfo, Site == "All")$DataType
+
+
+  if (FeatureType == "numeric")
+  {
+      df_Statistics <- ds.GetSampleStatistics(DSConnections = DSConnections,
                                               TableName = TableName,
-                                              FeatureName = FeatureName,
+                                              MetricFeatureName = FeatureName,
                                               ...)
-    }
+  }
 
-    if (FeatureType == "Date")
-    {
-        df_Statistics <- ds.GetSampleStatistics(DataSources = DataSources,
-                                                TableName = TableName,
-                                                MetricFeatureName = FeatureName,
-                                                ...)
-    }
+  if (FeatureType %in% c("character", "logical"))
+  {
+      df_Statistics <- ds.GetFrequencyTable(DSConnections = DSConnections,
+                                            TableName = TableName,
+                                            FeatureName = FeatureName,
+                                            ...)
+  }
+
+  if (FeatureType == "Date")
+  {
+      df_Statistics <- ds.GetSampleStatistics(DSConnections = DSConnections,
+                                              TableName = TableName,
+                                              MetricFeatureName = FeatureName,
+                                              ...)
+  }
 
 
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Return statement
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    return(list(FeatureInfo = df_FeatureInfo,
-                Statistics = df_Statistics))
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Return statement
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  return(list(FeatureInfo = df_FeatureInfo,
+              Statistics = df_Statistics))
 }

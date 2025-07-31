@@ -5,27 +5,31 @@
 \title{ds.GetCohortDescription}
 \usage{
 ds.GetCohortDescription(
-  DataSources = NULL,
   DataSetName = "AugmentedDataSet",
-  CCPDataSetType = "ADS"
+  CCPDataSetType = "ADS",
+  DSConnections = NULL
 )
 }
 \arguments{
-\item{DataSources}{\code{list} of \code{DSConnection} objects}
-
 \item{DataSetName}{\code{string} - Name of Data Set object (list) on server, usually "RawDataSet", "CuratedDataSet" or "AugmentedDataSet" - Default: "AugmentedDataSet"}
 
 \item{CCPDataSetType}{\code{string} - Indicating the type of CCP data set that should be described, one of "RDS" / "CDS" / "ADS" - Default: "ADS"}
+
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A \code{list} containing descriptive statistics characterizing patient cohort
-\itemize{\item }
+A \code{list} containing descriptive statistics characterizing patient cohort:
+\itemize{\item CohortSize
+\item CohortSizeOverTime
+\item AgeDistribution
+\item GenderDistribution}
 }
 \description{
-Obtain site-specific and aggregated descriptive characteristics about the patient cohort to be analyzed
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
+Obtain site-specific and aggregated descriptive characteristics about the patient cohort to be analyzed.
 }
 \details{
-Linked to server-side \code{AGGREGATE} function \code{dsCCPhos::GetCohortDescriptionDS()}.
+Linked to server-side \code{AGGREGATE} function \code{GetCohortDescriptionDS()}.
 }
 \author{
 Bastian Reiter

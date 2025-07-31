@@ -4,17 +4,18 @@
 \alias{LoadRawDataSet}
 \title{LoadRawDataSet}
 \usage{
-LoadRawDataSet(CCPSiteSpecifications = NULL, DataSources)
+LoadRawDataSet(SiteSpecifications = NULL, DSConnections = NULL)
 }
 \arguments{
-\item{CCPSiteSpecifications}{\code{data.frame} - Same data.frame used for login. Used here only for akquisition of site-specific project names (in case they are differing) - Default: NULL for virtual project}
+\item{SiteSpecifications}{\code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of site-specific project names (in case they are differing) - Default: \code{NULL} for virtual project}
 
-\item{DataSources}{\code{list} of \code{DSConnection} objects}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
 A \code{list} of messages
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
 Load raw data set from Opal data base into R session on servers.
 }
 \author{

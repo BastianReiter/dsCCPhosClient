@@ -1,53 +1,44 @@
 
 #' ds.ExtractFromList
 #'
+#' `r lifecycle::badge("stable")` \cr\cr
 #' Auxiliary function to trigger assignment of object extracted from a list on server
 #'
 #' Linked to server-side ASSIGN method ExtractFromListDS()
 #'
-#' @param ListName String | Name of a list object on server
-#' @param ObjectName String | Name of object inside list
-#' @param NewObjectName String | Optionally assigned name of object after extraction to server session | Default: NULL
-#' @param DataSources List of DSConnection objects
+#' @param ListName \code{string} - Name of a \code{list} object on server
+#' @param ObjectName \code{string} - Name of object inside \code{list}
+#' @param NewObjectName \code{string} - Optionally assigned name of object after extraction to server session - Default: \code{NULL}
+#' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
-#' @return A list of messages about object assignment for monitoring purposes
+#' @return A \code{list} of messages about object assignment for monitoring purposes
 #' @export
 #'
-#' @examples
 #' @author Bastian Reiter
 ds.ExtractFromList <- function(ListName,
                                ObjectName,
                                AssignedObjectName = NULL,
-                               DataSources = NULL)
+                               DSConnections = NULL)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
-    # Look for DS connections
-    if (is.null(DataSources))
-    {
-        DataSources <- DSI::datashield.connections_find()
-    }
+  # Check validity of 'DSConnections' or find them programmatically if none are passed
+  DSConnections <- CheckDSConnections(DSConnections)
 
-    # Ensure DataSources is a list of DSConnection-class
-    if (!(is.list(DataSources) && all(unlist(lapply(DataSources, function(d) {methods::is(d,"DSConnection")})))))
-    {
-        stop("'DataSources' were expected to be a list of DSConnection-class objects", call. = FALSE)
-    }
+  # Construct the server-side function call
+  ServerCall <- call("ExtractFromListDS",
+                     ListName.S = ListName,
+                     ObjectName.S = ObjectName)
 
+  # Execute server-side assign function
+  DSI::datashield.assign(conns = DSConnections,
+                         symbol = ifelse(!is.null(NewObjectName),      # Per default, assign same name to object as it was in the list, but optionally assign new name
+                                         NewObjectName,
+                                         ObjectName),
+                         value = ServerCall)
 
-    # Construct the server-side function call
-    ServerCall <- call("ExtractFromListDS",
-                       ListName.S = ListName,
-                       ObjectName.S = ObjectName)
+  # Call helper function to check if object assignment succeeded
+  AssignmentInfo <- ds.GetObjectStatus(ObjectName,
+                                       DSConnections = DSConnections)
 
-    # Execute server-side assign function
-    DSI::datashield.assign(conns = DataSources,
-                           symbol = ifelse(!is.null(NewObjectName),      # Per default, assign same name to object as it was in the list, but optionally assign new name
-                                           NewObjectName,
-                                           ObjectName),
-                           value = ServerCall)
-
-    # Call helper function to check if object assignment succeeded
-    AssignmentInfo <- ds.GetObjectStatus(ObjectName,
-                                         DataSources = DataSources)
-
-    return(AssignmentInfo)
+  return(AssignmentInfo)
 }

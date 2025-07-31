@@ -5,7 +5,6 @@
 \title{ds.GetTTEModel}
 \usage{
 ds.GetTTEModel(
-  DataSources = NULL,
   TableName,
   TimeFeature,
   EventFeature,
@@ -13,39 +12,40 @@ ds.GetTTEModel(
   CovariateA = NULL,
   CovariateB = NULL,
   CovariateC = NULL,
-  MinFollowUpTime = 1
+  MinFollowUpTime = 1,
+  DSConnections = NULL
 )
 }
 \arguments{
-\item{DataSources}{List of DSConnection objects}
+\item{TableName}{\code{string} - Name of the table containing the features of concern}
 
-\item{TableName}{\code{string} | Name of the table containing the features of concern}
+\item{TimeFeature}{\code{string} - Name of time feature}
 
-\item{TimeFeature}{\code{string} | Name of time feature}
+\item{EventFeature}{\code{string} - Name of event feature}
 
-\item{EventFeature}{\code{string} | Name of event feature}
-
-\item{ModelType}{\code{string} | Function name of different TTE models implemented in \code{survival} package:
+\item{ModelType}{\code{string} - Function name of different TTE models implemented in \code{survival} package:
 \itemize{\item 'survfit'
 \item 'survdiff'
 \item 'coxph'}}
 
-\item{CovariateA}{\code{string} | Name of optional CovariateA}
+\item{CovariateA}{\code{string} - Name of optional CovariateA}
 
-\item{CovariateB}{\code{string} | Name of optional CovariateB}
+\item{CovariateB}{\code{string} - Name of optional CovariateB}
 
-\item{CovariateC}{\code{string} | Name of optional CovariateC}
+\item{CovariateC}{\code{string} - Name of optional CovariateC}
 
-\item{MinFollowUpTime}{\code{integer} | Optional minimum of observed follow up time}
+\item{MinFollowUpTime}{\code{integer} - Optional minimum of observed follow up time}
+
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A list of Time-to-Event models
+A \code{list} of Time-to-Event models
 }
 \description{
 Get Time-to-Event model
 }
 \details{
-Linked to server-side \code{AGGREGATE} function \code{dsCCPhos::GetSurvModelDS()}.
+Linked to server-side \code{AGGREGATE} function \code{GetSurvModelDS()}.
 }
 \author{
 Bastian Reiter

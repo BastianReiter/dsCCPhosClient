@@ -10,7 +10,7 @@ ds.JoinTables(
   ByStatement,
   JoinType = "left_join",
   OutputName,
-  DataSources = NULL
+  DSConnections = NULL
 )
 }
 \arguments{
@@ -27,15 +27,17 @@ ds.JoinTables(
 \item 'inner_join'}}
 
 \item{OutputName}{\code{string} - Name of resulting table on server}
+
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A list of messages about object assignment for monitoring purposes
+A \code{list} of messages about object assignment for monitoring purposes
 }
 \description{
 Join tables on server, making use of \code{dplyr} mutating join operations.
 }
 \details{
-Linked to server-side ASSIGN method JoinTablesDS()
+Linked to server-side \code{ASSIGN} function \code{JoinTablesDS()}
 }
 \author{
 Bastian Reiter

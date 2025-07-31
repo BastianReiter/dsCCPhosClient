@@ -4,23 +4,24 @@
 \alias{ds.GetFeatureInfo}
 \title{ds.GetFeatureInfo}
 \usage{
-ds.GetFeatureInfo(DataSources = NULL, TableName, FeatureName)
+ds.GetFeatureInfo(TableName, FeatureName, DSConnections = NULL)
 }
 \arguments{
-\item{DataSources}{\code{list} of DSConnection objects}
+\item{TableName}{\code{string} - Name of the table containing the feature of concern}
 
-\item{TableName}{\code{string} | Name of the table containing the feature of concern}
+\item{FeatureName}{\code{string} - Name of feature}
 
-\item{FeatureName}{\code{string} | Name of feature}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
 A \code{tibble} containing separate and cumulated meta data about feature type and sample size.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
 Obtain data about feature type and sample size.
 }
 \details{
-Linked to server-side \code{AGGREGATE} function \code{dsCCPhos::GetFeatureInfoDS()}.
+Linked to server-side \code{AGGREGATE} function \code{GetFeatureInfoDS()}.
 }
 \author{
 Bastian Reiter

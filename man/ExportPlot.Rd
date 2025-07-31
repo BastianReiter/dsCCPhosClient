@@ -51,7 +51,7 @@ ExportPlot(
 No return; The function creates a plot file
 }
 \description{
-Helper function to save ggplot2 objects into graphic files, based on ggplot2::ggsave()
+Helper function to save \code{ggplot2} objects into graphic files, based on \code{ggplot2::ggsave()}
 }
 \author{
 Bastian Reiter

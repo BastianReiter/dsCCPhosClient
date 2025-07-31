@@ -7,29 +7,25 @@
 ds.AugmentData(
   CuratedDataSetName = "CuratedDataSet",
   OutputName = "AugmentationOutput",
-  DataSources = NULL
+  DSConnections = NULL
 )
 }
 \arguments{
-\item{CuratedDataSetName}{String | Name of the Curated Data Set object on server | Default: 'CuratedDataSet'}
+\item{CuratedDataSetName}{\code{string} - Name of the Curated Data Set object on server | Default: 'CuratedDataSet'}
 
-\item{OutputName}{String | Name of output object to be assigned on server | Default: 'AugmentationOutput'}
+\item{OutputName}{\code{string} - Name of output object to be assigned on server | Default: 'AugmentationOutput'}
 
-\item{DataSources}{List of DSConnection objects
-
-#'                          \item DiagnosisAssociation_Check \code{logical} - Whether or not to classify associated diagnosis entries
-\item DiagnosisAssociation_RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_DiagnosisAssociation}
-\item DiagnosisAssociation_Profile \code{character} - Profile name defining rule set to be used for classification of diagnosis associations. Profile name must be stated in \code{DiagnosisAssociation_RuleSet} - Default: 'Default'}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A list of variables containing messages about object assignment for monitoring purposes.
+A \code{list} of variables containing messages about object assignment for monitoring purposes.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
 Transforms curated CCP core data set (CDM) into augmented data set (ADM)
 }
 \details{
-Linked to server-side ASSIGN method AugmentDataDS()
+Linked to server-side ASSIGN method \code{AugmentDataDS()}
 }
 \author{
 Bastian Reiter

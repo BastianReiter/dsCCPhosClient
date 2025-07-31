@@ -1,32 +1,26 @@
 
 #' ds.UnpackCuratedDataSet
 #'
-#' Make tables within Curated Data Set (list object) directly addressable in R server sessions
+#' Make tables within Curated Data Set (\code{list} object) directly addressable in R server sessions
 #'
-#' Linked to server-side ASSIGN method ExtractFromListDS()
+#' Linked to server-side \code{ASSIGN} function \code{ExtractFromListDS()}
 #'
-#' @param CuratedDataSetName \code{string} - Name of Curated Data Set object (list) on server | Default: 'CuratedDataSet'
-#' @param DataSources List of DSConnection objects
+#' @param CuratedDataSetName \code{string} - Name of Curated Data Set object (list) on server - Default: 'CuratedDataSet'
+#' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
-#' @return A list of messages about object assignment for monitoring purposes
+#' @return A \code{list} of messages about object assignment for monitoring purposes
 #' @export
 #'
 #' @author Bastian Reiter
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
-                                    DataSources = NULL)
+                                    DSConnections = NULL)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
-    # Look for DS connections
-    if (is.null(DataSources))
-    {
-        DataSources <- DSI::datashield.connections_find()
-    }
+  # Check validity of 'DSConnections' or find them programmatically if none are passed
+  DSConnections <- CheckDSConnections(DSConnections)
 
-    # Ensure DataSources is a list of DSConnection-class
-    if (!(is.list(DataSources) && all(unlist(lapply(DataSources, function(d) {methods::is(d,"DSConnection")})))))
-    {
-        stop("'DataSources' were expected to be a list of DSConnection-class objects", call. = FALSE)
-    }
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Initiate output messaging objects
     Messages <- list()
@@ -45,14 +39,14 @@ ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
                            ObjectName.S = CCPTableNames_CDS[i])
 
         # Execute server-side assign function
-        DSI::datashield.assign(conns = DataSources,
+        DSI::datashield.assign(conns = DSConnections,
                                symbol = paste0("CDS_", CCPTableNames_CDS[i]),      # E.g. 'CDS_Metastasis'
                                value = ServerCall)
 
         # Call helper function to check if object assignment succeeded
         Messages$Assignment <- c(Messages$Assignment,
                                  ds.GetObjectStatus(ObjectName = paste0("CDS_", CCPTableNames_CDS[i]),
-                                                    DataSources = DataSources))
+                                                    DSConnections = DSConnections))
     }
 
     # Turn list into (named) vector

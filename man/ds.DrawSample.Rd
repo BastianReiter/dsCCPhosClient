@@ -8,26 +8,27 @@ ds.DrawSample(
   RawDataSetName = "RawDataSet",
   SampleSize = "100",
   SampleName = "RawDataSet",
-  DataSources = NULL
+  DSConnections = NULL
 )
 }
 \arguments{
-\item{RawDataSetName}{\code{string} | Name of a list object on server}
+\item{RawDataSetName}{\code{string} - Name of a \code{list} object on server}
 
-\item{SampleSize}{\code{string} | Number of patients per site}
+\item{SampleSize}{\code{string} - Number of patients per site}
 
-\item{SampleName}{\code{string} | Option to assign subset of Raw Data Set a different object name on servers}
+\item{SampleName}{\code{string} - Option to assign subset of 'RawDataSet' a different object name on servers}
 
-\item{DataSources}{List of DSConnection objects}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A list of messages about object assignment for monitoring purposes
+A \code{list} of messages about object assignment for monitoring purposes
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
 Draw a random sample from Raw Data Set
 }
 \details{
-Linked to server-side ASSIGN method DrawSampleDS()
+Linked to server-side ASSIGN method \code{DrawSampleDS()}
 }
 \author{
 Bastian Reiter

@@ -4,21 +4,22 @@
 \alias{ds.GetObjectMetaData}
 \title{ds.GetObjectMetaData}
 \usage{
-ds.GetObjectMetaData(ObjectName, DataSources)
+ds.GetObjectMetaData(ObjectName, DSConnections = NULL)
 }
 \arguments{
 \item{ObjectName}{\code{string} - Name of object on server}
 
-\item{DataSources}{\code{list} of DSConnection objects}
+\item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A list of server returns
+A \code{list} of server returns
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
 Gathers meta data about an R object.
 }
 \details{
-Linked to server-side AGGREGATE method GetObjectMetaDataDS()
+Linked to server-side \code{AGGREGATE} method \code{GetObjectMetaDataDS()}
 }
 \author{
 Bastian Reiter
