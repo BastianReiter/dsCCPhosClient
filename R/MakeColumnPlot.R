@@ -65,7 +65,9 @@ MakeColumnPlot <- function(DataFrame,
                            ...)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
+    require(dplyr)
     require(ggplot2)
+    require(rlang)
     require(scales)
 
 
