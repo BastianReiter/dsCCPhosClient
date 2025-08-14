@@ -1,20 +1,20 @@
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#   - Virtual dataSHIELD infrastructure for testing purposes -
+#   - Virtual DataSHIELD infrastructure for testing purposes -
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Install newest base dataSHIELD packages
+# Install newest base DataSHIELD packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # devtools::install_github(repo = "datashield/dsBase")
 # devtools::install_github(repo = "datashield/dsBaseClient")
 
-# Install own dataSHIELD packages
+# Install own DataSHIELD packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # devtools::install_github(repo = "BastianReiter/dsCCPhos")
 # devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
 # devtools::install_github(repo = "BastianReiter/CCPhosApp")
 
-# Install additional datashield-packages
+# Install additional Datashield-packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # install.packages("dsTidyverse")
 # install.packages("dsTidyverseClient")
@@ -160,6 +160,7 @@ ds.DrawSample(RawDataSetName = "RawDataSet",
 
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS) (using default settings)
 Curation <- ds.CurateData(RawDataSetName = "RawDataSet",
+                          Settings = NULL,
                           OutputName = "CurationOutput")
 
 CDSTableCheck <- ds.CheckDataSet(DataSetName = "CuratedDataSet",

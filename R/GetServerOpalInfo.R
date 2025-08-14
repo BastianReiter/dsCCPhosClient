@@ -5,6 +5,7 @@
 #' Check if tables are available in server Opal data bases.
 #'
 #' @param ServerSpecifications \code{data.frame} - Same data frame used for login. Used here only for akquisition of server-specific project names (in case they are differing). - Default: NULL for virtual project
+#' @param RequiredTableNames \code{character vector} - The table names expected/required in server Opal data base
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{tibble}
@@ -13,6 +14,7 @@
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 GetServerOpalInfo <- function(ServerSpecifications = NULL,
+                              RequiredTableNames,
                               DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
@@ -31,15 +33,11 @@ GetServerOpalInfo <- function(ServerSpecifications = NULL,
   # Get server names (sorted alphabetically)
   ServerNames <- sort(names(DSConnections))
 
-  # Get table names from meta data
-  CCPTableNames_Raw <- dsCCPhosClient::Meta_Tables$TableName_Raw
-  CCPTableNames_Curated <- dsCCPhosClient::Meta_Tables$TableName_Curated
-
   # Get overview of available tables on servers
   TableAvailability <- DSI::datashield.tables(conns = DSConnections)
 
   # Initiate data frame containing info about table availability
-  RequiredTableAvailability <- tibble(TableName = CCPTableNames_Raw)
+  RequiredTableAvailability <- tibble(TableName = RequiredTableNames)
 
   for (i in 1:length(ServerNames))
   {
@@ -58,15 +56,15 @@ GetServerOpalInfo <- function(ServerSpecifications = NULL,
       }
 
       # In case project is virtual, server Opal table names are just raw CCP table names
-      ServerTableNames <- CCPTableNames_Raw
+      ServerTableNames <- RequiredTableNames
 
       if (ServerProjectName != "Virtual")
       {
           # Create vector with server-specific table names (raw CCP table names concatenated with server-specific project name)
-          ServerTableNames <- paste0(ServerProjectName, ".", CCPTableNames_Raw)
+          ServerTableNames <- paste0(ServerProjectName, ".", RequiredTableNames)
       }
 
-      # For every server, check if CCP raw data tables with server-specific correspondent names are existent in 'TableAvailability'
+      # For every server, check if raw data tables with server-specific correspondent names are existent in 'TableAvailability'
       RequiredTableAvailability <- RequiredTableAvailability %>%
                                         mutate(!!ServerNames[i] := ServerTableNames %in% TableAvailability[[ServerNames[i]]])
   }

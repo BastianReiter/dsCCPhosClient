@@ -32,8 +32,8 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
   ServerNames <- sort(names(DSConnections))
 
 
-  # 1) Get the names of all objects living in the server-side R sessions and check whether they occur on every server
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 1) Get the names of all objects living in the server-side R sessions and check whether they occur on every server
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ServerObjectNames <- DSI::datashield.symbols(conns = DSConnections)
 

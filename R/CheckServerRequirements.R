@@ -7,6 +7,7 @@
 #' @param ServerSpecifications \code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of server-specific project names (in case they are differing). - Default: \code{NULL} for virtual project
 #' @param RequiredPackages A \code{character vector} naming required packages
 #' @param RequiredFunctions A named \code{character vector} containing names of required functions. Their type ('aggregate' or 'assign') is defined by the correspondent element names.
+#' @param RequiredOpalTableNames \code{character vector} - The expected names of the Opal data base tables.
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{list} of \code{data.frames} containing gathered info and messages
@@ -23,6 +24,7 @@ CheckServerRequirements <- function(ServerSpecifications = NULL,
                                                           assign = "CurateDataDS",
                                                           assign = "ExtractFromListDS",
                                                           assign = "DrawSampleDS"),
+                                    RequiredOpalTableNames = dsCCPhosClient::Meta_Tables$TableName_Raw,
                                     DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
@@ -220,6 +222,7 @@ CheckServerRequirements <- function(ServerSpecifications = NULL,
 
   # Get info on Opal table availability with dsCCPhosClient::GetServerOpalDBInfo()
   RequiredOpalTableAvailability <- GetServerOpalInfo(ServerSpecifications,
+                                                     RequiredTableNames = RequiredOpalTableNames,
                                                      DSConnections)
 
   # Compile output message concerning one table each and add it to Messages

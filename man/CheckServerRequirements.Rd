@@ -9,6 +9,7 @@ CheckServerRequirements(
   RequiredPackages = c("dsBase", "dsCCPhos", "dsTidyverse"),
   RequiredFunctions = c(aggregate = "GetReportingObjectDS", assign = "AugmentDataDS",
     assign = "CurateDataDS", assign = "ExtractFromListDS", assign = "DrawSampleDS"),
+  RequiredOpalTableNames = dsCCPhosClient::Meta_Tables$TableName_Raw,
   DSConnections = NULL
 )
 }
@@ -18,6 +19,8 @@ CheckServerRequirements(
 \item{RequiredPackages}{A \code{character vector} naming required packages}
 
 \item{RequiredFunctions}{A named \code{character vector} containing names of required functions. Their type ('aggregate' or 'assign') is defined by the correspondent element names.}
+
+\item{RequiredOpalTableNames}{\code{character vector} - The expected names of the Opal data base tables.}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }

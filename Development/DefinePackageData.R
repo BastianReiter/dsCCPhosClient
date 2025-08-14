@@ -50,21 +50,34 @@ use_data(CCPhosColors, overwrite = TRUE)
 # Meta Data transported from dsCCPhos package
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Meta_Tables <- dsCCPhos::Meta_Tables
-Meta_Features <- dsCCPhos::Meta_Features
-Meta_Values <- dsCCPhos::Meta_Values
-Meta_DataHarmonization <- dsCCPhos::Meta_DataHarmonization
-Meta_DiagnosisRedundancy <- dsCCPhos::Meta_DiagnosisRedundancy
+Meta_DataHarmonizationMethods <- dsCCPhos::Meta_DataHarmonizationMethods
 Meta_DiagnosisAssociation <- dsCCPhos::Meta_DiagnosisAssociation
+Meta_DiagnosisRedundancy <- dsCCPhos::Meta_DiagnosisRedundancy
+Meta_Dictionary <- dsCCPhos::Meta_Dictionary
+Meta_EventFeatures <- dsCCPhos::Meta_EventFeatures
+Meta_Features <- dsCCPhos::Meta_Features
 Meta_FeatureObligations <- dsCCPhos::Meta_FeatureObligations
+Meta_FeatureTracking <- dsCCPhos::Meta_FeatureTracking
+Meta_FuzzyStringMatching <- dsCCPhos::Meta_FuzzyStringMatching
+Meta_TableNormalization <- dsCCPhos::Meta_TableNormalization
+Meta_Tables <- dsCCPhos::Meta_Tables
+Meta_TransformativeExpressions <- dsCCPhos::Meta_TransformativeExpressions
+Meta_Values <- dsCCPhos::Meta_Values
 
-use_data(Meta_Tables, overwrite = TRUE)
-use_data(Meta_Features, overwrite = TRUE)
-use_data(Meta_Values, overwrite = TRUE)
-use_data(Meta_DataHarmonization, overwrite = TRUE)
-use_data(Meta_DiagnosisRedundancy, overwrite = TRUE)
+
+use_data(Meta_DataHarmonizationMethods, overwrite = TRUE)
 use_data(Meta_DiagnosisAssociation, overwrite = TRUE)
+use_data(Meta_DiagnosisRedundancy, overwrite = TRUE)
+use_data(Meta_Dictionary, overwrite = TRUE)
+use_data(Meta_EventFeatures, overwrite = TRUE)
+use_data(Meta_Features, overwrite = TRUE)
 use_data(Meta_FeatureObligations, overwrite = TRUE)
+use_data(Meta_FeatureTracking, overwrite = TRUE)
+use_data(Meta_FuzzyStringMatching, overwrite = TRUE)
+use_data(Meta_TableNormalization, overwrite = TRUE)
+use_data(Meta_Tables, overwrite = TRUE)
+use_data(Meta_TransformativeExpressions, overwrite = TRUE)
+use_data(Meta_Values, overwrite = TRUE)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
