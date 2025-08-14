@@ -15,9 +15,10 @@
 #' @export
 #'
 #' @author Bastian Reiter
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.DrawSample <- function(RawDataSetName = "RawDataSet",
                           SampleSize = "100",
-                          SampleName = "RawDataSet",
+                          SampleName = "RDSSample",
                           DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
@@ -26,15 +27,12 @@ ds.DrawSample <- function(RawDataSetName = "RawDataSet",
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # Construct the server-side function call
-  ServerCall <- call("DrawSampleDS",
-                     RawDataSetName.S = RawDataSetName,
-                     SampleSize.S = SampleSize)
-
   # Execute server-side assign function
   DSI::datashield.assign(conns = DSConnections,
                          symbol = SampleName,
-                         value = ServerCall)
+                         value = call("DrawSampleDS",
+                                      RawDataSetName.S = RawDataSetName,
+                                      SampleSize.S = SampleSize))
 
   # Call helper function to check if object assignment succeeded
   AssignmentInfo <- ds.GetObjectStatus(SampleName,

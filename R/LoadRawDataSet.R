@@ -5,6 +5,8 @@
 #' Load raw data set from Opal data base into R session on servers.
 #'
 #' @param ServerSpecifications \code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of server-specific project names (in case they are differing) - Default: \code{NULL} for virtual project
+#' @param RawTableNames \code{character vector} - The expected names of the Opal data base tables
+#' @param CuratedTableNames \code{character vector} - The corresponding curated table names (used for assignment in R session)
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{list} of messages
@@ -13,6 +15,8 @@
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 LoadRawDataSet <- function(ServerSpecifications = NULL,
+                           RawTableNames = dsCCPhosClient::Meta_Tables$TableName_Raw,
+                           CuratedTableNames = dsCCPhosClient::Meta_Tables$TableName_Curated,
                            DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
@@ -24,6 +28,8 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
 
   # --- For testing purposes ---
   # ServerSpecifications <- NULL
+  # RawTableNames = dsCCPhosClient::Meta_Tables$TableName_Raw
+  # CuratedTableNames = dsCCPhosClient::Meta_Tables$TableName_Curated
   # DSConnections <- CCPConnections
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
@@ -38,13 +44,16 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   # Get server names
   ServerNames <- names(DSConnections)
 
-  # Get table names from meta data
-  CCPTableNames_Raw <- dsCCPhosClient::Meta_Tables$TableName_Raw
-  CCPTableNames_Curated <- dsCCPhosClient::Meta_Tables$TableName_Curated
+  # Compile a vector of table names to look for in server Opal data bases
+  # Usually this should be 'RawTableNames' but also check 'CuratedTableNames' because some servers might already have adopted 'curated' table names
+  TableNamesToLookFor <- c(RawTableNames,
+                           CuratedTableNames)
 
-  # Check Opal table availability before assignment
+  # Check Opal table availability
   OpalTableAvailability <- GetServerOpalInfo(ServerSpecifications = ServerSpecifications,
+                                             RequiredTableNames = TableNamesToLookFor,
                                              DSConnections = DSConnections)
+
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Assignment in R server sessions
@@ -53,8 +62,8 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   # Loop through all participating servers
   for (i in 1:length(ServerNames))
   {
-      # In case ServerSpecifications are NULL, server Opal table names are just raw CCP table names
-      ServerTableNames <- CCPTableNames_Raw
+      # In case ServerSpecifications are NULL, server Opal table will not be concatenated with server-specific project names
+      ServerTableNames <- TableNamesToLookFor
       ServerProjectName <- NULL
 
       # If ServerSpecifications are assigned, there can be server-specific project names and therefore server-specific Opal table names
@@ -66,33 +75,33 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
                                     select(ProjectName) %>%
                                     pull()
 
-          # If ServerProjectName is "Virtual" (as it is the case when using virtual infrastructure in CCPhosApp) make the variable empty so that server Opal table names are just raw CCP table names
+          # If ServerProjectName is "Virtual" (as it is the case when using virtual infrastructure in CCPhosApp) make the variable empty so that server Opal table names are just raw table names
           if (ServerProjectName == "Virtual") { ServerProjectName <- "" }
 
           # Else add a dot ('.') to ServerProjectName according to Opal table name nomenclature
           else { ServerProjectName <- paste0(ServerProjectName, ".") }
-
-          # Create vector with server-specific table names (raw CCP table names concatenated with server-specific project name)
-          ServerTableNames <- paste0(ServerProjectName, CCPTableNames_Raw)
       }
 
-      # Get vector of all Opal table names that are available on the current server
-      AvailableOpalTables <- OpalTableAvailability %>%
-                                  rename(IsAvailable = ServerNames[i]) %>%
-                                  filter(IsAvailable == TRUE) %>%
-                                  pull(TableName) %>%
-                                  paste0(ServerProjectName, .)
+      # Create tibble that takes only available Opal tables and matches their names to R symbol names that are used in following assignment
+      TableNameMatching <- OpalTableAvailability %>%
+                                rename(IsAvailable = ServerNames[i]) %>%
+                                select(TableName,
+                                       IsAvailable) %>%
+                                filter(IsAvailable == TRUE) %>%
+                                distinct() %>%
+                                mutate(# Create feature with server-specific table names (server-specific project name concatenated with generic table names)
+                                       OpalTableName = paste0(ServerProjectName, TableName),
+                                       # Turn 'RawTableNames' into 'CuratedTableNames' where necessary and concatenate with prefix 'RDS_'
+                                       RTableName = case_when(TableName %in% RawTableNames ~ paste0("RDS_", setNames(CuratedTableNames, nm = RawTableNames)[TableName]),
+                                                              .default = paste0("RDS_", TableName)))
 
-      # Loop through all tables from Opal DB and assign their content to objects (data.frames) in R session
-      for (j in 1:length(ServerTableNames))
+      # Loop through available Opal DB tables and assign their content to objects (data.frames) in R session
+      for (j in 1:nrow(TableNameMatching))
       {
-          if (ServerTableNames[j] %in% AvailableOpalTables)
-          {
-              datashield.assign(conns = DSConnections[[i]],
-                                symbol = paste0("RDS_", CCPTableNames_Curated[j]),
-                                value = ServerTableNames[j],
-                                id.name = "_id")
-          }
+          datashield.assign(conns = DSConnections[[i]],
+                            symbol = TableNameMatching$RTableName[j],
+                            value = TableNameMatching$OpalTableName[j],
+                            id.name = "_id")
       }
   }
 
@@ -104,11 +113,11 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
 
   BundledMessages <- list()
 
-  # Loop through all CCP tables to get info about assignment on servers
-  for(i in 1:length(CCPTableNames_Curated))
+  # Loop through all tables to get info about assignment on servers
+  for(i in 1:length(CuratedTableNames))
   {
       # Make sure assignment was successful on all servers
-      ObjectStatus_Table <- ds.GetObjectStatus(ObjectName = paste0("RDS_", CCPTableNames_Curated[i]),
+      ObjectStatus_Table <- ds.GetObjectStatus(ObjectName = paste0("RDS_", CuratedTableNames[i]),
                                                DSConnections = DSConnections)
 
       # Add info about table assignment to Messages
@@ -127,9 +136,9 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # Create list of vectors (one for each server) containing names of actually existing data.frames
-  ExistingRDSTables <- paste0("RDS_", CCPTableNames_Curated) %>%
+  ExistingRDSTables <- paste0("RDS_", CuratedTableNames) %>%
                             map(function(tablename) { if (!is.na(tablename)) { unlist(ds.exists(x = tablename, datasources = DSConnections)) } else { return(NULL) } }) %>%
-                            set_names(paste0("RDS_", CCPTableNames_Curated)) %>%
+                            set_names(paste0("RDS_", CuratedTableNames)) %>%
                             list_transpose() %>%
                             map(\(TableNames) names(TableNames[TableNames == TRUE]))
 

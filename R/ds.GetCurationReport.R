@@ -283,43 +283,43 @@ ds.GetCurationReport <- function(DSConnections = NULL)
       if (nrow(AllServersValueSetOverview_Raw) > 0)
       {
           AllServersValueSetOverview_Raw <- AllServersValueSetOverview_Raw %>%
-                                              group_by(Feature, Value_Raw, IsOccurring, IsEligible_Raw) %>%
-                                                  summarize(Count_Raw = sum(Count_Raw, na.rm = TRUE)) %>%
-                                                  arrange(desc(IsOccurring), .by_group = TRUE) %>%
-                                                  slice_head() %>%      # Remove / Replace values marked as non-occurring
-                                              group_by(Feature) %>%
-                                                  mutate(Proportion_Raw = Count_Raw / sum(Count_Raw, na.rm = TRUE)) %>%
-                                              ungroup()
+                                                group_by(Feature, Value_Raw, IsOccurring, IsEligible_Raw) %>%
+                                                    summarize(Count_Raw = sum(Count_Raw, na.rm = TRUE)) %>%
+                                                    arrange(desc(IsOccurring), .by_group = TRUE) %>%
+                                                    slice_head() %>%      # Remove / Replace values marked as non-occurring
+                                                group_by(Feature) %>%
+                                                    mutate(Proportion_Raw = Count_Raw / sum(Count_Raw, na.rm = TRUE)) %>%
+                                                ungroup()
       }
 
       if (nrow(AllServersValueSetOverview_Harmonized) > 0)
       {
           AllServersValueSetOverview_Harmonized <- AllServersValueSetOverview_Harmonized %>%
-                                                      group_by(Feature, Value_Harmonized, IsEligible_Harmonized) %>%
-                                                          summarize(Count_Harmonized = sum(Count_Harmonized, na.rm = TRUE)) %>%
-                                                      group_by(Feature) %>%
-                                                          mutate(Proportion_Harmonized = Count_Harmonized / sum(Count_Harmonized, na.rm = TRUE)) %>%
-                                                      ungroup()
+                                                        group_by(Feature, Value_Harmonized, IsEligible_Harmonized) %>%
+                                                            summarize(Count_Harmonized = sum(Count_Harmonized, na.rm = TRUE)) %>%
+                                                        group_by(Feature) %>%
+                                                            mutate(Proportion_Harmonized = Count_Harmonized / sum(Count_Harmonized, na.rm = TRUE)) %>%
+                                                        ungroup()
       }
 
       if (nrow(AllServersValueSetOverview_Recoded) > 0)
       {
           AllServersValueSetOverview_Recoded <- AllServersValueSetOverview_Recoded %>%
-                                                  group_by(Feature, Value_Recoded, IsEligible_Recoded) %>%
-                                                      summarize(Count_Recoded = sum(Count_Recoded, na.rm = TRUE)) %>%
-                                                  group_by(Feature) %>%
-                                                      mutate(Proportion_Recoded = Count_Recoded / sum(Count_Recoded, na.rm = TRUE)) %>%
-                                                  ungroup()
+                                                    group_by(Feature, Value_Recoded, IsEligible_Recoded) %>%
+                                                        summarize(Count_Recoded = sum(Count_Recoded, na.rm = TRUE)) %>%
+                                                    group_by(Feature) %>%
+                                                        mutate(Proportion_Recoded = Count_Recoded / sum(Count_Recoded, na.rm = TRUE)) %>%
+                                                    ungroup()
       }
 
       if (nrow(AllServersValueSetOverview_Final) > 0)
       {
           AllServersValueSetOverview_Final <- AllServersValueSetOverview_Final %>%
-                                                group_by(Feature, Value_Final, IsEligible_Final) %>%
-                                                    summarize(Count_Final = sum(Count_Final, na.rm = TRUE)) %>%
-                                                group_by(Feature) %>%
-                                                    mutate(Proportion_Final = Count_Final / sum(Count_Final, na.rm = TRUE)) %>%
-                                                ungroup()
+                                                  group_by(Feature, Value_Final, IsEligible_Final) %>%
+                                                      summarize(Count_Final = sum(Count_Final, na.rm = TRUE)) %>%
+                                                  group_by(Feature) %>%
+                                                      mutate(Proportion_Final = Count_Final / sum(Count_Final, na.rm = TRUE)) %>%
+                                                  ungroup()
       }
 
       ValueSetOverviewsCumulated <- c(ValueSetOverviewsCumulated,

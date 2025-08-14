@@ -13,6 +13,7 @@
 #' @export
 #'
 #' @author Bastian Reiter
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.GetObjectMetaData <- function(ObjectName,
                                  DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,13 +29,10 @@ ds.GetObjectMetaData <- function(ObjectName,
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # Construct server-side function call
-  ServerCall <- call("GetObjectMetaDataDS",
-                     ObjectName.S = ObjectName)
-
   # Get object meta data from every server
   ObjectMetaData <- DSI::datashield.aggregate(conns = DSConnections,
-                                              expr = ServerCall)
+                                              expr = call("GetObjectMetaDataDS",
+                                                          ObjectName.S = ObjectName))
 
   # Get logical vector indicating existence of object on servers
   ObjectExistence <- ObjectMetaData %>%

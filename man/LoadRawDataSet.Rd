@@ -4,10 +4,19 @@
 \alias{LoadRawDataSet}
 \title{LoadRawDataSet}
 \usage{
-LoadRawDataSet(ServerSpecifications = NULL, DSConnections = NULL)
+LoadRawDataSet(
+  ServerSpecifications = NULL,
+  RawTableNames = dsCCPhosClient::Meta_Tables$TableName_Raw,
+  CuratedTableNames = dsCCPhosClient::Meta_Tables$TableName_Curated,
+  DSConnections = NULL
+)
 }
 \arguments{
 \item{ServerSpecifications}{\code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of server-specific project names (in case they are differing) - Default: \code{NULL} for virtual project}
+
+\item{RawTableNames}{\code{character vector} - The expected names of the Opal data base tables}
+
+\item{CuratedTableNames}{\code{character vector} - The corresponding curated table names (used for assignment in R session)}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
