@@ -20,14 +20,14 @@ GetEligibleValues <- function(TableName,
 {
   require(dplyr)
 
-  # --- For testing purposes ---
+  # --- For Testing Purposes ---
   # TableName = "Surgery"
   # FeatureName = "Intention"
   # Stage = "Curated"
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  EligibleValues <- Meta_Values %>%
+  EligibleValues <- dsCCPhosClient::Meta_Values %>%
                         filter(Table == TableName,
                                Feature == FeatureName) %>%
                         { if (Stage == "Raw") { pull(., Value_Raw) }

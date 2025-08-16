@@ -10,10 +10,11 @@
 #' @param FeatureName \code{string} - Name of feature
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
-#' @return A \code{tibble} containing separate and cumulated meta data about feature type and sample size.
+#' @return A \code{tibble} containing separate and cumulated feature properties about feature type and sample size.
 #' @export
 #'
 #' @author Bastian Reiter
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.GetFeatureInfo <- function(TableName,
                               FeatureName,
                               DSConnections = NULL)
@@ -24,7 +25,7 @@ ds.GetFeatureInfo <- function(TableName,
   require(purrr)
 
   # --- For Testing Purposes ---
-  # TableName <- "ADS_Patients"
+  # TableName <- "CDS_Staging"
   # FeatureName <- "TNM_T"
   # DSConnections <- CCPConnections
 
@@ -41,31 +42,39 @@ ds.GetFeatureInfo <- function(TableName,
   if (TableMetaData$FirstEligible$Class != "data.frame") { stop("Error: The referred table object does not seem to be a data.frame.", call. = FALSE)}
 
 
-  # ServerReturns: Obtain feature meta data for each server calling dsCCPhos::GetFeatureInfoDS()
-  ls_ServerReturns <- DSI::datashield.aggregate(conns = DSConnections,
-                                              expr = call("GetFeatureInfoDS",
-                                                          TableName.S = TableName,
-                                                          FeatureName.S = FeatureName))
+  # ServerReturns: Obtain feature properties for each server calling dsCCPhos::GetFeatureInfoDS()
+  ServerReturns <- DSI::datashield.aggregate(conns = DSConnections,
+                                             expr = call("GetFeatureInfoDS",
+                                                         TableName.S = TableName,
+                                                         FeatureName.S = FeatureName))
 
   # Convert Server returns into tibble containing separate feature meta data
-  df_SeparateMetaData <- ls_ServerReturns %>%
-                              list_rbind(names_to = "Server")
+  SeparateProperties <- ServerReturns %>%
+                            list_rbind(names_to = "Server")
 
   # Obtaining return value for cumulated feature data type
-  ReturnedFeatureDataTypes <- unique(df_SeparateMetaData$DataType[!is.na(df_SeparateMetaData$DataType)])
+  ReturnedFeatureDataTypes <- unique(SeparateProperties$DataType[!is.na(SeparateProperties$DataType)])
   CumulatedDataType <- NA
   if (length(ReturnedFeatureDataTypes) == 1) { CumulatedDataType <- ReturnedFeatureDataTypes }
   if (length(ReturnedFeatureDataTypes) > 1) { CumulatedDataType <- "Inconclusive"}
 
   # Obtain cumulated feature meta data
-  df_CumulatedMetaData <- tibble(Server = "All",
-                                 DataType = CumulatedDataType,
-                                 N_Total = sum(df_SeparateMetaData$N_Total),
-                                 N_Valid = sum(df_SeparateMetaData$N_Valid),
-                                 ValidProportion = N_Valid / N_Total,
-                                 N_Missing = sum(df_SeparateMetaData$N_Missing),
-                                 MissingProportion = N_Missing / N_Total)
+  CumulatedProperties <- tibble(Server = "All",
+                                DataType = CumulatedDataType,
+                                N.Total = sum(SeparateProperties$N.Total),
+                                N.Valid = sum(SeparateProperties$N.Valid),
+                                ValidProportion = N.Valid / N.Total,
+                                N.Missing = sum(SeparateProperties$N.Missing),
+                                MissingProportion = N.Missing / N.Total)
 
+  # EligibleValues <- NULL
+  #
+  # # If Feature of concern is of class character
+  # if (CumulatedDataType == "character")
+  # {
+  #     EligibleValues <- GetEligibleValues(TableName = TableName,
+  #                                         FeatureName = FeatureName)
+  # }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Glue cumulated and separate feature meta data together and return tibble
