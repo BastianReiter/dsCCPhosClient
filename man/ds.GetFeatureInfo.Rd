@@ -14,7 +14,7 @@ ds.GetFeatureInfo(TableName, FeatureName, DSConnections = NULL)
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
 \value{
-A \code{tibble} containing separate and cumulated meta data about feature type and sample size.
+A \code{tibble} containing separate and cumulated feature properties about feature type and sample size.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr

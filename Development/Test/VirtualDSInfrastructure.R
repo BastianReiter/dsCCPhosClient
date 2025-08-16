@@ -151,7 +151,8 @@ RDSValidationReports <- ds.GetRDSValidationReport()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ds.DrawSample(RawDataSetName = "RawDataSet",
-              SampleSize = "1000")
+              SampleSize = "1000",
+              SampleName = "RDSSample")
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -253,7 +254,7 @@ ServerWorkspaceInfo <- GetServerWorkspaceInfo()
 View(ServerWorkspaceInfo$Overview)
 
 # Detailed meta data of a particular object (also part of ServerWorkspaceInfo)
-ObjectMetaData <- ds.GetObjectMetaData(ObjectName = "ADS_Patient")
+ObjectMetaData <- ds.GetObjectMetaData(ObjectName = "CDS_Patient")
 
 # Explore Object meta data: Structural overview
 View(ObjectMetaData$ServerA$Structure)
@@ -277,6 +278,10 @@ ds.filter(df.name = "ADS_Patient",
 ds.filter(df.name = "ADS_Patient",
           tidy_expr = list(Gender == "Female"),
           newobj = "ADS_Patient_OneDiagnosis")
+
+
+
+
 
 
 Messages <- ds.JoinTables(TableNameA = "ADS_Patient_OneDiagnosis",

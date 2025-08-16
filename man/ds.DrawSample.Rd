@@ -7,7 +7,7 @@
 ds.DrawSample(
   RawDataSetName = "RawDataSet",
   SampleSize = "100",
-  SampleName = "RawDataSet",
+  SampleName = "RDSSample",
   DSConnections = NULL
 )
 }

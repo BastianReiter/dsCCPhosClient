@@ -72,12 +72,13 @@
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.CurateData <- function(RawDataSetName = "RawDataSet",
-                          Settings = list(DataHarmonization = list(Run = TRUE,
-                                                                   TransformativeExpressions.Profile = "Default",
-                                                                   Dictionary.Profile = "Default",
-                                                                   FuzzyStringMatching.Profile = "Default"),
-                                          FeatureObligations = list(RuleSet.Profile = "Default"),
-                                          FeatureTracking = list(RuleSet.Profile = "Default")),
+                          Settings = NULL,
+                          # Settings = list(DataHarmonization = list(Run = TRUE,
+                          #                                          TransformativeExpressions.Profile = "Default",
+                          #                                          Dictionary.Profile = "Default",
+                          #                                          FuzzyStringMatching.Profile = "Default"),
+                          #                 FeatureObligations = list(RuleSet.Profile = "Default"),
+                          #                 FeatureTracking = list(RuleSet.Profile = "Default")),
                           OutputName = "CurationOutput",
                           DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,15 +105,12 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
   # 1) Trigger dsCCPhos::CurateDataDS()
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # Construct the server-side function call
-  ServerCall <- call("CurateDataDS",
-                     RawDataSetName.S = RawDataSetName,
-                     Settings.S = Settings)
-
   # Execute the server-side function call
   DSI::datashield.assign(conns = DSConnections,
                          symbol = OutputName,
-                         value = ServerCall)
+                         value = call("CurateDataDS",
+                                      RawDataSetName.S = RawDataSetName,
+                                      Settings.S = Settings))
 
   # Call helper function to check if assignment of CurationOutput succeeded
   Messages$Assignment <- c(Messages$Assignment,
