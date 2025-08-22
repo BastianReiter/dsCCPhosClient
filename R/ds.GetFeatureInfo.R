@@ -79,6 +79,6 @@ ds.GetFeatureInfo <- function(TableName,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Glue cumulated and separate feature meta data together and return tibble
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  return(bind_rows(df_CumulatedMetaData,
-                   df_SeparateMetaData))
+  return(bind_rows(CumulatedProperties,
+                   SeparateProperties))
 }

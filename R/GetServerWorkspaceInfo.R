@@ -18,6 +18,7 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
   require(dsBaseClient)
   require(DSI)
   require(purrr)
+  require(stringr)
   require(tidyr)
 
   # --- For Testing Purposes ---
@@ -26,19 +27,22 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   # Get server names (sorted alphabetically)
   ServerNames <- sort(names(DSConnections))
 
 
 # 1) Get the names of all objects living in the server-side R sessions and check whether they occur on every server
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   ServerObjectNames <- DSI::datashield.symbols(conns = DSConnections)
 
   # Get all uniquely occurring object names across servers (although usually the set of symbol names should be the same on all servers)
   UniqueObjectNames <- sort(unique(unlist(ServerObjectNames)))
+
+  # If the server workspaces are completely empty, stop function and return NULL
+  if (length(UniqueObjectNames) == 0) { return(NULL) }
 
   # Initiate 'ObjectInfo' tibble
   ObjectInfoComplete <- tibble()
@@ -66,7 +70,7 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
 
 
       # 2) Collect meta data about existing objects and attach some of it to 'ObjectInfo'
-      #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      #-------------------------------------------------------------------------
 
       MetaData <- ObjectInfo$Object %>%
                       map(function(object)
@@ -76,7 +80,6 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
                               return(ObjectMetaData$FirstEligible)      # The meta data for an object is collected from the first server where the object actually exists (in case it does not exist everywhere)
                           }) %>%
                       setNames(ObjectInfo$Object)
-
 
       # Add some meta data to 'ObjectInfo'
       ObjectInfo <- ObjectInfo %>%
@@ -94,8 +97,19 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
   }
 
 
+  # EligibleValues <- tibble(Object = UniqueObjectNames) %>%
+  #                       mutate(Stage = case_when(str_starts(Object, "RDS_") ~ "Raw",
+  #                                                str_starts(Object, "(CDS_|ADS_)") ~ "Curated",
+  #                                                .default = NA),
+  #                              Table = str_replace(Object, "^(RDS_|CDS_|ADS_)", "")) %>%
+  #                       left_join(dsCCPhosClient::Meta_Values, join_by(Table)) %>%
+  #
+  #
+  # ValueSets <- dsCCPhosClient::Meta_Values
+
+
   # Return list
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #-----------------------------------------------------------------------------
   return(list(Overview = ObjectInfoComplete,
               Details = MetaData))
 }
