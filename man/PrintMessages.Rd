@@ -7,17 +7,8 @@
 PrintMessages(Messages)
 }
 \arguments{
-\item{Text}{\code{list} List of of named vectors}
-
-\item{IsClassInfo}{\code{logical}}
-
-\item{IsClassSuccess}{\code{logical}}
-
-\item{IsClassWarning}{\code{logical}}
-
-\item{IsClassFailure}{\code{logical}}
+\item{Messages}{\code{list} List of of named vectors}
 }
 \description{
-Take list of messages, add symbols and print them on console
+Take list of messages and print them with \code{PrintSoloMessage()}.
 }
-\keyword{internal}

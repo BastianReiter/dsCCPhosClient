@@ -57,8 +57,8 @@ TestResource <- resourcer::newResource(name = "TestResource",
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfServers = 3,
                                       NumberOfPatientsPerServer = 2000,
-                                      AddedDsPackages = "dsTidyverse")
-                                      #Resources = list(TestResource = TestResource))
+                                      AddedDsPackages = "dsTidyverse",
+                                      Resources = list(TestResource = TestResource))
 
 
 
@@ -94,7 +94,7 @@ DSI::datashield.resource_status(conns = CCPConnections,
                                 resource = "TestResource")
 
 # We know that there is a resource (class 'resource') on the servers pointing to a local csv-file
-# Note: Currently, if unkown, there is no way to find out from client-side what exactly a specific resource points at (CSV, DB, Computational resource...)
+# Note: Currently, if unknown, there is no way to find out from client-side what exactly a specific resource points at (CSV, DB, Computational resource...)
 # First step is to create a 'ResourceClient' on the servers to handle the resource:
 
 DSI::datashield.assign.resource(conns = CCPConnections,
