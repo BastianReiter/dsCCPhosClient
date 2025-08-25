@@ -33,7 +33,7 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
   ServerNames <- sort(names(DSConnections))
 
 
-# 1) Get the names of all objects living in the server-side R sessions and check whether they occur on every server
+# Get the names of all objects living in the server-side R sessions and check whether they occur on every server
 #-------------------------------------------------------------------------------
 
   ServerObjectNames <- DSI::datashield.symbols(conns = DSConnections)
@@ -69,7 +69,7 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
       #                        ServerColumns)
 
 
-      # 2) Collect meta data about existing objects and attach some of it to 'ObjectInfo'
+      # Collect meta data about existing objects and attach some of it to 'ObjectInfo'
       #-------------------------------------------------------------------------
 
       MetaData <- ObjectInfo$Object %>%
@@ -97,19 +97,35 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
   }
 
 
-  # EligibleValues <- tibble(Object = UniqueObjectNames) %>%
-  #                       mutate(Stage = case_when(str_starts(Object, "RDS_") ~ "Raw",
-  #                                                str_starts(Object, "(CDS_|ADS_)") ~ "Curated",
-  #                                                .default = NA),
-  #                              Table = str_replace(Object, "^(RDS_|CDS_|ADS_)", "")) %>%
-  #                       left_join(dsCCPhosClient::Meta_Values, join_by(Table)) %>%
-  #
-  #
-  # ValueSets <- dsCCPhosClient::Meta_Values
+  # Get eligible value sets from meta data
+  EligibleValues <- tibble(Object = UniqueObjectNames) %>%
+                        mutate(TableWithoutPrefix = str_replace(Object, "^(RDS_|CDS_|ADS_)", ""),
+                               Stage = case_when(str_starts(Object, "RDS_") ~ "Raw",
+                                                 str_starts(Object, "(CDS_|ADS_)") ~ "Curated",
+                                                 .default = NA)) %>%
+                        left_join(dsCCPhosClient::Meta_Values, by = join_by(TableWithoutPrefix == Table)) %>%
+                        left_join(select(dsCCPhosClient::Meta_Features, TableName_Curated, FeatureName_Curated, FeatureName_Raw), by = join_by(TableWithoutPrefix == TableName_Curated, Feature == FeatureName_Curated)) %>%
+                        mutate(Feature = case_when(Stage == "Raw" ~ FeatureName_Raw,
+                                                   Stage == "Curated" ~ Feature,
+                                                   .default = NA),
+                               Value = case_when(Stage == "Raw" ~ Value_Raw,
+                                                 Stage == "Curated" ~ Value_Curated,
+                                                 .default = NA),
+                               Label = case_when(Stage == "Raw" ~ Label_Raw,
+                                                 Stage == "Curated" ~ Label_Curated,
+                                                 .default = NA)) %>%
+                        filter(!is.na(Feature) & !is.na(Value)) %>%
+                        select(Object,
+                               Feature,
+                               Value,
+                               Label) %>%
+                        split(., .$Object) %>%
+                        map(\(PerObject) split(PerObject, PerObject$Feature))
 
 
   # Return list
   #-----------------------------------------------------------------------------
   return(list(Overview = ObjectInfoComplete,
-              Details = MetaData))
+              Details = MetaData,
+              EligibleValues = EligibleValues))
 }
