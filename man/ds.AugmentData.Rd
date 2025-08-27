@@ -7,13 +7,16 @@
 ds.AugmentData(
   CuratedDataSetName = "CuratedDataSet",
   OutputName = "AugmentationOutput",
+  UnpackAugmentedDataSet = TRUE,
   DSConnections = NULL
 )
 }
 \arguments{
-\item{CuratedDataSetName}{\code{string} - Name of the Curated Data Set object on server | Default: 'CuratedDataSet'}
+\item{CuratedDataSetName}{\code{string} - Name of the Curated Data Set object on server - Default: 'CuratedDataSet'}
 
-\item{OutputName}{\code{string} - Name of output object to be assigned on server | Default: 'AugmentationOutput'}
+\item{OutputName}{\code{string} - Name of output object to be assigned on server - Default: 'AugmentationOutput'}
+
+\item{UnpackAugmentedDataSet}{\code{logical} indicating whether the Augmented Data Set \code{list} should be unpacked so that tables \code{data.frames} are directly accessible - Default: \code{TRUE}}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }

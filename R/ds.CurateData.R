@@ -31,6 +31,7 @@
 #'                                            \item RuleSet.Profile \code{string} - Profile name defining rule set to be used for table normalization. Profile name must be stated in \code{TableNormalization$RuleSet} - Default: 'Default'}}
 #'
 #' @param OutputName \code{character} - Name of output object to be assigned on server - Default: 'CurationOutput'
+#' @param UnpackCuratedDataSet \code{logical} indicating whether the Curated Data Set \code{list} should be unpacked so that tables \code{data.frames} are directly accessible - Default: \code{TRUE}
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return \code{list} of following objects:
@@ -80,6 +81,7 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                           #                 FeatureObligations = list(RuleSet.Profile = "Default"),
                           #                 FeatureTracking = list(RuleSet.Profile = "Default")),
                           OutputName = "CurationOutput",
+                          UnpackCuratedDataSet = TRUE,
                           DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
@@ -89,12 +91,13 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
   #--- For testing purposes ---
   # RawDataSetName <- "RawDataSet"
   # OutputName <- "CurationOutput"
+  # UnpackCuratedDataSet <- TRUE
   # DSConnections <- CCPConnections
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   # Initiate output messaging objects
   Messages <- list()
@@ -116,7 +119,6 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
   Messages$Assignment <- c(Messages$Assignment,
                            ds.GetObjectStatus(ObjectName = OutputName,
                                               DSConnections = DSConnections))
-
 
 
   # 2) Extract objects from list returned by CurateDataDS() and assign them to R server sessions
@@ -142,6 +144,28 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
       Messages$Assignment <- c(Messages$Assignment,
                                ds.GetObjectStatus(ObjectName = CurationOutputObjects[i],
                                                   DSConnections = DSConnections))
+  }
+
+  # Optionally unpack (unlist) CuratedDataSet
+  if (UnpackCuratedDataSet == TRUE)
+  {
+      # Get curated table names
+      CCPTableNames_CDS <- dsCCPhosClient::Meta_Tables$TableName_Curated
+
+      for(i in 1:length(CCPTableNames_CDS))
+      {
+          # Execute server-side assign function
+          DSI::datashield.assign(conns = DSConnections,
+                                 symbol = paste0("CDS_", CCPTableNames_CDS[i]),      # E.g. 'CDS_Metastasis'
+                                 value = call("ExtractFromListDS",
+                                              ListName.S = "CuratedDataSet",
+                                              ObjectName.S = CCPTableNames_CDS[i]))
+
+          # Call helper function to check if object assignment succeeded
+          Messages$Assignment <- c(Messages$Assignment,
+                                   ds.GetObjectStatus(ObjectName = paste0("CDS_", CCPTableNames_CDS[i]),
+                                                      DSConnections = DSConnections))
+      }
   }
 
   # Turn list into (named) vector
@@ -190,14 +214,13 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                                    Messages$CurationCompletion)
 
 
-
   # Print messages and return output
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # Print messages on console
   PrintMessages(Messages)
 
-  # Return Messages and Curation completion check object
-  return(list(Messages = Messages,
-              CurationCompletionCheck = CurationCompletionCheck))
+  # Invisibly return Messages and Curation completion check object
+  invisible(list(Messages = Messages,
+                 CurationCompletionCheck = CurationCompletionCheck))
 }

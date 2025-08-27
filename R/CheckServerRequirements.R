@@ -43,7 +43,7 @@ CheckServerRequirements <- function(ServerSpecifications = NULL,
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   # Initiate output messaging objects
   Messages <- list()
@@ -267,10 +267,10 @@ CheckServerRequirements <- function(ServerSpecifications = NULL,
   # Print messages on console
   PrintMessages(Messages)
 
-  # Return list containing data frames of gathered info and messages
-  return(list(PackageAvailability = RequiredPackageAvailability,
-              VersionOfdsCCPhos = VersionOfdsCCPhos,
-              FunctionAvailability = RequiredFunctionAvailability,
-              OpalTableAvailability = RequiredOpalTableAvailability,
-              Messages = Messages))
+  # Invisibly return list containing data frames of gathered info and messages
+  invisible(list(PackageAvailability = RequiredPackageAvailability,
+                 VersionOfdsCCPhos = VersionOfdsCCPhos,
+                 FunctionAvailability = RequiredFunctionAvailability,
+                 OpalTableAvailability = RequiredOpalTableAvailability,
+                 Messages = Messages))
 }

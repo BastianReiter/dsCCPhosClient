@@ -5,6 +5,34 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' AddCumulativeRow
+#'
+#' Adds a cumulative row to a tibble/data.frame
+#'
+#' @param
+#' @keywords internal
+#' @export
+AddCumulativeRow <- function(DataFrame,
+                             StringInNonNumericColumns = "All")
+{
+  # Get names of all non-numeric columns
+  NonNumericColumns <- names(DataFrame %>% select(!where(is.numeric)))
+
+  # Make cumulative row
+  CumulativeRow <- DataFrame %>%
+                      summarize(across(where(is.numeric), ~ sum(.x, na.rm = TRUE))) %>%      # Sum all non-numeric columns
+                      bind_cols(setNames(rep(list(StringInNonNumericColumns), length(NonNumericColumns)), NonNumericColumns))      # Re-add non-numeric columns and assign 'StringInNonNumericColumns' as values
+
+  # Row-bind original data.frame and cumulative row
+  DataFrame %>%
+      bind_rows(CumulativeRow)
+}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' CheckDSConnections
 #'
 #' This function checks if 'DSConnections' that are passed to a DataSHIELD client function are valid. If this object is not passed, the function will try to find an existing \code{list} programmatically (using \code{DSI} functionality) and return it.

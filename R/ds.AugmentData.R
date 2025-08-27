@@ -6,16 +6,19 @@
 #'
 #' Linked to server-side ASSIGN method \code{AugmentDataDS()}
 #'
-#' @param CuratedDataSetName \code{string} - Name of the Curated Data Set object on server | Default: 'CuratedDataSet'
-#' @param OutputName \code{string} - Name of output object to be assigned on server | Default: 'AugmentationOutput'
+#' @param CuratedDataSetName \code{string} - Name of the Curated Data Set object on server - Default: 'CuratedDataSet'
+#' @param OutputName \code{string} - Name of output object to be assigned on server - Default: 'AugmentationOutput'
+#' @param UnpackAugmentedDataSet \code{logical} indicating whether the Augmented Data Set \code{list} should be unpacked so that tables \code{data.frames} are directly accessible - Default: \code{TRUE}
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{list} of variables containing messages about object assignment for monitoring purposes.
 #' @export
 #'
 #' @author Bastian Reiter
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
                            OutputName = "AugmentationOutput",
+                           UnpackAugmentedDataSet = TRUE,
                            DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
@@ -25,6 +28,7 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
   #--- For testing purposes ---
   # CuratedDataSetName <- "CuratedDataSet"
   # OutputName <- "AugmentationOutput"
+  # UnpackAugmentedDataSet <- TRUE
   # DSConnections <- CCPConnections
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
@@ -82,6 +86,28 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
                                                   DSConnections = DSConnections))
   }
 
+  # Optionally unpack (unlist) AugmentedDataSet
+  if (UnpackAugmentedDataSet == TRUE)
+  {
+      # Define ADS table names
+      CCPTableNames_ADS <- c("Patient", "Diagnosis", "Therapy", "DiseaseCourse", "Events")
+
+      for(i in 1:length(CCPTableNames_ADS))
+      {
+          # Execute server-side assign function
+          DSI::datashield.assign(conns = DSConnections,
+                                 symbol = paste0("ADS_", CCPTableNames_ADS[i]),      # E.g. 'ADS_Events'
+                                 value = call("ExtractFromListDS",
+                                              ListName.S = "AugmentedDataSet",
+                                              ObjectName.S = CCPTableNames_ADS[i]))
+
+          # Call helper function to check if object assignment succeeded
+          Messages$Assignment <- c(Messages$Assignment,
+                                   ds.GetObjectStatus(ObjectName = paste0("ADS_", CCPTableNames_ADS[i]),
+                                                      DSConnections = DSConnections))
+      }
+  }
+
   # Turn list into (named) vector
   Messages$Assignment <- purrr::list_c(Messages$Assignment)
 
@@ -132,7 +158,7 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
   # Print messages on console
   PrintMessages(Messages)
 
-  # Return Messages and Augmentation completion check object
-  return(list(Messages = Messages,
-              AugmentationCompletionCheck = AugmentationCompletionCheck))
+  # Invisibly return Messages and Augmentation completion check object
+  invisible(list(Messages = Messages,
+                 AugmentationCompletionCheck = AugmentationCompletionCheck))
 }

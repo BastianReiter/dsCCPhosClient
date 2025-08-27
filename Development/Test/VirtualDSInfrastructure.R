@@ -66,7 +66,7 @@ CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
 # Check server requirements using dsCCPhosClient::CheckServerRequirements()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Requirements <- CheckServerRequirements()
+CheckServerRequirements()
 
 
 # datashield.pkg_status(conns = CCPConnections)
@@ -78,7 +78,7 @@ Requirements <- CheckServerRequirements()
 # Load Raw Data Set (RDS) from Opal data base to R sessions on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Messages <- LoadRawDataSet(ServerSpecifications = NULL)
+LoadRawDataSet(ServerSpecifications = NULL)
 
 
 
@@ -114,8 +114,8 @@ datashield.assign.expr(conns = CCPConnections,
 # Check RDS tables for existence and completeness
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-RDSTableCheck <- ds.CheckDataSet(DataSetName = "RawDataSet",
-                                 AssumeCCPDataSet = TRUE)
+RDSTableCheck <- ds.GetDataSetCheck(DataSetName = "RawDataSet",
+                                    AssumeCCPDataSet = TRUE)
 
 View(RDSTableCheck$TableStatus)
 
@@ -160,15 +160,15 @@ ds.DrawSample(RawDataSetName = "RawDataSet",
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS) (using default settings)
-Curation <- ds.CurateData(RawDataSetName = "RawDataSet",
-                          Settings = NULL,
-                          OutputName = "CurationOutput")
+ds.CurateData(RawDataSetName = "RawDataSet",
+              Settings = NULL,
+              OutputName = "CurationOutput")
 
-CDSTableCheck <- ds.CheckDataSet(DataSetName = "CuratedDataSet",
-                                 AssumeCCPDataSet = TRUE)
+CDSTableCheck <- ds.GetDataSetCheck(DataSetName = "CuratedDataSet",
+                                    AssumeCCPDataSet = TRUE)
 
-# Make tables from Curated Data Set directly addressable by unpacking them into R server session
-Messages <- ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet")
+# Integrated in ds.CuratedData: Make tables from Curated Data Set directly addressable by unpacking them into R server session
+# ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet")
 
 # Get curation reports
 CurationReport <- ds.GetCurationReport()
@@ -231,15 +231,14 @@ plot_ly(data = filter(PlotData, Feature == "UICCStage")$data[[1]],
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Run ds.AugmentData
-Messages <- ds.AugmentData(CuratedDataSetName = "CuratedDataSet",
-                           OutputName = "AugmentationOutput")
+ds.AugmentData(CuratedDataSetName = "CuratedDataSet",
+               OutputName = "AugmentationOutput")
 
-# Make tables from Augmented Data Set directly addressable by unpacking them into R server session
-Messages <- ds.UnpackAugmentedDataSet(AugmentedDataSetName = "AugmentedDataSet")
-
-ADSTableCheck <- ds.CheckDataSet(DataSetName = "AugmentedDataSet")
+ADSTableCheck <- ds.GetDataSetCheck(DataSetName = "AugmentedDataSet")
 
 
+# Integrated into ds.AugmentData: Make tables from Augmented Data Set directly addressable by unpacking them into R server session
+# Messages <- ds.UnpackAugmentedDataSet(AugmentedDataSetName = "AugmentedDataSet")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Get overview of objects in server workspaces
@@ -367,7 +366,7 @@ Test <- ds.GetFeatureInfo(TableName = "AnalysisDataSet",
 Test <- ds.GetSampleStatistics(TableName = "AnalysisDataSet",
                                MetricFeatureName = "PatientAgeAtDiagnosis")
 
-Test <- ds.GetFrequencyTable(TableName = "AnalysisDataSet",
+Test <- ds.GetFrequencyTable(TableName = "ADS_Diagnosis",
                              FeatureName = "TNM_T",
                              MaxNumberCategories = 20)
 

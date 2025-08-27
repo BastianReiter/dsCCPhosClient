@@ -20,46 +20,44 @@ ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
-    # Initiate output messaging objects
-    Messages <- list()
-    Messages$Assignment <- list()
+  # Initiate output messaging objects
+  Messages <- list()
+  Messages$Assignment <- list()
 
+  # Get curated CCP table names
+  CCPTableNames_CDS <- dsCCPhosClient::Meta_Tables$TableName_Curated
 
-    CCPTableNames_CDS <- dsCCPhosClient::Meta_Tables$TableName_Curated
+  for(i in 1:length(CCPTableNames_CDS))
+  {
+      # Execute server-side assign function
+      DSI::datashield.assign(conns = DSConnections,
+                             symbol = paste0("CDS_", CCPTableNames_CDS[i]),      # E.g. 'CDS_Metastasis'
+                             value = call("ExtractFromListDS",
+                                          ListName.S = CuratedDataSetName,
+                                          ObjectName.S = CCPTableNames_CDS[i]))
 
-    AssignmentInfo <- list()
+      # Call helper function to check if object assignment succeeded
+      Messages$Assignment <- c(Messages$Assignment,
+                               ds.GetObjectStatus(ObjectName = paste0("CDS_", CCPTableNames_CDS[i]),
+                                                  DSConnections = DSConnections))
+  }
 
-    for(i in 1:length(CCPTableNames_CDS))
-    {
-        # Execute server-side assign function
-        DSI::datashield.assign(conns = DSConnections,
-                               symbol = paste0("CDS_", CCPTableNames_CDS[i]),      # E.g. 'CDS_Metastasis'
-                               value = call("ExtractFromListDS",
-                                            ListName.S = CuratedDataSetName,
-                                            ObjectName.S = CCPTableNames_CDS[i]))
+  # Turn list into (named) vector
+  Messages$Assignment <- purrr::list_c(Messages$Assignment)
 
-        # Call helper function to check if object assignment succeeded
-        Messages$Assignment <- c(Messages$Assignment,
-                                 ds.GetObjectStatus(ObjectName = paste0("CDS_", CCPTableNames_CDS[i]),
-                                                    DSConnections = DSConnections))
-    }
-
-    # Turn list into (named) vector
-    Messages$Assignment <- purrr::list_c(Messages$Assignment)
-
-    # Add topic element to start of vector
-    Messages$Assignment <- c(Topic = "Object assignment on servers",
-                             Messages$Assignment)
+  # Add topic element to start of vector
+  Messages$Assignment <- c(Topic = "Object assignment on servers",
+                           Messages$Assignment)
 
 
-    # Print messages and return Messages object
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Print messages and return Messages object
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    # Print messages on console
-    PrintMessages(Messages)
+  # Print messages on console
+  PrintMessages(Messages)
 
-    # Return Messages
-    return(Messages)
+  # Return Messages invisibly
+  invisible(Messages)
 }

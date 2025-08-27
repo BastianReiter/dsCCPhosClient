@@ -44,66 +44,140 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
   # If the server workspaces are completely empty, stop function and return NULL
   if (length(UniqueObjectNames) == 0) { return(NULL) }
 
-  # Initiate 'ObjectInfo' tibble
-  ObjectInfoComplete <- tibble()
-  MetaDataComplete <- list()
-
-  # Create server-specific columns that give feedback on existence of objects (TRUE / FALSE)
-  #ServerColumns <- NULL
+  # Initiate objects
+  Overview <- list()
+  ObjectDetails <- list()
 
   for (i in 1:length(ServerNames))
   {
-      #print(i)
-      ObjectInfo <- tibble(Object = UniqueObjectNames)
-      ObjectInfo$ObjectExists <- ObjectInfo$Object %in% ServerObjectNames[[ServerNames[i]]]
-
-      #ServerColumns <- cbind(ServerColumns,      # Using cbind() instead of bind_cols() because it's quiet
-      #                       Column)
-      #}
-
-      # Name columns according to server names
-      #colnames(ServerColumns) <- "ObjectExists"
-
-      # Bind columns to Output data frame
-      # ObjectInfo <- bind_cols(ObjectInfo,
-      #                        ServerColumns)
-
+      ServerOverview <- tibble(Object = UniqueObjectNames) %>%
+                            mutate(Exists = Object %in% ServerObjectNames[[ServerNames[i]]])
 
       # Collect meta data about existing objects and attach some of it to 'ObjectInfo'
       #-------------------------------------------------------------------------
+      ExistingObjects <- ServerOverview %>%
+                            filter(Exists == TRUE)
 
-      MetaData <- ObjectInfo$Object %>%
-                      map(function(object)
+      # Get meta data
+      MetaData <- ExistingObjects %>%
+                      pull(Object) %>%
+                      map(function(objectname)
                           {
-                              ObjectMetaData <- ds.GetObjectMetaData(ObjectName = object,
+                              ObjectMetaData <- ds.GetObjectMetaData(ObjectName = objectname,
                                                                      DSConnections = DSConnections[i])
-                              return(ObjectMetaData$FirstEligible)      # The meta data for an object is collected from the first server where the object actually exists (in case it does not exist everywhere)
+                              return(ObjectMetaData[[ServerNames[i]]])
                           }) %>%
-                      setNames(ObjectInfo$Object)
+                      setNames(ExistingObjects$Object)
 
-      # Add some meta data to 'ObjectInfo'
-      ObjectInfo <- ObjectInfo %>%
-                        rowwise() %>%
-                        mutate(Class = ifelse(!is.null(MetaData[[Object]]$Class), MetaData[[Object]]$Class, NA),
-                               Length = ifelse(!is.null(MetaData[[Object]]$Length), MetaData[[Object]]$Length, NA),
-                               RowCount = ifelse(!is.null(MetaData[[Object]]$RowCount), MetaData[[Object]]$RowCount, NA),
-                               .after = Object) %>%
-                        ungroup() %>%
-                        mutate(ServerName = ServerNames[i], .before = 1)
+      # Add some meta data to 'ServerOverview'
+      ServerOverview <- ServerOverview %>%
+                            rowwise() %>%
+                            mutate(Class = ifelse(!is.null(MetaData[[Object]]$Class), MetaData[[Object]]$Class, NA),
+                                   Length = as.character(ifelse(!is.null(MetaData[[Object]]$Length), MetaData[[Object]]$Length, NA)),
+                                   RowCount = ifelse(!is.null(MetaData[[Object]]$RowCount), MetaData[[Object]]$RowCount, NA),
+                                   .after = Object) %>%
+                            ungroup() %>%
+                            mutate(ServerName = ServerNames[i], .before = 1)
 
-      ObjectInfoComplete <- rbind(ObjectInfoComplete, ObjectInfo)
-      MetaDataComplete[[i]] <- MetaData
-      names(MetaDataComplete)[i] <- ServerNames[i]
+      # Extract structural details from object meta data
+      ServerObjectDetails <- MetaData %>%
+                                map(\(ObjectMetaData) ObjectMetaData$Structure)
+
+      # Add server-specific overview table and object details to overall lists
+      Overview[[i]] <- ServerOverview
+      names(Overview)[i] <- ServerNames[i]
+      ObjectDetails[[i]] <- ServerObjectDetails
+      names(ObjectDetails)[i] <- ServerNames[i]
   }
 
 
+  # Summarize server-specific overviews in 'Overview.All'
+  Overview.All <- Overview %>%
+                      list_rbind() %>%
+                      group_by(Object) %>%
+                          summarize(ServerName = "All",
+                                    Exists = case_when(all(Exists == TRUE) ~ TRUE,
+                                                       .default = FALSE),
+                                    Exists.Info = case_when(all(Exists == TRUE) ~ "Uniform (TRUE)",
+                                                            all(Exists == FALSE) ~ "Uniform (FALSE)",
+                                                            .default = "Varied"),
+                                    Class = case_when(length(unique(Class)) == 1 ~ unique(Class),
+                                                      .default = "Varied"),
+                                    Class.Info = case_when(length(unique(Class)) == 1 ~ paste0("Uniform (", unique(Class), ")"),
+                                                           .default = "Varied"),
+                                    Length = case_when(length(unique(Length)) == 1 ~ unique(Length),
+                                                       length(unique(Length)) > 1 ~ paste0(min(Length, na.rm = TRUE), " - ", max(Length, na.rm = TRUE)),
+                                                       .default = NA),
+                                    Length.Info = case_when(length(unique(Length)) == 1 ~ paste0("Uniform (", unique(Length), ")"),
+                                                            .default = paste0("Varied (", min(Length, na.rm = TRUE), " - ", max(Length, na.rm = TRUE), ")")),
+                                    RowCount = sum(RowCount, is.na = TRUE)) %>%
+                      ungroup() %>%
+                      relocate(ServerName, .before = Object)
+
+  # Row-bind cumulative and server-specific overview data.frames
+  Overview <- c(list(All = Overview.All),
+                Overview)
+
+
+  # Object details
+  #-----------------------------------------------------------------------------
+
+  # For easier handling
+  ObjectDetails <- ObjectDetails %>%
+                      list_transpose()
+
+  # For all objects that are not of class 'data.frame', summarize server-specific object details
+  NonTableDetails <- Overview.All %>%
+                          filter(!(Class == "data.frame")) %>%
+                          pull(Object, name = Object) %>%
+                          map(function(objectname)
+                              {
+                                  # Row-bind all server-specific tables containing object structure details
+                                  ObjectDetails.All <- ObjectDetails[[objectname]] %>%      # This is a list with server-specific structural details for the current object
+                                                            list_rbind()
+
+                                  if (!length(ObjectDetails.All) == 0)
+                                  {
+                                      # Create a summarizing structure table
+                                      ObjectDetails.All <- ObjectDetails.All %>%
+                                                                group_by(Element) %>%
+                                                                    summarize(ExistsEverywhere = case_when(n() == length(ServerNames) ~ TRUE,
+                                                                                                           .default = FALSE),
+                                                                              Type = case_when(length(unique(Type)) == 1 ~ unique(Type),
+                                                                                               .default = "Varied")) %>%
+                                                                ungroup()
+
+                                  } else { ObjectDetails.All <- NULL }
+
+                                  return(c(list(All = ObjectDetails.All),
+                                           ObjectDetails[[objectname]]))
+                              })
+
+  # For all objects of class 'data.frame' use 'ds.GetTableCheck' to get more meta data
+  TableDetails <- Overview.All %>%
+                      filter(Class == "data.frame") %>%
+                      pull(Object, name = Object) %>%
+                      map(function(objectname)
+                          {
+                              ds.GetTableCheck(TableName = objectname,
+                                               DSConnections = DSConnections) %>%
+                                  pluck("FeatureCheckOverview")
+                          })
+
+  # Re-consolidate in 'ObjectDetails'
+  ObjectDetails <- c(NonTableDetails,
+                     TableDetails) %>%
+                      list_transpose()
+
+
   # Get eligible value sets from meta data
+  #-----------------------------------------------------------------------------
   EligibleValues <- tibble(Object = UniqueObjectNames) %>%
                         mutate(TableWithoutPrefix = str_replace(Object, "^(RDS_|CDS_|ADS_)", ""),
                                Stage = case_when(str_starts(Object, "RDS_") ~ "Raw",
                                                  str_starts(Object, "(CDS_|ADS_)") ~ "Curated",
                                                  .default = NA)) %>%
-                        left_join(dsCCPhosClient::Meta_Values, by = join_by(TableWithoutPrefix == Table)) %>%
+                        left_join(dsCCPhosClient::Meta_Values, by = join_by(TableWithoutPrefix == Table), relationship = "many-to-many") %>%
                         left_join(select(dsCCPhosClient::Meta_Features, TableName_Curated, FeatureName_Curated, FeatureName_Raw), by = join_by(TableWithoutPrefix == TableName_Curated, Feature == FeatureName_Curated)) %>%
                         mutate(Feature = case_when(Stage == "Raw" ~ FeatureName_Raw,
                                                    Stage == "Curated" ~ Feature,
@@ -125,7 +199,7 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
 
   # Return list
   #-----------------------------------------------------------------------------
-  return(list(Overview = ObjectInfoComplete,
-              Details = MetaData,
+  return(list(Overview = Overview,
+              ObjectDetails = ObjectDetails,
               EligibleValues = EligibleValues))
 }

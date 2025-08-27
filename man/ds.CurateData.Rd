@@ -8,6 +8,7 @@ ds.CurateData(
   RawDataSetName = "RawDataSet",
   Settings = NULL,
   OutputName = "CurationOutput",
+  UnpackCuratedDataSet = TRUE,
   DSConnections = NULL
 )
 }
@@ -38,6 +39,8 @@ ds.CurateData(
 \item RuleSet.Profile \code{string} - Profile name defining rule set to be used for table normalization. Profile name must be stated in \code{TableNormalization$RuleSet} - Default: 'Default'}}}
 
 \item{OutputName}{\code{character} - Name of output object to be assigned on server - Default: 'CurationOutput'}
+
+\item{UnpackCuratedDataSet}{\code{logical} indicating whether the Curated Data Set \code{list} should be unpacked so that tables \code{data.frames} are directly accessible - Default: \code{TRUE}}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }

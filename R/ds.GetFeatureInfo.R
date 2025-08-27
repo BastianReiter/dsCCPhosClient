@@ -32,7 +32,7 @@ ds.GetFeatureInfo <- function(TableName,
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   # Get meta data of table object
   TableMetaData <- ds.GetObjectMetaData(ObjectName = TableName,
@@ -66,15 +66,6 @@ ds.GetFeatureInfo <- function(TableName,
                                 ValidProportion = N.Valid / N.Total,
                                 N.Missing = sum(SeparateProperties$N.Missing),
                                 MissingProportion = N.Missing / N.Total)
-
-  # EligibleValues <- NULL
-  #
-  # # If Feature of concern is of class character
-  # if (CumulatedDataType == "character")
-  # {
-  #     EligibleValues <- GetEligibleValues(TableName = TableName,
-  #                                         FeatureName = FeatureName)
-  # }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Glue cumulated and separate feature meta data together and return tibble
