@@ -21,13 +21,13 @@ ds.GetObjectMetaData <- function(ObjectName,
   require(purrr)
 
   # --- For Testing Purposes ---
-  # ObjectName <- "TestData"
+  # ObjectName <- "RDS_Diagnosis"
   # DSConnections <- CCPConnections
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   # Get object meta data from every server
   ObjectMetaData <- DSI::datashield.aggregate(conns = DSConnections,

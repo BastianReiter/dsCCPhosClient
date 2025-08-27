@@ -40,32 +40,6 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Meta_DataHarmonization.rda
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#' Meta data on rule-based transformation of raw data
-#'
-#' A tibble containing rules
-#'
-#' @format ## `Meta_DataHarmonization`
-#' Tibble
-#' \describe{
-#'   \item{Profile}{}
-#'   \item{Table}{}
-#'   \item{Feature}{}
-#'   \item{EvaluationOrder}{}
-#'   \item{Operation}{}
-#'   \item{LookupValue}{}
-#'   \item{NewValue}{}
-#'   \item{Comment}{}
-#' }
-#' @source <https://github.com/BastianReiter/dsCCPhos/blob/main/Development/MetaData>
-#' @author Bastian Reiter
-"Meta_DataHarmonization"
-
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Meta_DiagnosisAssociation.rda
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

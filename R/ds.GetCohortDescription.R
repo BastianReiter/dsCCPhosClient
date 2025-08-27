@@ -78,7 +78,7 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
 
   # Create coherent data.frame with Server-specific data
   CohortSize_OverTime_Servers <- ServerReturns$CohortSize_OverTime %>%
-                                  list_rbind(names_to = "Server")
+                                    list_rbind(names_to = "Server")
 
   # Get cumulated values
   CohortSize_OverTime_All <- CohortSize_OverTime_Servers %>%

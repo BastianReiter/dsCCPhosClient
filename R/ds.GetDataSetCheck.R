@@ -1,10 +1,10 @@
 
-#' ds.CheckDataSet
+#' ds.GetDataSetCheck
 #'
 #' `r lifecycle::badge("stable")` \cr\cr
 #' Check out a data set (\code{list} of \code{data.frames}) on servers and return a coherent summary across servers.
 #'
-#' Linked to server-side AGGREGATE method \code{CheckDataSetDS()}
+#' Linked to server-side AGGREGATE method \code{GetDataSetCheckDS()}
 #'
 #' @param DataSetName \code{string} - Name of Data Set object (list) on server, usually "RawDataSet", "CuratedDataSet" or "AugmentedDataSet"
 #' @param RequiredTableNames \code{character vector} - Names of tables that are expected/required to be in the data set - Default: Names of elements in list evaluated from \code{DataSetName.S}
@@ -12,20 +12,22 @@
 #' @param AssumeCCPDataSet \code{logical} - Whether or not the data set to be checked out is one of the main data sets used in CCPhos - Default: FALSE
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
-#' @return A \code{list} containing compiled meta data about RDS table:
+#' @return A \code{list} containing compiled meta data about data set tables:
 #'         \itemize{\item TableStatus
 #'                  \item TableRowCounts
-#'                  \item FeatureStatus
+#'                  \item FeatureExistence
 #'                  \item FeatureTypes
+#'                  \item NonMissingValueCounts
 #'                  \item NonMissingValueRates }
 #' @export
 #'
 #' @author Bastian Reiter
-ds.CheckDataSet <- function(DataSetName,
-                            RequiredTableNames = NULL,
-                            RequiredFeatureNames = NULL,
-                            AssumeCCPDataSet = FALSE,
-                            DSConnections = NULL)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ds.GetDataSetCheck <- function(DataSetName,
+                               RequiredTableNames = NULL,
+                               RequiredFeatureNames = NULL,
+                               AssumeCCPDataSet = FALSE,
+                               DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   require(dplyr)
@@ -33,19 +35,17 @@ ds.CheckDataSet <- function(DataSetName,
   require(stringr)
   require(tidyr)
 
-  #--- For testing purposes ---
-  # DataSetName <- "CuratedDataSet"
+  # --- For Testing Purposes ---
+  # DataSetName <- "RawDataSet"
   # AssumeCCPDataSet <- TRUE
-  # RequiredTableNames = paste0("RDS_", dsCCPhos::Meta_Tables$TableName_Curated)
-  # RequiredFeatureNames = RequiredTableNames.S %>%
-  #                             map(\(tablename) filter(dsCCPhos::Meta_Features, TableName_Curated == str_remove(tablename, "RDS_"))$FeatureName_Raw) %>%
-  #                             set_names(RequiredTableNames.S)
+  # RequiredTableNames = NULL
+  # RequiredFeatureNames = NULL
   # DSConnections <- CCPConnections
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Check argument eligibility
@@ -61,23 +61,23 @@ ds.CheckDataSet <- function(DataSetName,
   # Server function call to get list of lists
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  TableCheck <- DSI::datashield.aggregate(conns = DSConnections,
-                                          expr = call("CheckDataSetDS",
-                                                      DataSetName.S = DataSetName,
-                                                      RequiredTableNames.S = RequiredTableNames,
-                                                      RequiredFeatureNames.S = RequiredFeatureNames,
-                                                      AssumeCCPDataSet.S = AssumeCCPDataSet))
+  DataSetCheck <- DSI::datashield.aggregate(conns = DSConnections,
+                                            expr = call("GetDataSetCheckDS",
+                                                        DataSetName.S = DataSetName,
+                                                        RequiredTableNames.S = RequiredTableNames,
+                                                        RequiredFeatureNames.S = RequiredFeatureNames,
+                                                        AssumeCCPDataSet.S = AssumeCCPDataSet))
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Transform into cumulated report objects
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # Create data frame containing "traffic light" info about existence/completeness of RDS tables
-  TableStatus <- TableCheck %>%
-                      map(function(ServerTableCheck)
+  # Create data frame containing "traffic light" info about existence/completeness of data set tables
+  TableStatus <- DataSetCheck %>%
+                      map(function(ServerDataSetCheck)
                           {
-                              ServerTableStatus <- ServerTableCheck %>%
+                              ServerTableStatus <- ServerDataSetCheck %>%
                                                     map_chr(function(TableInfo)
                                                             {
                                                                 Status <- "grey"
@@ -86,8 +86,8 @@ ds.CheckDataSet <- function(DataSetName,
                                                                 else if (TableInfo$TableExists == TRUE & TableInfo$TableComplete == TRUE) { Status <- "green" }
                                                                 else if (TableInfo$TableExists == TRUE & TableInfo$TableComplete == FALSE) { Status <- "yellow" }
 
-                                                                CountExistingFeatures <- sum(TableInfo$FeatureCheck$Exists)
-                                                                CountTotalFeatures <- nrow(TableInfo$FeatureCheck)
+                                                                CountExistingFeatures <- sum(TableInfo$FeatureCheckOverview$Exists)
+                                                                CountTotalFeatures <- nrow(TableInfo$FeatureCheckOverview)
 
                                                                 if (Status != "grey") { Status <- paste0(Status, " (", CountExistingFeatures, "/", CountTotalFeatures, ")") }
 
@@ -103,7 +103,7 @@ ds.CheckDataSet <- function(DataSetName,
 
 
   # Create list of data frames (one per RDS table) containing table row counts at different servers
-  TableRowCounts <- TableCheck %>%
+  TableRowCounts <- DataSetCheck %>%
                         list_transpose() %>%
                         map(function(TableInfo)
                             {
@@ -114,12 +114,12 @@ ds.CheckDataSet <- function(DataSetName,
 
 
   # Create list of data frames (one per RDS table) containing info about existence of table features
-  FeatureExistence <- TableCheck %>%
+  FeatureExistence <- DataSetCheck %>%
                           list_transpose() %>%
                           map(function(TableInfo)
                               {
                                   TableInfo %>%
-                                      map(\(ServerTableInfo) ServerTableInfo$FeatureCheck %>% select(Feature, Exists)) %>%
+                                      map(\(ServerTableInfo) ServerTableInfo$FeatureCheckOverview %>% select(Feature, Exists)) %>%
                                       list_rbind(names_to = "ServerName") %>%
                                       pivot_wider(names_from = Feature,
                                                   values_from = Exists)
@@ -127,28 +127,39 @@ ds.CheckDataSet <- function(DataSetName,
 
 
   # Create list of data frames (one per RDS table) containing table's feature types
-  FeatureTypes <- TableCheck %>%
+  FeatureTypes <- DataSetCheck %>%
                       list_transpose() %>%
                       map(function(TableInfo)
                           {
                               TableInfo %>%
-                                  map(\(ServerTableInfo) ServerTableInfo$FeatureCheck %>% select(Feature, Type)) %>%
+                                  map(\(ServerTableInfo) ServerTableInfo$FeatureCheckOverview %>% select(Feature, Type)) %>%
                                   list_rbind(names_to = "ServerName") %>%
                                   pivot_wider(names_from = Feature,
                                               values_from = Type)
                           })
 
 
-  # Create list of data frames (one per RDS table) containing feature-specific non-missing value rates
-  NonMissingValueRates <- TableCheck %>%
+  # Create list of data frames (one per RDS table) containing feature-specific non-missing value counts
+  NonMissingValueCounts <- DataSetCheck %>%
                               list_transpose() %>%
                               map(function(TableInfo)
                                   {
                                       TableInfo %>%
-                                          map(\(ServerTableInfo) ServerTableInfo$FeatureCheck %>% select(Feature, NonMissingValueRate)) %>%
+                                          map(\(ServerTableInfo) ServerTableInfo$FeatureCheckOverview %>% select(Feature, NonMissingValueCount)) %>%
                                           list_rbind(names_to = "ServerName") %>%
                                           pivot_wider(names_from = Feature,
-                                                      values_from = NonMissingValueRate)
+                                                      values_from = NonMissingValueCount)
+                                  })
+
+
+  # Create list of data frames (one per RDS table) containing feature-specific non-missing value rates
+  NonMissingValueRates <- NonMissingValueCounts %>%
+                              imap(function(TableInfo, tablename)
+                                  {
+                                      TableInfo %>%
+                                          left_join(TableRowCounts[[tablename]], by = join_by(ServerName)) %>%      # Get row counts from 'TableCheckOverview'
+                                          mutate(across(-c(ServerName, RowCount), ~ .x / RowCount)) %>%
+                                          select(-RowCount)
                                   })
 
 
@@ -159,5 +170,6 @@ ds.CheckDataSet <- function(DataSetName,
               TableRowCounts = TableRowCounts,
               FeatureExistence = FeatureExistence,
               FeatureTypes = FeatureTypes,
+              NonMissingValueCounts = NonMissingValueCounts,
               NonMissingValueRates = NonMissingValueRates))
 }

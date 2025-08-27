@@ -169,6 +169,6 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   # Print messages on console
   PrintMessages(Messages)
 
-  # Return Messages
-  return(Messages)
+  # Return Messages invisibly
+  invisible(Messages)
 }

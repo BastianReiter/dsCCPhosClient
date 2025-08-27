@@ -30,10 +30,8 @@ ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
   Messages <- list()
   Messages$Assignment <- list()
 
-
+  # Define ADS table names
   CCPTableNames_ADS <- c("Patient", "Diagnosis", "Therapy", "DiseaseCourse", "Events")
-
-  AssignmentInfo <- list()
 
   for(i in 1:length(CCPTableNames_ADS))
   {
@@ -64,6 +62,6 @@ ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
   # Print messages on console
   PrintMessages(Messages)
 
-  # Return Messages
-  return(Messages)
+  # Return Messages invisibly
+  invisible(Messages)
 }
