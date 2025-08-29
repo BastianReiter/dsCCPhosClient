@@ -124,7 +124,7 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
 
   # For easier handling
   ObjectDetails <- ObjectDetails %>%
-                      list_transpose()
+                      list_transpose(simplify = FALSE)
 
   # For all objects that are not of class 'data.frame', summarize server-specific object details
   NonTableDetails <- Overview.All %>%
