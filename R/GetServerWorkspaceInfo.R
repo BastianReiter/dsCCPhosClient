@@ -133,8 +133,8 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
                           map(function(objectname)
                               {
                                   # Row-bind all server-specific tables containing object structure details
-                                  ObjectDetails.All <- ObjectDetails[[objectname]] %>%      # This is a list with server-specific structural details for the current object
-                                                            list_rbind()
+                                  ObjectDetails.All <- ObjectDetails[[objectname]] %>%     # This is a list with server-specific structural details for the current object
+                                                            { if (!is.data.frame(.) & !is.vector(.)) { list_rbind(.) } }
 
                                   if (!length(ObjectDetails.All) == 0)
                                   {
