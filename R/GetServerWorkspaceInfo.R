@@ -124,7 +124,7 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
 
   # For easier handling
   ObjectDetails <- ObjectDetails %>%
-                      list_transpose()
+                      list_transpose(simplify = FALSE)
 
   # For all objects that are not of class 'data.frame', summarize server-specific object details
   NonTableDetails <- Overview.All %>%
@@ -134,7 +134,8 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
                               {
                                   # Row-bind all server-specific tables containing object structure details
                                   ObjectDetails.All <- ObjectDetails[[objectname]] %>%     # This is a list with server-specific structural details for the current object
-                                                            { if (!is.data.frame(.) & !is.vector(.)) { list_rbind(.) } }
+                                                            list_rbind()
+                                                            #{ if (!is.data.frame(.) & !is.vector(.)) { list_rbind(.) } }
 
                                   if (!length(ObjectDetails.All) == 0)
                                   {
