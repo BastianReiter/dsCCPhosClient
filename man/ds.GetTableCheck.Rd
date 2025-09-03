@@ -22,10 +22,10 @@ ds.GetTableCheck(
 }
 \value{
 A \code{list} containing compiled meta data about table:
-\itemize{\item TableStatus
-\item TableRowCounts
-\item FeatureStatus
+\itemize{\item TableCheckOverview
+\item FeatureExistence
 \item FeatureTypes
+\item NonMissingValueCounts
 \item NonMissingValueRates }
 }
 \description{

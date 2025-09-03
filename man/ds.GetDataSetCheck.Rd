@@ -27,8 +27,9 @@ ds.GetDataSetCheck(
 A \code{list} containing compiled meta data about data set tables:
 \itemize{\item TableStatus
 \item TableRowCounts
-\item FeatureStatus
+\item FeatureExistence
 \item FeatureTypes
+\item NonMissingValueCounts
 \item NonMissingValueRates }
 }
 \description{
