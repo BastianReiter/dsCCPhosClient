@@ -237,8 +237,6 @@ ds.AugmentData(CuratedDataSetName = "CuratedDataSet",
 ADSTableCheck <- ds.GetDataSetCheck(DataSetName = "AugmentedDataSet")
 
 
-# Integrated into ds.AugmentData: Make tables from Augmented Data Set directly addressable by unpacking them into R server session
-# Messages <- ds.UnpackAugmentedDataSet(AugmentedDataSetName = "AugmentedDataSet")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Get overview of objects in server workspaces
@@ -266,7 +264,10 @@ ObjectMetaData$FirstEligible$DataTypes["PatientID"]
 # Process ADS tables
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ds.table("ADS_Patient$Gender")
+Test <- ds.table("ADS_Patient$Gender",
+         "ADS_Patient$CountDiagnoses")
+
+ds.names("ADS_Patient")
 
 # dsTidyverse
 ds.filter(df.name = "ADS_Patient",
@@ -326,10 +327,12 @@ Plot <- CohortDescription$AgeDistribution %>%
 
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Perform exemplary analyses
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
 
 
 ds.names("AnalysisDataSet")

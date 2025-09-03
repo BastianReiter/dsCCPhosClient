@@ -26,6 +26,7 @@ library(dplyr)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Adding package dependencies using usethis::use_package()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# use_package("assertthat")
 # use_dev_package("CCPhosApp", type = "Suggests", remote = "devtools::BastianReiter/CCPhosApp")
 # use_package("cli")
 # use_package("dplyr")
@@ -69,6 +70,7 @@ library(dplyr)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_r("ds.GetAugmentationReport.R")
 # use_r("ds.GetCohortDescription.R")
+# use_r("ds.GetCrossTab.R")
 # use_r("ds.GetCurationReport.R")
 # use_r("ds.GetDataSetCheck.R")
 # use_r("ds.GetFeatureInfo.R")
