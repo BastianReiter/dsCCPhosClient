@@ -25,9 +25,9 @@ ds.GetCrossTab <- function(TableName,
   require(tidyr)
 
   # --- For Testing Purposes ---
-  TableName <- "ADS_Patient"
-  FeatureNames <- c("Sex", "CountDiagnoses")
-  DSConnections <- CCPConnections
+  # TableName <- "ADS_Patient"
+  # FeatureNames <- c("Sex", "CountDiagnoses")
+  # DSConnections <- CCPConnections
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
