@@ -6,12 +6,10 @@
 #' Linked to server-side \code{AGGREGATE} function \code{GetCrossTabDS()}
 #'
 #' @param TableName \code{string} - Name of \code{data.frame} on server
-#' @param FilterExpression \code{string} - \code{dplyr::filter} expression as string
-#' @param GroupBy \code{string} - Optional \code{dplyr::group_by} expression as string
-#' @param OutputName \code{string} - Name of resulting \code{data.frame} on server
+#' @param FeatureNames \code{character} - Vector of feature names
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
-#' @return A \code{list} of messages about object assignment for monitoring purposes
+#' @return A \code{list}
 #' @export
 #'
 #' @author Bastian Reiter

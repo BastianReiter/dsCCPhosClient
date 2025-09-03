@@ -9,16 +9,12 @@ ds.GetCrossTab(TableName, FeatureNames, DSConnections = NULL)
 \arguments{
 \item{TableName}{\code{string} - Name of \code{data.frame} on server}
 
+\item{FeatureNames}{\code{character} - Vector of feature names}
+
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
-
-\item{FilterExpression}{\code{string} - \code{dplyr::filter} expression as string}
-
-\item{GroupBy}{\code{string} - Optional \code{dplyr::group_by} expression as string}
-
-\item{OutputName}{\code{string} - Name of resulting \code{data.frame} on server}
 }
 \value{
-A \code{list} of messages about object assignment for monitoring purposes
+A \code{list}
 }
 \description{
 Get cross tab
