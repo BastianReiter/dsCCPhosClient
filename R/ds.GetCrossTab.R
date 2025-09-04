@@ -35,7 +35,7 @@ ds.GetCrossTab <- function(TableName,
   # RemoveNA = FALSE
   # DSConnections <- CCPConnections
 
-  # --- Argument assertions ---
+  # --- Argument Assertions ---
   assert_that(is.string(TableName),
               is.character(FeatureNames),
               is.logical(RemoveNA))
