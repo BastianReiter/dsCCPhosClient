@@ -22,7 +22,7 @@ A \code{list} containing descriptive statistics characterizing patient cohort:
 \itemize{\item CohortSize
 \item CohortSizeOverTime
 \item AgeDistribution
-\item GenderDistribution}
+\item SexDistribution}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr

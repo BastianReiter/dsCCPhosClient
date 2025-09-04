@@ -91,6 +91,7 @@ library(dplyr)
 # use_r("ds.ExtractFromList.R")
 # use_r("ds.FilterTable.R")
 # use_r("ds.JoinTables.R")
+# use_r("ds.MutateTable.R")
 # use_r("ds.UnpackAugmentationOutput.R")
 # use_r("ds.UnpackCurationOutput.R")
 

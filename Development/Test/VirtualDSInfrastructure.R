@@ -238,6 +238,7 @@ ADSTableCheck <- ds.GetDataSetCheck(DataSetName = "AugmentedDataSet")
 
 
 
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Get overview of objects in server workspaces
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -264,20 +265,16 @@ ObjectMetaData$FirstEligible$DataTypes["PatientID"]
 # Process ADS tables
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Test <- ds.table("ADS_Patient$Gender",
-         "ADS_Patient$CountDiagnoses")
-
-ds.names("ADS_Patient")
 
 # dsTidyverse
-ds.filter(df.name = "ADS_Patient",
-          tidy_expr = list(CountDiagnoses == 1),
-          newobj = "ADS_Patient_OneDiagnosis")
-
-
-ds.filter(df.name = "ADS_Patient",
-          tidy_expr = list(Gender == "Female"),
-          newobj = "ADS_Patient_OneDiagnosis")
+# ds.filter(df.name = "ADS_Patient",
+#           tidy_expr = list(CountDiagnoses == 1),
+#           newobj = "ADS_Patient_OneDiagnosis")
+#
+#
+# ds.filter(df.name = "ADS_Patient",
+#           tidy_expr = list(Gender == "Female"),
+#           newobj = "ADS_Patient_OneDiagnosis")
 
 
 
@@ -332,10 +329,16 @@ Plot <- CohortDescription$AgeDistribution %>%
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+Test <- ds.GetCrossTab(TableName = "ADS_Patient",
+                       FeatureNames = c("Sex", "LastVitalStatus", "CountDiagnoses"),
+                       RemoveNA = TRUE)
+
+ds.MutateTable(TableName = "ADS_Diagnosis",
+               MutateExpression = "UICCStageClassification = case_when(str_starts(TNM_T, '3') ~ 'III', .default = '<NA>')",
+               OutputName = "TestUICC")
 
 
-
-ds.names("AnalysisDataSet")
+ds.names("TestUICC")
 
 
 Test <- dsBaseClient::ds.corTest(x = "AnalysisDataSet$PatientAgeAtDiagnosis",
