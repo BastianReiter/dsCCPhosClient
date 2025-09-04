@@ -14,7 +14,7 @@
 #'         \itemize{\item CohortSize
 #'                  \item CohortSizeOverTime
 #'                  \item AgeDistribution
-#'                  \item GenderDistribution}
+#'                  \item SexDistribution}
 #' @export
 #'
 #' @author Bastian Reiter
@@ -61,7 +61,7 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
 # Cohort Size Summary (Cumulated Patient and Diagnosis Count)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   CohortSize_Servers <- ServerReturns$CohortSize %>%
-                          list_rbind(names_to = "Server")
+                            list_rbind(names_to = "Server")
 
   CohortSize_All <- CohortSize_Servers %>%
                         summarize(PatientCount = sum(PatientCount),
@@ -130,21 +130,21 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Gender
+# Sex
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  GenderDistribution_Servers <- ServerReturns$Gender %>%
+  SexDistribution_Servers <- ServerReturns$Sex %>%
                                   list_rbind(names_to = "Server")
 
-  GenderDistribution_All <- GenderDistribution_Servers %>%
-                                group_by(Gender) %>%
-                                    summarize(N = sum(N)) %>%
-                                ungroup() %>%
-                                mutate(Server = "All",
-                                       Proportion = N / sum(N))
+  SexDistribution_All <- SexDistribution_Servers %>%
+                              group_by(Sex) %>%
+                                  summarize(N = sum(N)) %>%
+                              ungroup() %>%
+                              mutate(Server = "All",
+                                     Proportion = N / sum(N))
 
-  GenderDistribution <- GenderDistribution_Servers %>%
-                            bind_rows(GenderDistribution_All)
+  SexDistribution <- SexDistribution_Servers %>%
+                          bind_rows(SexDistribution_All)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -153,5 +153,5 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
   return(list(CohortSize = CohortSize,
               CohortSize_OverTime = CohortSize_OverTime,
               AgeDistribution = AgeDistribution,
-              GenderDistribution = GenderDistribution))
+              SexDistribution = SexDistribution))
 }

@@ -1,12 +1,12 @@
 
-#' ds.FilterTable
+#' ds.MutateTable
 #'
-#' Filter a table on server, making use of \code{dplyr} and \code{stringr}.
+#' Make use of \code{dplyr::mutate()} to create new features in a given table (\code{data.frame}) on the servers.
 #'
-#' Linked to server-side \code{ASSIGN} function \code{FilterTableDS()}
+#' Linked to server-side \code{ASSIGN} function \code{MutateTableDS()}
 #'
 #' @param TableName \code{string} - Name of \code{data.frame} on server
-#' @param FilterExpression \code{string} - \code{dplyr::filter} expression as string
+#' @param MutateExpression \code{string} - \code{dplyr::mutate} expression as string
 #' @param GroupBy \code{string} - Optional \code{dplyr::group_by} expression as string
 #' @param OutputName \code{string} - Name of resulting \code{data.frame} on server
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
@@ -16,8 +16,8 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ds.FilterTable <- function(TableName,
-                           FilterExpression,
+ds.MutateTable <- function(TableName,
+                           MutateExpression,
                            GroupBy = NULL,
                            OutputName,
                            DSConnections = NULL)
@@ -27,14 +27,14 @@ ds.FilterTable <- function(TableName,
 
   # --- For Testing Purposes ---
   # TableName <- "CDS_Patient"
-  # FilterExpression <- "LastVitalStatus == 'Alive' & str_starts(Gender, 'Ma')"
+  # MutateExpression <- "LastVitalStatus == 'Alive' & str_starts(Gender, 'Ma')"
   # GroupBy <- NULL
   # OutputName <- "Test"
   # DSConnections <- CCPConnections
 
   # --- Argument assertions ---
   assert_that(is.string(TableName),
-              is.string(FilterExpression),
+              is.string(MutateExpression),
               (is.null(GroupBy) || is.string(GroupBy)),
               is.string(OutputName))
 
@@ -43,15 +43,15 @@ ds.FilterTable <- function(TableName,
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # Encode string in 'FilterExpression' to make it passable through DSI
-  FilterExpression <- .encode_tidy_eval(FilterExpression, .get_encode_dictionary())
+  # Encode string in 'MutateExpression' to make it passable through DSI
+  MutateExpression <- .encode_tidy_eval(MutateExpression, .get_encode_dictionary())
 
   # Execute server-side assign function
   DSI::datashield.assign(conns = DSConnections,
                          symbol = OutputName,
-                         value = call("FilterTableDS",
+                         value = call("MutateTableDS",
                                       TableName.S = TableName,
-                                      FilterExpression.S = FilterExpression,
+                                      MutateExpression.S = MutateExpression,
                                       GroupBy.S = GroupBy))
 
   # Call helper function to check if object assignment succeeded
