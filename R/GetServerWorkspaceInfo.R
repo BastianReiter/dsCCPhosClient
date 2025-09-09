@@ -93,22 +93,21 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
   Overview.All <- Overview %>%
                       list_rbind() %>%
                       group_by(Object) %>%
-                          summarize(ServerName = "All",
-                                    Exists = case_when(all(Exists == TRUE) ~ TRUE,
-                                                       .default = FALSE),
-                                    Exists.Info = case_when(all(Exists == TRUE) ~ "Uniform (TRUE)",
-                                                            all(Exists == FALSE) ~ "Uniform (FALSE)",
-                                                            .default = "Varied"),
-                                    Class = case_when(length(unique(Class)) == 1 ~ unique(Class),
-                                                      .default = "Varied"),
-                                    Class.Info = case_when(length(unique(Class)) == 1 ~ paste0("Uniform (", unique(Class), ")"),
-                                                           .default = "Varied"),
-                                    Length = case_when(length(unique(Length)) == 1 ~ unique(Length),
-                                                       length(unique(Length)) > 1 ~ paste0(min(Length, na.rm = TRUE), " - ", max(Length, na.rm = TRUE)),
-                                                       .default = NA),
-                                    Length.Info = case_when(length(unique(Length)) == 1 ~ paste0("Uniform (", unique(Length), ")"),
-                                                            .default = paste0("Varied (", min(Length, na.rm = TRUE), " - ", max(Length, na.rm = TRUE), ")")),
-                                    RowCount = sum(RowCount, is.na = TRUE)) %>%
+                      summarize(ServerName = "All",
+                                Exists.Info = case_when(n_distinct(Exists) == 1 ~ "Uniform",
+                                                        .default = "Varied"),
+                                Exists = case_when(all(Exists == TRUE) ~ TRUE,
+                                                   .default = NA),
+                                Class.Info = case_when(n_distinct(Class) == 1 ~ "Uniform",
+                                                       .default = "Varied"),
+                                Class = case_when(n_distinct(Class) == 1 ~ first(Class),
+                                                  .default = "Varied"),
+                                Length.Info = case_when(n_distinct(Length) == 1 ~ "Uniform",
+                                                        .default = paste0("Varied (", min(Length, na.rm = TRUE), " - ", max(Length, na.rm = TRUE), ")")),
+                                Length = case_when(n_distinct(Length) == 1 ~ first(Length),
+                                                   n_distinct(Length) > 1 ~ paste0(min(Length, na.rm = TRUE), " - ", max(Length, na.rm = TRUE)),
+                                                   .default = NA),
+                                RowCount = sum(RowCount, na.rm = TRUE)) %>%
                       ungroup() %>%
                       relocate(ServerName, .before = Object)
 
