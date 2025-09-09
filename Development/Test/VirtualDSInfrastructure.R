@@ -61,6 +61,8 @@ CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       Resources = list(TestResource = TestResource))
 
 
+# QuickProcessingRun()
+
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Check server requirements using dsCCPhosClient::CheckServerRequirements()

@@ -8,6 +8,7 @@
 #'
 #' @param CuratedDataSetName \code{string} - Name of the Curated Data Set object on server - Default: 'CuratedDataSet'
 #' @param OutputName \code{string} - Name of output object to be assigned on server - Default: 'AugmentationOutput'
+#' @param RunAssignmentChecks \code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}
 #' @param UnpackAugmentedDataSet \code{logical} indicating whether the Augmented Data Set \code{list} should be unpacked so that tables \code{data.frames} are directly accessible - Default: \code{TRUE}
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
@@ -18,6 +19,7 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
                            OutputName = "AugmentationOutput",
+                           RunAssignmentChecks = TRUE,
                            UnpackAugmentedDataSet = TRUE,
                            DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,6 +30,7 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
   #--- For testing purposes ---
   # CuratedDataSetName <- "CuratedDataSet"
   # OutputName <- "AugmentationOutput"
+  # RunAssignmentChecks <- TRUE
   # UnpackAugmentedDataSet <- TRUE
   # DSConnections <- CCPConnections
 
@@ -38,26 +41,26 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
 
   # Initiate output messaging objects
   Messages <- list()
-  Messages$Assignment <- list()
+  if (RunAssignmentChecks == TRUE) { Messages$Assignment <- list() }
   Messages$AugmentationCompletion <- list()
 
 
   # 1) Trigger dsCCPhos::AugmentDataDS()
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # Construct the server-side function call
-  ServerCall <- call("AugmentDataDS",
-                     CuratedDataSetName.S = CuratedDataSetName)
-
   # Execute the server-side function call
   DSI::datashield.assign(conns = DSConnections,
                          symbol = OutputName,
-                         value = ServerCall)
+                         value = call("AugmentDataDS",
+                                      CuratedDataSetName.S = CuratedDataSetName))
 
-  # Call helper function to check if assignment of AugmentationOutput succeeded
-  Messages$Assignment <- c(Messages$Assignment,
-                           ds.GetObjectStatus(ObjectName = OutputName,
-                                              DSConnections = DSConnections))
+  if (RunAssignmentChecks == TRUE)
+  {
+      # Call helper function to check if assignment of AugmentationOutput succeeded
+      Messages$Assignment <- c(Messages$Assignment,
+                               ds.GetObjectStatus(ObjectName = OutputName,
+                                                  DSConnections = DSConnections))
+  }
 
 
 
@@ -70,20 +73,20 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
 
   for(i in 1:length(AugmentationOutputObjects))
   {
-      # Construct the server-side function call
-      ServerCall <- call("ExtractFromListDS",
-                         ListName.S = OutputName,
-                         ObjectName.S = AugmentationOutputObjects[i])
-
       # Execute server-side assign function
       DSI::datashield.assign(conns = DSConnections,
                              symbol = AugmentationOutputObjects[i],
-                             value = ServerCall)
+                             value = call("ExtractFromListDS",
+                                          ListName.S = OutputName,
+                                          ObjectName.S = AugmentationOutputObjects[i]))
 
-      # Call helper function to check if object assignment succeeded
-      Messages$Assignment <- c(Messages$Assignment,
-                               ds.GetObjectStatus(ObjectName = AugmentationOutputObjects[i],
-                                                  DSConnections = DSConnections))
+      if (RunAssignmentChecks == TRUE)
+      {
+          # Call helper function to check if object assignment succeeded
+          Messages$Assignment <- c(Messages$Assignment,
+                                   ds.GetObjectStatus(ObjectName = AugmentationOutputObjects[i],
+                                                      DSConnections = DSConnections))
+      }
   }
 
   # Optionally unpack (unlist) AugmentedDataSet
@@ -101,30 +104,33 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
                                               ListName.S = "AugmentedDataSet",
                                               ObjectName.S = CCPTableNames_ADS[i]))
 
-          # Call helper function to check if object assignment succeeded
-          Messages$Assignment <- c(Messages$Assignment,
-                                   ds.GetObjectStatus(ObjectName = paste0("ADS_", CCPTableNames_ADS[i]),
-                                                      DSConnections = DSConnections))
+          if (RunAssignmentChecks == TRUE)
+          {
+              # Call helper function to check if object assignment succeeded
+              Messages$Assignment <- c(Messages$Assignment,
+                                       ds.GetObjectStatus(ObjectName = paste0("ADS_", CCPTableNames_ADS[i]),
+                                                          DSConnections = DSConnections))
+          }
       }
   }
 
-  # Turn list into (named) vector
-  Messages$Assignment <- purrr::list_c(Messages$Assignment)
+  if (RunAssignmentChecks == TRUE)
+  {
+      # Turn list into (named) vector
+      Messages$Assignment <- purrr::list_c(Messages$Assignment)
 
-  # Add topic element to start of vector
-  Messages$Assignment <- c(Topic = "Object assignment on servers",
-                           Messages$Assignment)
-
+      # Add topic element to start of vector
+      Messages$Assignment <- c(Topic = "Object assignment on servers",
+                               Messages$Assignment)
+  }
 
 
   # 3) Get AugmentationMessages objects from servers (as a list of lists) and create completion check object
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  ServerCall <- call("GetReportingObjectDS",
-                     ObjectName.S = "AugmentationMessages")
-
   AugmentationMessages <- DSI::datashield.aggregate(conns = DSConnections,
-                                                    expr = ServerCall)
+                                                    expr = call("GetReportingObjectDS",
+                                                                ObjectName.S = "AugmentationMessages"))
 
   # Create table object for output
   AugmentationCompletionCheck <- AugmentationMessages %>%

@@ -7,6 +7,7 @@
 #' Linked to server-side ASSIGN methods \code{CurateDataDS()} and \code{ExtractFromListDS()}
 #'
 #' @param RawDataSetName \code{character} - Name of Raw Data Set object (list) on server - Default: 'RawDataSet'
+#' @param OutputName \code{character} - Name of output object to be assigned on server - Default: 'CurationOutput'
 #' @param Settings \code{list} - Settings passed to function
 #'                   \itemize{  \item \emph{DataHarmonization} - \code{list}
 #'                                  \itemize{ \item Run \code{logical} - Whether or not to perform data harmonization - Default: \code{TRUE}
@@ -30,7 +31,7 @@
 #'                                            \item RuleSet \code{data.frame} - Deault: \code{dsCCPhos::Meta_TableNormalization}
 #'                                            \item RuleSet.Profile \code{string} - Profile name defining rule set to be used for table normalization. Profile name must be stated in \code{TableNormalization$RuleSet} - Default: 'Default'}}
 #'
-#' @param OutputName \code{character} - Name of output object to be assigned on server - Default: 'CurationOutput'
+#' @param RunAssignmentChecks \code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}
 #' @param UnpackCuratedDataSet \code{logical} indicating whether the Curated Data Set \code{list} should be unpacked so that tables \code{data.frames} are directly accessible - Default: \code{TRUE}
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
@@ -73,6 +74,7 @@
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.CurateData <- function(RawDataSetName = "RawDataSet",
+                          OutputName = "CurationOutput",
                           Settings = NULL,
                           # Settings = list(DataHarmonization = list(Run = TRUE,
                           #                                          TransformativeExpressions.Profile = "Default",
@@ -80,7 +82,8 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                           #                                          FuzzyStringMatching.Profile = "Default"),
                           #                 FeatureObligations = list(RuleSet.Profile = "Default"),
                           #                 FeatureTracking = list(RuleSet.Profile = "Default")),
-                          OutputName = "CurationOutput",
+                          #--- Secondary Arguments ---
+                          RunAssignmentChecks = TRUE,
                           UnpackCuratedDataSet = TRUE,
                           DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -88,9 +91,10 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
   require(dplyr)
   require(purrr)
 
-  #--- For testing purposes ---
+  #--- For Testing Purposes ---
   # RawDataSetName <- "RawDataSet"
   # OutputName <- "CurationOutput"
+  # RunAssignmentChecks <- FALSE
   # UnpackCuratedDataSet <- TRUE
   # DSConnections <- CCPConnections
 
@@ -101,7 +105,7 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
 
   # Initiate output messaging objects
   Messages <- list()
-  Messages$Assignment <- list()
+  if (RunAssignmentChecks == TRUE) { Messages$Assignment <- list() }
   Messages$CurationCompletion <- list()
 
 
@@ -115,10 +119,13 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                                       RawDataSetName.S = RawDataSetName,
                                       Settings.S = Settings))
 
-  # Call helper function to check if assignment of CurationOutput succeeded
-  Messages$Assignment <- c(Messages$Assignment,
-                           ds.GetObjectStatus(ObjectName = OutputName,
-                                              DSConnections = DSConnections))
+  if (RunAssignmentChecks == TRUE)
+  {
+      # Call helper function to check if assignment of CurationOutput succeeded
+      Messages$Assignment <- c(Messages$Assignment,
+                               ds.GetObjectStatus(ObjectName = OutputName,
+                                                  DSConnections = DSConnections))
+  }
 
 
   # 2) Extract objects from list returned by CurateDataDS() and assign them to R server sessions
@@ -130,20 +137,20 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
 
   for(i in 1:length(CurationOutputObjects))
   {
-      # Construct the server-side function call
-      ServerCall <- call("ExtractFromListDS",
-                         ListName.S = OutputName,
-                         ObjectName.S = CurationOutputObjects[i])
-
-      # Execute server-side assign function
+      # Execute server-side list extraction
       DSI::datashield.assign(conns = DSConnections,
                              symbol = CurationOutputObjects[i],
-                             value = ServerCall)
+                             value = call("ExtractFromListDS",
+                                           ListName.S = OutputName,
+                                           ObjectName.S = CurationOutputObjects[i]))
 
-      # Call helper function to check if object assignment succeeded
-      Messages$Assignment <- c(Messages$Assignment,
-                               ds.GetObjectStatus(ObjectName = CurationOutputObjects[i],
-                                                  DSConnections = DSConnections))
+      if (RunAssignmentChecks == TRUE)
+      {
+          # Call helper function to check if object assignment succeeded
+          Messages$Assignment <- c(Messages$Assignment,
+                                   ds.GetObjectStatus(ObjectName = CurationOutputObjects[i],
+                                                      DSConnections = DSConnections))
+      }
   }
 
   # Optionally unpack (unlist) CuratedDataSet
@@ -161,30 +168,34 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                                               ListName.S = "CuratedDataSet",
                                               ObjectName.S = CCPTableNames_CDS[i]))
 
-          # Call helper function to check if object assignment succeeded
-          Messages$Assignment <- c(Messages$Assignment,
-                                   ds.GetObjectStatus(ObjectName = paste0("CDS_", CCPTableNames_CDS[i]),
-                                                      DSConnections = DSConnections))
+          if (RunAssignmentChecks == TRUE)
+          {
+              # Call helper function to check if object assignment succeeded
+              Messages$Assignment <- c(Messages$Assignment,
+                                       ds.GetObjectStatus(ObjectName = paste0("CDS_", CCPTableNames_CDS[i]),
+                                                          DSConnections = DSConnections))
+          }
       }
   }
 
-  # Turn list into (named) vector
-  Messages$Assignment <- purrr::list_c(Messages$Assignment)
+  if (RunAssignmentChecks == TRUE)
+  {
+      # Turn list into (named) vector
+      Messages$Assignment <- purrr::list_c(Messages$Assignment)
 
-  # Add topic element to start of vector
-  Messages$Assignment <- c(Topic = "Object assignment on servers",
-                           Messages$Assignment)
+      # Add topic element to start of vector
+      Messages$Assignment <- c(Topic = "Object assignment on servers",
+                               Messages$Assignment)
+  }
 
 
 
   # 3) Get CurationMessages objects from servers (as a list of lists) and create completion check object
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  ServerCall <- call("GetReportingObjectDS",
-                     ObjectName.S = "CurationMessages")
-
   CurationMessages <- DSI::datashield.aggregate(conns = DSConnections,
-                                                expr = ServerCall)
+                                                expr = call("GetReportingObjectDS",
+                                                            ObjectName.S = "CurationMessages"))
 
   # Create table object for output
   CurationCompletionCheck <- CurationMessages %>%

@@ -65,6 +65,8 @@ library(dplyr)
 # use_r("GetServerOpalDBInfo.R")
 # use_r("GetServerWorkspaceInfo.R")
 # use_r("LoadRawDataSet.R")
+# use_r("QuickProcessingCheck.R")
+# use_r("QuickProcessingRun.R")
 
 # Linked to dataSHIELD AGGREGATE functions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

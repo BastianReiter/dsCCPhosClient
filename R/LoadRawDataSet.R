@@ -7,6 +7,7 @@
 #' @param ServerSpecifications \code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of server-specific project names (in case they are differing) - Default: \code{NULL} for virtual project
 #' @param RawTableNames \code{character vector} - The expected names of the Opal data base tables
 #' @param CuratedTableNames \code{character vector} - The corresponding curated table names (used for assignment in R session)
+#' @param RunAssignmentChecks \code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{list} of messages
@@ -17,6 +18,7 @@
 LoadRawDataSet <- function(ServerSpecifications = NULL,
                            RawTableNames = dsCCPhosClient::Meta_Tables$TableName_Raw,
                            CuratedTableNames = dsCCPhosClient::Meta_Tables$TableName_Curated,
+                           RunAssignmentChecks = TRUE,
                            DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
@@ -26,20 +28,21 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   require(purrr)
   require(tidyr)
 
-  # --- For testing purposes ---
+  # --- For Testing Purposes ---
   # ServerSpecifications <- NULL
-  # RawTableNames = dsCCPhosClient::Meta_Tables$TableName_Raw
-  # CuratedTableNames = dsCCPhosClient::Meta_Tables$TableName_Curated
+  # RawTableNames <- dsCCPhosClient::Meta_Tables$TableName_Raw
+  # CuratedTableNames <- dsCCPhosClient::Meta_Tables$TableName_Curated
+  # RunAssignmentChecks <- TRUE
   # DSConnections <- CCPConnections
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   # Initiate output messaging objects
   Messages <- list()
-  Messages$Assignment <- c(Topic = "Object assignment on servers")
+  if (RunAssignmentChecks == TRUE) { Messages$Assignment <- c(Topic = "Object assignment on servers") }
 
   # Get server names
   ServerNames <- names(DSConnections)
@@ -111,23 +114,26 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   # Check if assignment on servers succeeded
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  BundledMessages <- list()
-
-  # Loop through all tables to get info about assignment on servers
-  for(i in 1:length(CuratedTableNames))
+  if (RunAssignmentChecks == TRUE)
   {
-      # Make sure assignment was successful on all servers
-      ObjectStatus_Table <- ds.GetObjectStatus(ObjectName = paste0("RDS_", CuratedTableNames[i]),
-                                               DSConnections = DSConnections)
+      BundledMessages <- list()
 
-      # Add info about table assignment to Messages
-      BundledMessages <- c(BundledMessages,
-                           ObjectStatus_Table["ObjectValidity"])   # Must select list element 'ObjectValidity' this way to keep naming of vector and thus class 'Success', 'Warning' and so forth
+      # Loop through all tables to get info about assignment on servers
+      for(i in 1:length(CuratedTableNames))
+      {
+          # Make sure assignment was successful on all servers
+          ObjectStatus_Table <- ds.GetObjectStatus(ObjectName = paste0("RDS_", CuratedTableNames[i]),
+                                                   DSConnections = DSConnections)
+
+          # Add info about table assignment to Messages
+          BundledMessages <- c(BundledMessages,
+                               ObjectStatus_Table["ObjectValidity"])   # Must select list element 'ObjectValidity' this way to keep naming of vector and thus class 'Success', 'Warning' and so forth
+      }
+
+      # Turn list into (named) vector and add it to Messages
+      Messages$Assignment <- c(Messages$Assignment,
+                               purrr::list_c(BundledMessages))
   }
-
-  # Turn list into (named) vector and add it to Messages
-  Messages$Assignment <- c(Messages$Assignment,
-                           purrr::list_c(BundledMessages))
 
 
 
@@ -151,15 +157,16 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
                                             datasources = DSConnections[servername])
                    })
 
+  if (RunAssignmentChecks == TRUE)
+  {
+      # Make sure assignment of RawDataSet was successful on all servers
+      ObjectStatus_RawDataSet <- ds.GetObjectStatus(ObjectName = "RawDataSet",
+                                                    DSConnections = DSConnections)
 
-  # Make sure assignment of RawDataSet was successful on all servers
-  ObjectStatus_RawDataSet <- ds.GetObjectStatus(ObjectName = "RawDataSet",
-                                                DSConnections = DSConnections)
-
-  # Add info about RawDataSet assignment to Messages
-  Messages$Assignment <- c(Messages$Assignment,
-                           ObjectStatus_RawDataSet$ObjectValidity)
-
+      # Add info about RawDataSet assignment to Messages
+      Messages$Assignment <- c(Messages$Assignment,
+                               ObjectStatus_RawDataSet$ObjectValidity)
+  }
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
