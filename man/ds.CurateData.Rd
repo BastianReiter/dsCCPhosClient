@@ -6,14 +6,17 @@
 \usage{
 ds.CurateData(
   RawDataSetName = "RawDataSet",
-  Settings = NULL,
   OutputName = "CurationOutput",
+  Settings = NULL,
+  RunAssignmentChecks = TRUE,
   UnpackCuratedDataSet = TRUE,
   DSConnections = NULL
 )
 }
 \arguments{
 \item{RawDataSetName}{\code{character} - Name of Raw Data Set object (list) on server - Default: 'RawDataSet'}
+
+\item{OutputName}{\code{character} - Name of output object to be assigned on server - Default: 'CurationOutput'}
 
 \item{Settings}{\code{list} - Settings passed to function
 \itemize{  \item \emph{DataHarmonization} - \code{list}
@@ -38,7 +41,7 @@ ds.CurateData(
 \item RuleSet \code{data.frame} - Deault: \code{dsCCPhos::Meta_TableNormalization}
 \item RuleSet.Profile \code{string} - Profile name defining rule set to be used for table normalization. Profile name must be stated in \code{TableNormalization$RuleSet} - Default: 'Default'}}}
 
-\item{OutputName}{\code{character} - Name of output object to be assigned on server - Default: 'CurationOutput'}
+\item{RunAssignmentChecks}{\code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}}
 
 \item{UnpackCuratedDataSet}{\code{logical} indicating whether the Curated Data Set \code{list} should be unpacked so that tables \code{data.frames} are directly accessible - Default: \code{TRUE}}
 

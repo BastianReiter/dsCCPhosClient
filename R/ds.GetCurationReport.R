@@ -24,17 +24,15 @@ ds.GetCurationReport <- function(DSConnections = NULL)
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # 1) Get CurationReport objects from servers (as a list of lists)
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  Call <- call("GetReportingObjectDS",
-                    ObjectName.S = "CurationReport")
-
   CurationReports <- DSI::datashield.aggregate(conns = DSConnections,
-                                               expr = Call)
+                                               expr = call("GetReportingObjectDS",
+                                                           ObjectName.S = "CurationReport"))
 
   # Turn returned list 'inside-out' using purrr::list_transpose() for easier processing
   CurationReports <- CurationReports %>% list_transpose()

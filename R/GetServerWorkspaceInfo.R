@@ -48,10 +48,10 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
   Overview <- list()
   ObjectDetails <- list()
 
-  for (i in 1:length(ServerNames))
+  for (servername in ServerNames)
   {
       ServerOverview <- tibble(Object = UniqueObjectNames) %>%
-                            mutate(Exists = Object %in% ServerObjectNames[[ServerNames[i]]])
+                            mutate(Exists = Object %in% ServerObjectNames[[servername]])
 
       # Collect meta data about existing objects and attach some of it to 'ObjectInfo'
       #-------------------------------------------------------------------------
@@ -64,8 +64,8 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
                       map(function(objectname)
                           {
                               ObjectMetaData <- ds.GetObjectMetaData(ObjectName = objectname,
-                                                                     DSConnections = DSConnections[i])
-                              return(ObjectMetaData[[ServerNames[i]]])
+                                                                     DSConnections = DSConnections[servername])
+                              return(ObjectMetaData[[servername]])
                           }) %>%
                       setNames(ExistingObjects$Object)
 
@@ -77,17 +77,15 @@ GetServerWorkspaceInfo <- function(DSConnections = NULL)
                                    RowCount = ifelse(!is.null(MetaData[[Object]]$RowCount), MetaData[[Object]]$RowCount, NA),
                                    .after = Object) %>%
                             ungroup() %>%
-                            mutate(ServerName = ServerNames[i], .before = 1)
+                            mutate(ServerName = servername, .before = 1)
 
       # Extract structural details from object meta data
       ServerObjectDetails <- MetaData %>%
                                 map(\(ObjectMetaData) ObjectMetaData$Structure)
 
       # Add server-specific overview table and object details to overall lists
-      Overview[[i]] <- ServerOverview
-      names(Overview)[i] <- ServerNames[i]
-      ObjectDetails[[i]] <- ServerObjectDetails
-      names(ObjectDetails)[i] <- ServerNames[i]
+      Overview[[servername]] <- ServerOverview
+      ObjectDetails[[servername]] <- ServerObjectDetails
   }
 
 
