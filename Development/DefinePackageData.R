@@ -50,41 +50,43 @@ use_data(CCPhosColors, overwrite = TRUE)
 # Meta Data transported from dsCCPhos package
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Meta_DataHarmonizationMethods <- dsCCPhos::Meta_DataHarmonizationMethods
-Meta_DiagnosisAssociation <- dsCCPhos::Meta_DiagnosisAssociation
-Meta_DiagnosisRedundancy <- dsCCPhos::Meta_DiagnosisRedundancy
-Meta_Dictionary <- dsCCPhos::Meta_Dictionary
-Meta_EventFeatures <- dsCCPhos::Meta_EventFeatures
-Meta_Features <- dsCCPhos::Meta_Features
-Meta_FeatureObligations <- dsCCPhos::Meta_FeatureObligations
-Meta_FeatureTracking <- dsCCPhos::Meta_FeatureTracking
-Meta_FuzzyStringMatching <- dsCCPhos::Meta_FuzzyStringMatching
-Meta_TableNormalization <- dsCCPhos::Meta_TableNormalization
-Meta_Tables <- dsCCPhos::Meta_Tables
-Meta_TransformativeExpressions <- dsCCPhos::Meta_TransformativeExpressions
-Meta_Values <- dsCCPhos::Meta_Values
+Meta.Tables <- dsCCPhos::Meta.Tables
+Meta.Features <- dsCCPhos::Meta.Features
+Meta.Values <- dsCCPhos::Meta.Values
+Proc.TableNormalization <- dsCCPhos::Proc.TableNormalization
+Proc.EventFeatures <- dsCCPhos::Proc.EventFeatures
+Set.DataHarmonizationMethods <- dsCCPhos::Set.DataHarmonizationMethods
+Set.DiagnosisAssociation <- dsCCPhos::Set.DiagnosisAssociation
+Set.DiagnosisRedundancy <- dsCCPhos::Set.DiagnosisRedundancy
+Set.Dictionary <- dsCCPhos::Set.Dictionary
+Set.FeatureObligations <- dsCCPhos::Set.FeatureObligations
+Set.FeatureTracking <- dsCCPhos::Set.FeatureTracking
+Set.FuzzyStringMatching <- dsCCPhos::Set.FuzzyStringMatching
+Set.TransformativeExpressions <- dsCCPhos::Set.TransformativeExpressions
 
 
-use_data(Meta_DataHarmonizationMethods, overwrite = TRUE)
-use_data(Meta_DiagnosisAssociation, overwrite = TRUE)
-use_data(Meta_DiagnosisRedundancy, overwrite = TRUE)
-use_data(Meta_Dictionary, overwrite = TRUE)
-use_data(Meta_EventFeatures, overwrite = TRUE)
-use_data(Meta_Features, overwrite = TRUE)
-use_data(Meta_FeatureObligations, overwrite = TRUE)
-use_data(Meta_FeatureTracking, overwrite = TRUE)
-use_data(Meta_FuzzyStringMatching, overwrite = TRUE)
-use_data(Meta_TableNormalization, overwrite = TRUE)
-use_data(Meta_Tables, overwrite = TRUE)
-use_data(Meta_TransformativeExpressions, overwrite = TRUE)
-use_data(Meta_Values, overwrite = TRUE)
+use_data(Meta.Tables, overwrite = TRUE)
+use_data(Meta.Features, overwrite = TRUE)
+use_data(Meta.Values, overwrite = TRUE)
+use_data(Proc.TableNormalization, overwrite = TRUE)
+use_data(Proc.EventFeatures, overwrite = TRUE)
+use_data(Set.DataHarmonizationMethods, overwrite = TRUE)
+use_data(Set.DiagnosisAssociation, overwrite = TRUE)
+use_data(Set.DiagnosisRedundancy, overwrite = TRUE)
+use_data(Set.Dictionary, overwrite = TRUE)
+use_data(Set.FeatureObligations, overwrite = TRUE)
+use_data(Set.FeatureTracking, overwrite = TRUE)
+use_data(Set.FuzzyStringMatching, overwrite = TRUE)
+use_data(Set.TransformativeExpressions, overwrite = TRUE)
+
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Meta Data: Define server requirements that are checked before running of CCPhos functions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Meta_ServerRequirements <- list(#--- Data frame containing names of required packages ---
+Set.ServerRequirements <- list(#--- Data frame containing names of required packages ---
                                 RequiredPackages = data.frame(PackageName = character()) %>%
                                                         add_row(PackageName = "dsBase") %>%
                                                         add_row(PackageName = "dsCCPhos"),
@@ -97,7 +99,7 @@ Meta_ServerRequirements <- list(#--- Data frame containing names of required pac
                                                         add_row(FunctionName = "ExtractFromListDS", FunctionType = "assign"))
 
 # Save data in .rda-file and make it part of package
-use_data(Meta_ServerRequirements, overwrite = TRUE)
+use_data(Set.ServerRequirements, overwrite = TRUE)
 
 
 

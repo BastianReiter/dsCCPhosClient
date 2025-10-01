@@ -11,8 +11,8 @@
 #' @param Settings \code{list} - Settings passed to function
 #'                   \itemize{  \item \emph{DataHarmonization} - \code{list}
 #'                                  \itemize{ \item Run \code{logical} - Whether or not to perform data harmonization - Default: \code{TRUE}
-#'                                            \item Methods \code{data.frame} - Default: \code{dsCCPhos::Meta_DataHarmonizationMethods}
-#'                                            \item TransformativeExpressions \code{data.frame} - Default: \code{dsCCPhos::Meta_TransformativeExpressions}
+#'                                            \item Methods \code{data.frame} - Default: \code{dsCCPhos::Set.DataHarmonizationMethods}
+#'                                            \item TransformativeExpressions \code{data.frame} - Default: \code{dsCCPhos::Set.TransformativeExpressions}
 #'                                            \item TransformativeExpressions.Profile \code{string} - Profile used in \emph{TransformativeExpressions} - Default: 'Default'
 #'                                            \item Dictionary \code{data.frame} - Default: \code{dsCCPhos::Meta_Dictionary}
 #'                                            \item Dictionary.Profile \code{string} - Profile used in \emph{Dictionary} - Default: 'Default'
@@ -28,7 +28,7 @@
 #'                                  \itemize{ \item Run \code{logical} - Whether or not to perform table cleaning (removal of redundant and ineligible entries) - Default: \code{TRUE}}
 #'                              \item \emph{TableNormalization} - \code{list}
 #'                                  \itemize{ \item Run \code{logical} - Whether or not to perform table normalization - Default: \code{TRUE}
-#'                                            \item RuleSet \code{data.frame} - Deault: \code{dsCCPhos::Meta_TableNormalization}
+#'                                            \item RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_TableNormalization}
 #'                                            \item RuleSet.Profile \code{string} - Profile name defining rule set to be used for table normalization. Profile name must be stated in \code{TableNormalization$RuleSet} - Default: 'Default'}}
 #'
 #' @param RunAssignmentChecks \code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}
@@ -94,7 +94,7 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
   #--- For Testing Purposes ---
   # RawDataSetName <- "RawDataSet"
   # OutputName <- "CurationOutput"
-  # RunAssignmentChecks <- FALSE
+  # RunAssignmentChecks <- TRUE
   # UnpackCuratedDataSet <- TRUE
   # DSConnections <- CCPConnections
 
@@ -157,22 +157,22 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
   if (UnpackCuratedDataSet == TRUE)
   {
       # Get curated table names
-      CCPTableNames_CDS <- dsCCPhosClient::Meta_Tables$TableName_Curated
+      CCPTableNames.CDS <- dsCCPhosClient::Meta.Tables$TableName.Curated
 
-      for(i in 1:length(CCPTableNames_CDS))
+      for(i in 1:length(CCPTableNames.CDS))
       {
           # Execute server-side assign function
           DSI::datashield.assign(conns = DSConnections,
-                                 symbol = paste0("CDS_", CCPTableNames_CDS[i]),      # E.g. 'CDS_Metastasis'
+                                 symbol = paste0("CDS.", CCPTableNames.CDS[i]),      # E.g. 'CDS.Metastasis'
                                  value = call("ExtractFromListDS",
                                               ListName.S = "CuratedDataSet",
-                                              ObjectName.S = CCPTableNames_CDS[i]))
+                                              ObjectName.S = CCPTableNames.CDS[i]))
 
           if (RunAssignmentChecks == TRUE)
           {
               # Call helper function to check if object assignment succeeded
               Messages$Assignment <- c(Messages$Assignment,
-                                       ds.GetObjectStatus(ObjectName = paste0("CDS_", CCPTableNames_CDS[i]),
+                                       ds.GetObjectStatus(ObjectName = paste0("CDS.", CCPTableNames.CDS[i]),
                                                           DSConnections = DSConnections))
           }
       }
@@ -207,13 +207,13 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                                     imap(function(ServerMessages, servername)
                                          {
                                             case_when(ServerMessages$CheckCurationCompletion == "green" ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' performed successfully!"),
-                                                                                                                            IsClassSuccess = TRUE),
+                                                                                                                              IsClassSuccess = TRUE),
                                                       ServerMessages$CheckCurationCompletion == "yellow" ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' performed with warnings! \n",
-                                                                                                                                           ServerMessages$FinalMessage),
-                                                                                                                             IsClassWarning = TRUE),
+                                                                                                                                             ServerMessages$FinalMessage),
+                                                                                                                               IsClassWarning = TRUE),
                                                       ServerMessages$CheckCurationCompletion == "red" ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' could not be performed! \n",
-                                                                                                                                        ServerMessages$FinalMessage),
-                                                                                                                          IsClassFailure = TRUE),
+                                                                                                                                          ServerMessages$FinalMessage),
+                                                                                                                            IsClassFailure = TRUE),
                                                       TRUE ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' could not be assessed. \n",
                                                                                                ServerMessages$FinalMessage),
                                                                                  IsClassFailure = TRUE))

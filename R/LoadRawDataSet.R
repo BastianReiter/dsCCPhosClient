@@ -16,8 +16,8 @@
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 LoadRawDataSet <- function(ServerSpecifications = NULL,
-                           RawTableNames = dsCCPhosClient::Meta_Tables$TableName_Raw,
-                           CuratedTableNames = dsCCPhosClient::Meta_Tables$TableName_Curated,
+                           RawTableNames = dsCCPhosClient::Meta.Tables$TableName.Raw,
+                           CuratedTableNames = dsCCPhosClient::Meta.Tables$TableName.Curated,
                            RunAssignmentChecks = TRUE,
                            DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -26,12 +26,13 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   require(dsBaseClient)
   require(DSI)
   require(purrr)
+  require(stringr)
   require(tidyr)
 
   # --- For Testing Purposes ---
   # ServerSpecifications <- NULL
-  # RawTableNames <- dsCCPhosClient::Meta_Tables$TableName_Raw
-  # CuratedTableNames <- dsCCPhosClient::Meta_Tables$TableName_Curated
+  # RawTableNames <- dsCCPhosClient::Meta.Tables$TableName.Raw
+  # CuratedTableNames <- dsCCPhosClient::Meta.Tables$TableName.Curated
   # RunAssignmentChecks <- TRUE
   # DSConnections <- CCPConnections
 
@@ -58,9 +59,9 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
                                              DSConnections = DSConnections)
 
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Assignment in R server sessions
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
+# Assignment in R server sessions
+#-------------------------------------------------------------------------------
 
   # Loop through all participating servers
   for (i in 1:length(ServerNames))
@@ -94,9 +95,9 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
                                 distinct() %>%
                                 mutate(# Create feature with server-specific table names (server-specific project name concatenated with generic table names)
                                        OpalTableName = paste0(ServerProjectName, TableName),
-                                       # Turn 'RawTableNames' into 'CuratedTableNames' where necessary and concatenate with prefix 'RDS_'
-                                       RTableName = case_when(TableName %in% RawTableNames ~ paste0("RDS_", setNames(CuratedTableNames, nm = RawTableNames)[TableName]),
-                                                              .default = paste0("RDS_", TableName)))
+                                       # Turn 'RawTableNames' into 'CuratedTableNames' where necessary and concatenate with prefix 'RDS.'
+                                       RTableName = case_when(TableName %in% RawTableNames ~ paste0("RDS.", setNames(CuratedTableNames, nm = RawTableNames)[TableName]),
+                                                              .default = paste0("RDS.", TableName)))
 
       # Loop through available Opal DB tables and assign their content to objects (data.frames) in R session
       for (j in 1:nrow(TableNameMatching))
@@ -109,10 +110,9 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   }
 
 
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Check if assignment on servers succeeded
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
+# Check if assignment on servers succeeded
+#-------------------------------------------------------------------------------
 
   if (RunAssignmentChecks == TRUE)
   {
@@ -122,7 +122,7 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
       for(i in 1:length(CuratedTableNames))
       {
           # Make sure assignment was successful on all servers
-          ObjectStatus_Table <- ds.GetObjectStatus(ObjectName = paste0("RDS_", CuratedTableNames[i]),
+          ObjectStatus_Table <- ds.GetObjectStatus(ObjectName = paste0("RDS.", CuratedTableNames[i]),
                                                    DSConnections = DSConnections)
 
           # Add info about table assignment to Messages
@@ -137,14 +137,22 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
 
 
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Assign list 'RawDataSet' on all servers
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
+# Assign list 'RawDataSet' on all servers
+#-------------------------------------------------------------------------------
 
   # Create list of vectors (one for each server) containing names of actually existing data.frames
-  ExistingRDSTables <- paste0("RDS_", CuratedTableNames) %>%
-                            map(function(tablename) { if (!is.na(tablename)) { unlist(ds.exists(x = tablename, datasources = DSConnections)) } else { return(NULL) } }) %>%
-                            set_names(paste0("RDS_", CuratedTableNames)) %>%
+  ExistingRDSTables <- paste0("RDS.", CuratedTableNames) %>%
+                            map(function(tablename)
+                                {
+                                    if (!is.na(tablename))
+                                    {
+                                        unlist(ds.exists(x = tablename, datasources = DSConnections))
+                                    } else {
+                                        return(NULL)
+                                    }
+                                }) %>%
+                            set_names(paste0("RDS.", CuratedTableNames)) %>%
                             list_transpose() %>%
                             map(\(TableNames) names(TableNames[TableNames == TRUE]))
 
@@ -152,9 +160,11 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   ExistingRDSTables %>%
       purrr::iwalk(function(RDSTableNames, servername)
                    {
-                      dsBaseClient::ds.list(x = RDSTableNames,
-                                            newobj = "RawDataSet",
-                                            datasources = DSConnections[servername])
+                      # Note: Tables within list 'RawDataSet' are named WITHOUT prefix 'RDS.'
+                      dsFredaClient::ds.MakeList(ObjectNames = setNames(object = RDSTableNames,
+                                                                        nm = str_remove(RDSTableNames, "RDS.")),
+                                                 OutputName = "RawDataSet",
+                                                 DSConnections = DSConnections[servername])
                    })
 
   if (RunAssignmentChecks == TRUE)
@@ -169,9 +179,9 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   }
 
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Print and return Messages object
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
+# Print and invisibly return Messages object
+#-------------------------------------------------------------------------------
 
   # Print messages on console
   PrintMessages(Messages)
