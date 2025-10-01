@@ -9,7 +9,7 @@ CheckServerRequirements(
   RequiredPackages = c("dsBase", "dsCCPhos", "dsTidyverse"),
   RequiredFunctions = c(aggregate = "GetReportingObjectDS", assign = "AugmentDataDS",
     assign = "CurateDataDS", assign = "ExtractFromListDS", assign = "DrawSampleDS"),
-  RequiredOpalTableNames = dsCCPhosClient::Meta_Tables$TableName_Raw,
+  RequiredOpalTableNames = dsCCPhosClient::Meta.Tables$TableName.Raw,
   DSConnections = NULL
 )
 }

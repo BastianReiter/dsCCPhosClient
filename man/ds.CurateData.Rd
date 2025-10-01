@@ -21,8 +21,8 @@ ds.CurateData(
 \item{Settings}{\code{list} - Settings passed to function
 \itemize{  \item \emph{DataHarmonization} - \code{list}
 \itemize{ \item Run \code{logical} - Whether or not to perform data harmonization - Default: \code{TRUE}
-\item Methods \code{data.frame} - Default: \code{dsCCPhos::Meta_DataHarmonizationMethods}
-\item TransformativeExpressions \code{data.frame} - Default: \code{dsCCPhos::Meta_TransformativeExpressions}
+\item Methods \code{data.frame} - Default: \code{dsCCPhos::Set.DataHarmonizationMethods}
+\item TransformativeExpressions \code{data.frame} - Default: \code{dsCCPhos::Set.TransformativeExpressions}
 \item TransformativeExpressions.Profile \code{string} - Profile used in \emph{TransformativeExpressions} - Default: 'Default'
 \item Dictionary \code{data.frame} - Default: \code{dsCCPhos::Meta_Dictionary}
 \item Dictionary.Profile \code{string} - Profile used in \emph{Dictionary} - Default: 'Default'
@@ -38,7 +38,7 @@ ds.CurateData(
 \itemize{ \item Run \code{logical} - Whether or not to perform table cleaning (removal of redundant and ineligible entries) - Default: \code{TRUE}}
 \item \emph{TableNormalization} - \code{list}
 \itemize{ \item Run \code{logical} - Whether or not to perform table normalization - Default: \code{TRUE}
-\item RuleSet \code{data.frame} - Deault: \code{dsCCPhos::Meta_TableNormalization}
+\item RuleSet \code{data.frame} - Default: \code{dsCCPhos::Meta_TableNormalization}
 \item RuleSet.Profile \code{string} - Profile name defining rule set to be used for table normalization. Profile name must be stated in \code{TableNormalization$RuleSet} - Default: 'Default'}}}
 
 \item{RunAssignmentChecks}{\code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}}

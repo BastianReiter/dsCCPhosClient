@@ -307,9 +307,9 @@ CohortDescription <- ds.GetCohortDescription(DataSetName = "AugmentedDataSet",
 
 # Transform data into display-friendly time series tables using auxiliary function 'DisplayTimeSeries()'
 PatientCount_TimeSeries <- DisplayTimeSeries(TimeSeriesData = CohortDescription$CohortSize_OverTime,
-                                             TimePointFeature = DiagnosisYear,
-                                             ValueFeature = PatientCount,
-                                             GroupingFeature = Server,
+                                             TimePointFeature = "DiagnosisYear",
+                                             ValueFeature = "PatientCount",
+                                             GroupingFeature = "Server",
                                              IncludeMissingTimePoints = TRUE)
 
 Plot <- CohortDescription$CohortSize_OverTime %>%
@@ -338,7 +338,7 @@ Plot <- CohortDescription$AgeDistribution %>%
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Test <- ds.GetCrossTab(TableName = "ADS_Patient",
+Test <- ds.GetCrossTab(TableName = "ADS.Patient",
                        FeatureNames = c("Sex", "LastVitalStatus", "CountDiagnoses"),
                        RemoveNA = TRUE)
 

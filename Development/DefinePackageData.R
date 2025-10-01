@@ -1,6 +1,5 @@
 
 library(dplyr)
-library(readxl)
 library(usethis)
 
 
@@ -53,9 +52,7 @@ use_data(CCPhosColors, overwrite = TRUE)
 Meta.Tables <- dsCCPhos::Meta.Tables
 Meta.Features <- dsCCPhos::Meta.Features
 Meta.Values <- dsCCPhos::Meta.Values
-Proc.TableNormalization <- dsCCPhos::Proc.TableNormalization
-Proc.EventFeatures <- dsCCPhos::Proc.EventFeatures
-Set.DataHarmonizationMethods <- dsCCPhos::Set.DataHarmonizationMethods
+Set.DataHarmonization <- dsCCPhos::Set.DataHarmonization
 Set.DiagnosisAssociation <- dsCCPhos::Set.DiagnosisAssociation
 Set.DiagnosisRedundancy <- dsCCPhos::Set.DiagnosisRedundancy
 Set.Dictionary <- dsCCPhos::Set.Dictionary
@@ -68,9 +65,7 @@ Set.TransformativeExpressions <- dsCCPhos::Set.TransformativeExpressions
 use_data(Meta.Tables, overwrite = TRUE)
 use_data(Meta.Features, overwrite = TRUE)
 use_data(Meta.Values, overwrite = TRUE)
-use_data(Proc.TableNormalization, overwrite = TRUE)
-use_data(Proc.EventFeatures, overwrite = TRUE)
-use_data(Set.DataHarmonizationMethods, overwrite = TRUE)
+use_data(Set.DataHarmonization, overwrite = TRUE)
 use_data(Set.DiagnosisAssociation, overwrite = TRUE)
 use_data(Set.DiagnosisRedundancy, overwrite = TRUE)
 use_data(Set.Dictionary, overwrite = TRUE)

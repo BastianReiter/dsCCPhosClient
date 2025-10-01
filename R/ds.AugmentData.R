@@ -93,22 +93,22 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
   if (UnpackAugmentedDataSet == TRUE)
   {
       # Define ADS table names
-      CCPTableNames_ADS <- c("Patient", "Diagnosis", "Therapy", "DiseaseCourse", "Events")
+      CCPTableNames.ADS <- c("Patient", "Diagnosis", "Therapy", "DiseaseCourse", "Events")
 
-      for(i in 1:length(CCPTableNames_ADS))
+      for(i in 1:length(CCPTableNames.ADS))
       {
           # Execute server-side assign function
           DSI::datashield.assign(conns = DSConnections,
-                                 symbol = paste0("ADS_", CCPTableNames_ADS[i]),      # E.g. 'ADS_Events'
+                                 symbol = paste0("ADS.", CCPTableNames.ADS[i]),      # E.g. 'ADS.Events'
                                  value = call("ExtractFromListDS",
                                               ListName.S = "AugmentedDataSet",
-                                              ObjectName.S = CCPTableNames_ADS[i]))
+                                              ObjectName.S = CCPTableNames.ADS[i]))
 
           if (RunAssignmentChecks == TRUE)
           {
               # Call helper function to check if object assignment succeeded
               Messages$Assignment <- c(Messages$Assignment,
-                                       ds.GetObjectStatus(ObjectName = paste0("ADS_", CCPTableNames_ADS[i]),
+                                       ds.GetObjectStatus(ObjectName = paste0("ADS.", CCPTableNames.ADS[i]),
                                                           DSConnections = DSConnections))
           }
       }
