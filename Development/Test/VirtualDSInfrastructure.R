@@ -10,6 +10,8 @@
 
 # Install own DataSHIELD packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# devtools::install_github(repo = "BastianReiter/dsFreda")
+# devtools::install_github(repo = "BastianReiter/dsFredaClient")
 # devtools::install_github(repo = "BastianReiter/dsCCPhos")
 # devtools::install_github(repo = "BastianReiter/dsCCPhosClient")
 # devtools::install_github(repo = "BastianReiter/CCPhosApp")
@@ -33,6 +35,7 @@
 
 library(dsBaseClient)
 library(dsCCPhosClient)
+library(dsFredaClient)
 library(dsTidyverseClient)
 library(resourcer)
 
@@ -108,7 +111,9 @@ DSI::datashield.assign.resource(conns = CCPConnections,
 # Then we can actually load the data of the resource into the server R session by calling 'as.resource.data.frame' on it
 datashield.assign.expr(conns = CCPConnections,
                        symbol = "TestDataFrame",
-                       expr = quote(as.resource.data.frame(TestResourceClient, strict = 'TRUE')))
+                       expr = quote(as.resource.data.frame(TestResourceClient,
+                                                           strict = 'TRUE')))
+                                                           #col_types = cols(.default = 'c'))))
 
 
 
@@ -117,14 +122,15 @@ datashield.assign.expr(conns = CCPConnections,
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 RDSTableCheck <- ds.GetDataSetCheck(DataSetName = "RawDataSet",
-                                    AssumeCCPDataSet = TRUE)
+                                    Module = "CCP",
+                                    TransformationStage = "Raw")
 
 View(RDSTableCheck$TableStatus)
 
-View(RDSTableCheck$TableRowCounts$RDS_Diagnosis)
-View(RDSTableCheck$FeatureExistence$RDS_Diagnosis)
-View(RDSTableCheck$FeatureTypes$RDS_Diagnosis)
-View(RDSTableCheck$NonMissingValueRates$RDS_Diagnosis)
+View(RDSTableCheck$TableRowCounts$Diagnosis)
+View(RDSTableCheck$FeatureExistence$Diagnosis)
+View(RDSTableCheck$FeatureTypes$Diagnosis)
+View(RDSTableCheck$NonMissingValueRates$Diagnosis)
 
 RDSTableCheck$TableStatus
 
@@ -167,7 +173,8 @@ ds.CurateData(RawDataSetName = "RawDataSet",
               OutputName = "CurationOutput")
 
 CDSTableCheck <- ds.GetDataSetCheck(DataSetName = "CuratedDataSet",
-                                    AssumeCCPDataSet = TRUE)
+                                    Modul = "CCP",
+                                    TransformationStage = "Curated")
 
 # Integrated in ds.CuratedData: Make tables from Curated Data Set directly addressable by unpacking them into R server session
 # ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet")
@@ -300,9 +307,9 @@ CohortDescription <- ds.GetCohortDescription(DataSetName = "AugmentedDataSet",
 
 # Transform data into display-friendly time series tables using auxiliary function 'DisplayTimeSeries()'
 PatientCount_TimeSeries <- DisplayTimeSeries(TimeSeriesData = CohortDescription$CohortSize_OverTime,
-                                             TimePointFeature = DiagnosisYear,
-                                             ValueFeature = PatientCount,
-                                             GroupingFeature = Server,
+                                             TimePointFeature = "DiagnosisYear",
+                                             ValueFeature = "PatientCount",
+                                             GroupingFeature = "Server",
                                              IncludeMissingTimePoints = TRUE)
 
 Plot <- CohortDescription$CohortSize_OverTime %>%
@@ -331,7 +338,7 @@ Plot <- CohortDescription$AgeDistribution %>%
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Test <- ds.GetCrossTab(TableName = "ADS_Patient",
+Test <- ds.GetCrossTab(TableName = "ADS.Patient",
                        FeatureNames = c("Sex", "LastVitalStatus", "CountDiagnoses"),
                        RemoveNA = TRUE)
 

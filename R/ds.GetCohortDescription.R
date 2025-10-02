@@ -24,23 +24,28 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
                                     DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
+  require(assertthat)
   require(dplyr)
   require(purrr)
 
-  #--- For Testing Purposes ---
+  # --- For Testing Purposes ---
   # DataSetName <- "AugmentedDataSet"
   # CCPDataSetType <- "ADS"
   # DSConnections <- CCPConnections
 
+  # --- Argument Assertions ---
+  assert_that(is.string(DataSetName),
+              is.string(CCPDataSetType))
+
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 # Server returns
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   # ServerReturns: Obtain descriptive data for each server calling dsCCPhos::GetCohortDescriptionDS()
   ServerReturns <- DSI::datashield.aggregate(conns = DSConnections,
@@ -54,12 +59,12 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
 
 
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 # Cohort Size
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
 # Cohort Size Summary (Cumulated Patient and Diagnosis Count)
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
   CohortSize_Servers <- ServerReturns$CohortSize %>%
                             list_rbind(names_to = "Server")
 
@@ -74,7 +79,7 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
 
 
 # Cohort Size Time Series
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   # Create coherent data.frame with Server-specific data
   CohortSize_OverTime_Servers <- ServerReturns$CohortSize_OverTime %>%
@@ -111,9 +116,9 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
                               # bind_rows(CohortSize_OverTime_Median)
 
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 # Age
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   AgeDistribution_Servers <- ServerReturns$Age %>%
                                 list_rbind(names_to = "Server")
@@ -129,9 +134,9 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
                           bind_rows(AgeDistribution_All)
 
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 # Sex
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   SexDistribution_Servers <- ServerReturns$Sex %>%
                                   list_rbind(names_to = "Server")
@@ -147,9 +152,7 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
                           bind_rows(SexDistribution_All)
 
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Return
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
   return(list(CohortSize = CohortSize,
               CohortSize_OverTime = CohortSize_OverTime,
               AgeDistribution = AgeDistribution,

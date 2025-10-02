@@ -6,8 +6,8 @@
 \usage{
 LoadRawDataSet(
   ServerSpecifications = NULL,
-  RawTableNames = dsCCPhosClient::Meta_Tables$TableName_Raw,
-  CuratedTableNames = dsCCPhosClient::Meta_Tables$TableName_Curated,
+  RawTableNames = dsCCPhosClient::Meta.Tables$TableName.Raw,
+  CuratedTableNames = dsCCPhosClient::Meta.Tables$TableName.Curated,
   RunAssignmentChecks = TRUE,
   DSConnections = NULL
 )

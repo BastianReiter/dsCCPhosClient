@@ -129,6 +129,7 @@ ConnectToVirtualCCP <- function(CCPTestData,
                                        config = DSLite::defaultDSConfiguration(include = c("dsBase",
                                                                                            "resourcer",
                                                                                            "dsCCPhos",
+                                                                                           "dsFreda",
                                                                                            AddedDsPackages)),
                                        home = WorkingDirectory),
                envir = .GlobalEnv)

@@ -24,11 +24,12 @@ CheckServerRequirements <- function(ServerSpecifications = NULL,
                                                           assign = "CurateDataDS",
                                                           assign = "ExtractFromListDS",
                                                           assign = "DrawSampleDS"),
-                                    RequiredOpalTableNames = dsCCPhosClient::Meta_Tables$TableName_Raw,
+                                    RequiredOpalTableNames = dsCCPhosClient::Meta.Tables$TableName.Raw,
                                     DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   require(dplyr)
+  require(dsFredaClient)
   require(DSI)
   require(tidyr)
 
@@ -227,9 +228,9 @@ CheckServerRequirements <- function(ServerSpecifications = NULL,
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # Get info on Opal table availability with dsCCPhosClient::GetServerOpalDBInfo()
-  RequiredOpalTableAvailability <- GetServerOpalInfo(ServerSpecifications,
-                                                     RequiredTableNames = RequiredOpalTableNames,
-                                                     DSConnections)
+  RequiredOpalTableAvailability <- dsFredaClient::GetServerOpalInfo(ServerSpecifications,
+                                                                    RequiredTableNames = RequiredOpalTableNames,
+                                                                    DSConnections)
 
   # Compile output message concerning one table each and add it to Messages
   for (i in 1:nrow(RequiredOpalTableAvailability))
