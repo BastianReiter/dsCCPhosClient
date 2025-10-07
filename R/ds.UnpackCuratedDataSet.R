@@ -27,20 +27,20 @@ ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
   Messages$Assignment <- list()
 
   # Get curated CCP table names
-  CCPTableNames_CDS <- dsCCPhosClient::Meta_Tables$TableName_Curated
+  CCPTableNames.CDS <- dsCCPhosClient::Meta_Tables$TableName.Curated
 
-  for(i in 1:length(CCPTableNames_CDS))
+  for(i in 1:length(CCPTableNames.CDS))
   {
       # Execute server-side assign function
       DSI::datashield.assign(conns = DSConnections,
-                             symbol = paste0("CDS_", CCPTableNames_CDS[i]),      # E.g. 'CDS_Metastasis'
+                             symbol = paste0("CDS.", CCPTableNames.CDS[i]),      # E.g. 'CDS.Metastasis'
                              value = call("ExtractFromListDS",
                                           ListName.S = CuratedDataSetName,
-                                          ObjectName.S = CCPTableNames_CDS[i]))
+                                          ObjectName.S = CCPTableNames.CDS[i]))
 
       # Call helper function to check if object assignment succeeded
       Messages$Assignment <- c(Messages$Assignment,
-                               ds.GetObjectStatus(ObjectName = paste0("CDS_", CCPTableNames_CDS[i]),
+                               ds.GetObjectStatus(ObjectName = paste0("CDS.", CCPTableNames.CDS[i]),
                                                   DSConnections = DSConnections))
   }
 
