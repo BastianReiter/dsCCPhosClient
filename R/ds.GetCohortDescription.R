@@ -7,7 +7,7 @@
 #' Linked to server-side \code{AGGREGATE} function \code{GetCohortDescriptionDS()}.
 #'
 #' @param DataSetName \code{string} - Name of Data Set object (list) on server, usually "RawDataSet", "CuratedDataSet" or "AugmentedDataSet" - Default: "AugmentedDataSet"
-#' @param CCPDataSetType \code{string} - Indicating the type of CCP data set that should be described, one of "RDS" / "CDS" / "ADS" - Default: "ADS"
+#' @param Stage \code{string} - Indicating the transformation stage of the described data set, one of "Raw" / "Curated" / "Augmented" - Default: "Augmented"
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{list} containing descriptive statistics characterizing patient cohort:
@@ -20,7 +20,7 @@
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
-                                    CCPDataSetType = "ADS",
+                                    Stage = "Augmented",
                                     DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
@@ -30,12 +30,12 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
 
   # --- For Testing Purposes ---
   # DataSetName <- "AugmentedDataSet"
-  # CCPDataSetType <- "ADS"
+  # Stage <- "ADS"
   # DSConnections <- CCPConnections
 
   # --- Argument Assertions ---
   assert_that(is.string(DataSetName),
-              is.string(CCPDataSetType))
+              is.string(Stage))
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
@@ -51,7 +51,7 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
   ServerReturns <- DSI::datashield.aggregate(conns = DSConnections,
                                            expr = call("GetCohortDescriptionDS",
                                                        DataSetName.S = DataSetName,
-                                                       CCPDataSetType.S = CCPDataSetType))
+                                                       Stage.S = Stage))
 
 
   # Transpose list (turning 'inside-out') for easier processing
