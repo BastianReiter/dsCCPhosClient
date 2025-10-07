@@ -27,7 +27,7 @@ ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
   Messages$Assignment <- list()
 
   # Get curated CCP table names
-  CCPTableNames.CDS <- dsCCPhosClient::Meta_Tables$TableName.Curated
+  CCPTableNames.CDS <- dsCCPhosClient::Meta.Tables$TableName.Curated
 
   for(i in 1:length(CCPTableNames.CDS))
   {
