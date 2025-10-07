@@ -6,14 +6,14 @@
 \usage{
 ds.GetCohortDescription(
   DataSetName = "AugmentedDataSet",
-  CCPDataSetType = "ADS",
+  Stage = "Augmented",
   DSConnections = NULL
 )
 }
 \arguments{
 \item{DataSetName}{\code{string} - Name of Data Set object (list) on server, usually "RawDataSet", "CuratedDataSet" or "AugmentedDataSet" - Default: "AugmentedDataSet"}
 
-\item{CCPDataSetType}{\code{string} - Indicating the type of CCP data set that should be described, one of "RDS" / "CDS" / "ADS" - Default: "ADS"}
+\item{Stage}{\code{string} - Indicating the transformation stage of the described data set, one of "Raw" / "Curated" / "Augmented" - Default: "Augmented"}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }
