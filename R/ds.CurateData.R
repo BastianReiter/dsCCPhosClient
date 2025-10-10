@@ -67,8 +67,9 @@
 #'                                                            \itemize{ \item Monitors
 #'                                                                      \item EligibilityOverviews
 #'                                                                      \item ValueSetOverviews}}
-#'                                              \item CurationMessages \code{list}}}
+#'                                              \item Messages \code{list}}}
 #'                  \item 'CurationCompletionCheck'}
+#'
 #' @export
 #'
 #' @author Bastian Reiter
@@ -88,15 +89,14 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                           DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
-  require(dplyr)
-  require(purrr)
-
   #--- For Testing Purposes ---
   # RawDataSetName <- "RawDataSet"
   # OutputName <- "CurationOutput"
   # RunAssignmentChecks <- TRUE
   # UnpackCuratedDataSet <- TRUE
   # DSConnections <- CCPConnections
+
+  # --- Argument Validation ---
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
@@ -109,9 +109,8 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
   Messages$CurationCompletion <- list()
 
 
-  # 1) Trigger dsCCPhos::CurateDataDS()
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# 1) Trigger dsCCPhos::CurateDataDS()
+#-------------------------------------------------------------------------------
   # Execute the server-side function call
   DSI::datashield.assign(conns = DSConnections,
                          symbol = OutputName,
@@ -128,12 +127,12 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
   }
 
 
-  # 2) Extract objects from list returned by CurateDataDS() and assign them to R server sessions
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 2) Extract objects from list returned by CurateDataDS() and assign them to R server sessions
+#-------------------------------------------------------------------------------
 
   CurationOutputObjects <- c("CuratedDataSet",
                              "CurationReport",
-                             "CurationMessages")
+                             "Messages")
 
   for(i in 1:length(CurationOutputObjects))
   {
@@ -190,20 +189,20 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
 
 
 
-  # 3) Get CurationMessages objects from servers (as a list of lists) and create completion check object
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 3) Get Messages object from servers (as a list of lists) and create completion check object
+#-------------------------------------------------------------------------------
 
-  CurationMessages <- DSI::datashield.aggregate(conns = DSConnections,
+  Messages <- DSI::datashield.aggregate(conns = DSConnections,
                                                 expr = call("GetReportingObjectDS",
-                                                            ObjectName.S = "CurationMessages"))
+                                                            ObjectName.S = "Messages"))
 
   # Create table object for output
-  CurationCompletionCheck <- CurationMessages %>%
+  CurationCompletionCheck <- Messages %>%
                                 map(\(ServerMessages) tibble(CheckCurationCompletion = ServerMessages$CheckCurationCompletion) ) %>%
                                 list_rbind(names_to = "ServerName")
 
   # Create vector of messages informing about curation completion
-  Messages$CurationCompletion <- CurationMessages %>%
+  Messages$CurationCompletion <- Messages %>%
                                     imap(function(ServerMessages, servername)
                                          {
                                             case_when(ServerMessages$CheckCurationCompletion == "green" ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' performed successfully!"),
@@ -225,8 +224,8 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
                                    Messages$CurationCompletion)
 
 
-  # Print messages and return output
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Print messages and return output
+#-------------------------------------------------------------------------------
 
   # Print messages on console
   PrintMessages(Messages)

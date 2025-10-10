@@ -13,6 +13,7 @@
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{list} of variables containing messages about object assignment for monitoring purposes.
+#'
 #' @export
 #'
 #' @author Bastian Reiter
@@ -24,20 +25,19 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
                            DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
-  require(dplyr)
-  require(purrr)
-
-  #--- For testing purposes ---
+  #--- For Testing Purposes ---
   # CuratedDataSetName <- "CuratedDataSet"
   # OutputName <- "AugmentationOutput"
   # RunAssignmentChecks <- TRUE
   # UnpackAugmentedDataSet <- TRUE
   # DSConnections <- CCPConnections
 
+  # --- Argument Validation ---
+
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#-------------------------------------------------------------------------------
 
   # Initiate output messaging objects
   Messages <- list()
@@ -69,7 +69,7 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
 
   AugmentationOutputObjects <- c("AugmentedDataSet",
                                  "AugmentationReport",
-                                 "AugmentationMessages")
+                                 "Messages")
 
   for(i in 1:length(AugmentationOutputObjects))
   {
@@ -125,20 +125,20 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
   }
 
 
-  # 3) Get AugmentationMessages objects from servers (as a list of lists) and create completion check object
+  # 3) Get Messages object from servers (as a list of lists) and create completion check object
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  AugmentationMessages <- DSI::datashield.aggregate(conns = DSConnections,
-                                                    expr = call("GetReportingObjectDS",
-                                                                ObjectName.S = "AugmentationMessages"))
+  Messages <- DSI::datashield.aggregate(conns = DSConnections,
+                                        expr = call("GetReportingObjectDS",
+                                                    ObjectName.S = "Messages"))
 
   # Create table object for output
-  AugmentationCompletionCheck <- AugmentationMessages %>%
+  AugmentationCompletionCheck <- Messages %>%
                                       map(\(ServerMessages) tibble(CheckAugmentationCompletion = ServerMessages$CheckAugmentationCompletion) ) %>%
                                       list_rbind(names_to = "ServerName")
 
   # Create vector of messages informing about Augmentation completion
-  Messages$AugmentationCompletion <- AugmentationMessages %>%
+  Messages$AugmentationCompletion <- Messages %>%
                                           imap(function(ServerMessages, servername)
                                                {
                                                   case_when(ServerMessages$CheckAugmentationCompletion == "green" ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' performed successfully!"),

@@ -11,6 +11,7 @@
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{list} of messages
+#'
 #' @export
 #'
 #' @author Bastian Reiter
@@ -22,13 +23,6 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
                            DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
-  require(dplyr)
-  require(dsBaseClient)
-  require(DSI)
-  require(purrr)
-  require(stringr)
-  require(tidyr)
-
   # --- For Testing Purposes ---
   # ServerSpecifications <- NULL
   # RawTableNames <- dsCCPhosClient::Meta.Tables$TableName.Raw
@@ -36,8 +30,10 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   # RunAssignmentChecks <- TRUE
   # DSConnections <- CCPConnections
 
+  # --- Argument Validation ---
+
   # Check validity of 'DSConnections' or find them programmatically if none are passed
-  DSConnections <- CheckDSConnections(DSConnections)
+  DSConnections <- dsFredaClient::CheckDSConnections(DSConnections)
 
 #-------------------------------------------------------------------------------
 
@@ -54,9 +50,9 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
                            CuratedTableNames)
 
   # Check Opal table availability
-  OpalTableAvailability <- GetServerOpalInfo(ServerSpecifications = ServerSpecifications,
-                                             RequiredTableNames = TableNamesToLookFor,
-                                             DSConnections = DSConnections)
+  OpalTableAvailability <- dsFredaClient::GetServerOpalInfo(ServerSpecifications = ServerSpecifications,
+                                                            RequiredTableNames = TableNamesToLookFor,
+                                                            DSConnections = DSConnections)
 
 
 #-------------------------------------------------------------------------------
@@ -102,10 +98,10 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
       # Loop through available Opal DB tables and assign their content to objects (data.frames) in R session
       for (j in 1:nrow(TableNameMatching))
       {
-          datashield.assign(conns = DSConnections[[i]],
-                            symbol = TableNameMatching$RTableName[j],
-                            value = TableNameMatching$OpalTableName[j],
-                            id.name = "_id")
+          DSI::datashield.assign(conns = DSConnections[[i]],
+                                 symbol = TableNameMatching$RTableName[j],
+                                 value = TableNameMatching$OpalTableName[j],
+                                 id.name = "_id")
       }
   }
 
@@ -122,8 +118,8 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
       for(i in 1:length(CuratedTableNames))
       {
           # Make sure assignment was successful on all servers
-          ObjectStatus_Table <- ds.GetObjectStatus(ObjectName = paste0("RDS.", CuratedTableNames[i]),
-                                                   DSConnections = DSConnections)
+          ObjectStatus_Table <- dsFredaClient::ds.GetObjectStatus(ObjectName = paste0("RDS.", CuratedTableNames[i]),
+                                                                  DSConnections = DSConnections)
 
           # Add info about table assignment to Messages
           BundledMessages <- c(BundledMessages,
@@ -132,7 +128,7 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
 
       # Turn list into (named) vector and add it to Messages
       Messages$Assignment <- c(Messages$Assignment,
-                               purrr::list_c(BundledMessages))
+                               list_c(BundledMessages))
   }
 
 
@@ -147,7 +143,7 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
                                 {
                                     if (!is.na(tablename))
                                     {
-                                        unlist(ds.exists(x = tablename, datasources = DSConnections))
+                                        unlist(dsBaseClient::ds.exists(x = tablename, datasources = DSConnections))
                                     } else {
                                         return(NULL)
                                     }
@@ -158,20 +154,20 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
 
   # For every server, consolidate all existing Raw Data Set tables in one list object called "RawDataSet"
   ExistingRDSTables %>%
-      purrr::iwalk(function(RDSTableNames, servername)
-                   {
-                      # Note: Tables within list 'RawDataSet' are named WITHOUT prefix 'RDS.'
-                      dsFredaClient::ds.MakeList(ObjectNames = setNames(object = RDSTableNames,
-                                                                        nm = str_remove(RDSTableNames, "RDS.")),
-                                                 OutputName = "RawDataSet",
-                                                 DSConnections = DSConnections[servername])
-                   })
+      iwalk(function(RDSTableNames, servername)
+            {
+                # Note: Tables within list 'RawDataSet' are named WITHOUT prefix 'RDS.'
+                dsFredaClient::ds.MakeList(ObjectNames = setNames(object = RDSTableNames,
+                                                                  nm = str_remove(RDSTableNames, "RDS.")),
+                                           OutputName = "RawDataSet",
+                                           DSConnections = DSConnections[servername])
+           })
 
   if (RunAssignmentChecks == TRUE)
   {
       # Make sure assignment of RawDataSet was successful on all servers
-      ObjectStatus_RawDataSet <- ds.GetObjectStatus(ObjectName = "RawDataSet",
-                                                    DSConnections = DSConnections)
+      ObjectStatus_RawDataSet <- dsFredaClient::ds.GetObjectStatus(ObjectName = "RawDataSet",
+                                                                   DSConnections = DSConnections)
 
       # Add info about RawDataSet assignment to Messages
       Messages$Assignment <- c(Messages$Assignment,
@@ -179,12 +175,10 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   }
 
 
-#-------------------------------------------------------------------------------
-# Print and invisibly return Messages object
-#-------------------------------------------------------------------------------
+#--- Print and invisibly return Messages object --------------------------------
 
   # Print messages on console
-  PrintMessages(Messages)
+  dsFredaClient::PrintMessages(Messages)
 
   # Return Messages invisibly
   invisible(Messages)

@@ -14,13 +14,11 @@ ConnectToCCP <- function(ServerSpecifications,
                          proxyurl = "http://localhost")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
-  require(DSI)
-  require(DSOpal)
-  require(httr)
-
   # --- For Testing Purposes ---
   # ServerSpecifications = Credentials
   # proxyurl = "http://localhost"
+
+  # --- Argument Validation ---
 
 #-------------------------------------------------------------------------------
 
@@ -48,6 +46,6 @@ ConnectToCCP <- function(ServerSpecifications,
                                           opts = list(ssl_verifypeer = FALSE),
                                           failSafe = TRUE)
 
-  # Return DSConnection objects
+#--- Return DSConnection objects -----------------------------------------------
   return(CCPConnections)
 }
