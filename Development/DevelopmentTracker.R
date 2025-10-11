@@ -88,6 +88,7 @@ use_import_from("dsFredaClient", c("AddCumulativeRow",
                                    "ggTheme",
                                    "gtTheme",
                                    "MakeBoxPlot",
-                                   "MakeColumnPlot"))
+                                   "MakeColumnPlot",
+                                   "MakeFunctionMessage"))
 
 
