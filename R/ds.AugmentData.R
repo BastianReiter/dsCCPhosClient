@@ -141,14 +141,14 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
   Messages$AugmentationCompletion <- Messages %>%
                                           imap(function(ServerMessages, servername)
                                                {
-                                                  case_when(ServerMessages$CheckAugmentationCompletion == "green" ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' performed successfully!"),
-                                                                                                                                 IsClassSuccess = TRUE),
-                                                            ServerMessages$CheckAugmentationCompletion == "yellow" ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' performed with warnings!"),
-                                                                                                                                  IsClassWarning = TRUE),
-                                                            ServerMessages$CheckAugmentationCompletion == "red" ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' could not be performed!"),
-                                                                                                                               IsClassFailure = TRUE),
-                                                            TRUE ~ MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' could not be assessed."),
-                                                                                       IsClassFailure = TRUE))
+                                                  case_when(ServerMessages$CheckAugmentationCompletion == "green" ~ dsFredaClient::MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' performed successfully!"),
+                                                                                                                                                       IsClassSuccess = TRUE),
+                                                            ServerMessages$CheckAugmentationCompletion == "yellow" ~ dsFredaClient::MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' performed with warnings!"),
+                                                                                                                                                        IsClassWarning = TRUE),
+                                                            ServerMessages$CheckAugmentationCompletion == "red" ~ dsFredaClient::MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' could not be performed!"),
+                                                                                                                                                     IsClassFailure = TRUE),
+                                                            TRUE ~ dsFredaClient::MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' could not be assessed."),
+                                                                                                      IsClassFailure = TRUE))
                                                }) %>%
                                           list_c()
 
