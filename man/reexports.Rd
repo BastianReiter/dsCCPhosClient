@@ -3,8 +3,6 @@
 \docType{import}
 \name{reexports}
 \alias{reexports}
-\alias{AddCumulativeRow}
-\alias{CheckDSConnections}
 \alias{DisplayTimeSeries}
 \alias{ds.ExtractFromList}
 \alias{ds.FilterTable}
@@ -37,6 +35,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dsFredaClient}{\code{\link[dsFredaClient]{AddCumulativeRow}}, \code{\link[dsFredaClient]{CheckDSConnections}}, \code{\link[dsFredaClient]{DisplayTimeSeries}}, \code{\link[dsFredaClient]{ExploreFeature}}, \code{\link[dsFredaClient]{ExportPlot}}, \code{\link[dsFredaClient]{GetEligibleValues}}, \code{\link[dsFredaClient]{GetServerOpalInfo}}, \code{\link[dsFredaClient]{GetServerWorkspaceInfo}}, \code{\link[dsFredaClient]{MakeBoxPlot}}, \code{\link[dsFredaClient]{MakeColumnPlot}}, \code{\link[dsFredaClient]{ds.ExtractFromList}}, \code{\link[dsFredaClient]{ds.FilterTable}}, \code{\link[dsFredaClient]{ds.GetCrossTab}}, \code{\link[dsFredaClient]{ds.GetCurationReport}}, \code{\link[dsFredaClient]{ds.GetDataSetCheck}}, \code{\link[dsFredaClient]{ds.GetFeatureInfo}}, \code{\link[dsFredaClient]{ds.GetFrequencyTable}}, \code{\link[dsFredaClient]{ds.GetObjectMetaData}}, \code{\link[dsFredaClient]{ds.GetObjectStatus}}, \code{\link[dsFredaClient]{ds.GetSampleStatistics}}, \code{\link[dsFredaClient]{ds.GetTTEModel}}, \code{\link[dsFredaClient]{ds.GetTableCheck}}, \code{\link[dsFredaClient]{ds.JoinTables}}, \code{\link[dsFredaClient]{ds.MakeList}}, \code{\link[dsFredaClient]{ds.MutateTable}}, \code{\link[dsFredaClient]{ggTheme}}, \code{\link[dsFredaClient]{gtTheme}}}
+  \item{dsFredaClient}{\code{\link[dsFredaClient]{DisplayTimeSeries}}, \code{\link[dsFredaClient]{ExploreFeature}}, \code{\link[dsFredaClient]{ExportPlot}}, \code{\link[dsFredaClient]{GetEligibleValues}}, \code{\link[dsFredaClient]{GetServerOpalInfo}}, \code{\link[dsFredaClient]{GetServerWorkspaceInfo}}, \code{\link[dsFredaClient]{MakeBoxPlot}}, \code{\link[dsFredaClient]{MakeColumnPlot}}, \code{\link[dsFredaClient]{ds.ExtractFromList}}, \code{\link[dsFredaClient]{ds.FilterTable}}, \code{\link[dsFredaClient]{ds.GetCrossTab}}, \code{\link[dsFredaClient]{ds.GetCurationReport}}, \code{\link[dsFredaClient]{ds.GetDataSetCheck}}, \code{\link[dsFredaClient]{ds.GetFeatureInfo}}, \code{\link[dsFredaClient]{ds.GetFrequencyTable}}, \code{\link[dsFredaClient]{ds.GetObjectMetaData}}, \code{\link[dsFredaClient]{ds.GetObjectStatus}}, \code{\link[dsFredaClient]{ds.GetSampleStatistics}}, \code{\link[dsFredaClient]{ds.GetTTEModel}}, \code{\link[dsFredaClient]{ds.GetTableCheck}}, \code{\link[dsFredaClient]{ds.JoinTables}}, \code{\link[dsFredaClient]{ds.MakeList}}, \code{\link[dsFredaClient]{ds.MutateTable}}, \code{\link[dsFredaClient]{ggTheme}}, \code{\link[dsFredaClient]{gtTheme}}}
 }}
 

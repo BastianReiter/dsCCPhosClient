@@ -34,16 +34,11 @@
 #' @importFrom dsFredaClient gtTheme
 #' @importFrom dsFredaClient MakeBoxPlot
 #' @importFrom dsFredaClient MakeColumnPlot
+#' @importFrom dsFredaClient MakeFunctionMessage
 #' @importFrom magrittr %>%
 ## usethis namespace: end
 NULL
 
-
-#' @export
-dsFredaClient::AddCumulativeRow
-
-#' @export
-dsFredaClient::CheckDSConnections
 
 #' @export
 dsFredaClient::DisplayTimeSeries
