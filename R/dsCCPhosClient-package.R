@@ -35,6 +35,7 @@
 #' @importFrom dsFredaClient MakeBoxPlot
 #' @importFrom dsFredaClient MakeColumnPlot
 #' @importFrom dsFredaClient MakeFunctionMessage
+#' @importFrom dsFredaClient PrintMessages
 #' @importFrom magrittr %>%
 ## usethis namespace: end
 NULL

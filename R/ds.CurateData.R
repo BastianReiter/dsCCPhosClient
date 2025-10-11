@@ -205,17 +205,17 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
   Messages$CurationCompletion <- Messages %>%
                                     imap(function(ServerMessages, servername)
                                          {
-                                            case_when(ServerMessages$CheckCurationCompletion == "green" ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' performed successfully!"),
-                                                                                                                              IsClassSuccess = TRUE),
-                                                      ServerMessages$CheckCurationCompletion == "yellow" ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' performed with warnings! \n",
-                                                                                                                                             ServerMessages$FinalMessage),
-                                                                                                                               IsClassWarning = TRUE),
-                                                      ServerMessages$CheckCurationCompletion == "red" ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' could not be performed! \n",
-                                                                                                                                          ServerMessages$FinalMessage),
-                                                                                                                            IsClassFailure = TRUE),
-                                                      TRUE ~ MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' could not be assessed. \n",
-                                                                                               ServerMessages$FinalMessage),
-                                                                                 IsClassFailure = TRUE))
+                                            case_when(ServerMessages$CheckCurationCompletion == "green" ~ dsFredaClient::MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' performed successfully!"),
+                                                                                                                                             IsClassSuccess = TRUE),
+                                                      ServerMessages$CheckCurationCompletion == "yellow" ~ dsFredaClient::MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' performed with warnings! \n",
+                                                                                                                                                            ServerMessages$FinalMessage),
+                                                                                                                                              IsClassWarning = TRUE),
+                                                      ServerMessages$CheckCurationCompletion == "red" ~ dsFredaClient::MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' could not be performed! \n",
+                                                                                                                                                         ServerMessages$FinalMessage),
+                                                                                                                                           IsClassFailure = TRUE),
+                                                      TRUE ~ dsFredaClient::MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' could not be assessed. \n",
+                                                                                                              ServerMessages$FinalMessage),
+                                                                                                IsClassFailure = TRUE))
                                          }) %>%
                                     list_c()
 
