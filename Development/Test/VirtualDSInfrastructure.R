@@ -122,8 +122,7 @@ datashield.assign.expr(conns = CCPConnections,
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 RDSTableCheck <- ds.GetDataSetCheck(DataSetName = "RawDataSet",
-                                    Module = "CCP",
-                                    TransformationStage = "Raw")
+                                    Stage = "Raw")
 
 View(RDSTableCheck$TableStatus)
 
@@ -159,7 +158,7 @@ RDSValidationReports <- ds.GetRDSValidationReport()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ds.DrawSample(RawDataSetName = "RawDataSet",
-              SampleSize = "1000",
+              SampleSize = 1000,
               SampleName = "RDSSample")
 
 
@@ -173,8 +172,7 @@ ds.CurateData(RawDataSetName = "RawDataSet",
               OutputName = "CurationOutput")
 
 CDSTableCheck <- ds.GetDataSetCheck(DataSetName = "CuratedDataSet",
-                                    Modul = "CCP",
-                                    TransformationStage = "Curated")
+                                    Stage = "Curated")
 
 # Integrated in ds.CuratedData: Make tables from Curated Data Set directly addressable by unpacking them into R server session
 # ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet")

@@ -15,6 +15,7 @@
 #'                  \item CohortSizeOverTime
 #'                  \item AgeDistribution
 #'                  \item SexDistribution}
+#'
 #' @export
 #'
 #' @author Bastian Reiter
@@ -24,16 +25,12 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
                                     DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
-  require(assertthat)
-  require(dplyr)
-  require(purrr)
-
   # --- For Testing Purposes ---
   # DataSetName <- "AugmentedDataSet"
   # Stage <- "ADS"
   # DSConnections <- CCPConnections
 
-  # --- Argument Assertions ---
+  # --- Argument Validation ---
   assert_that(is.string(DataSetName),
               is.string(Stage))
 
@@ -41,7 +38,6 @@ ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
   DSConnections <- CheckDSConnections(DSConnections)
 
 #-------------------------------------------------------------------------------
-
 
 #-------------------------------------------------------------------------------
 # Server returns

@@ -17,6 +17,9 @@ ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
                                     DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
+  # --- Argument Validation ---
+  assert_that(is.string(CuratedDataSetName))
+
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
 
@@ -52,8 +55,7 @@ ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
                            Messages$Assignment)
 
 
-  # Print messages and return Messages object
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#--- Print messages and invisibly return Messages object -----------------------
 
   # Print messages on console
   PrintMessages(Messages)

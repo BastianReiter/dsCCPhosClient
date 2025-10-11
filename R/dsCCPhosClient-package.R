@@ -1,14 +1,14 @@
+#' @keywords internal
+"_PACKAGE"
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# - dsCCPhosClient Imports and Re-Exports -
-#
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#-------------------------------------------------------------------------------
-# Import from dsFredaClient
-#-------------------------------------------------------------------------------
-
+## usethis namespace: start
+#' @import assertthat
+#' @import dplyr
+#' @import purrr
+#' @import stringr
+#' @import tidyr
+#' @importFrom dsFredaClient AddCumulativeRow
+#' @importFrom dsFredaClient CheckDSConnections
 #' @importFrom dsFredaClient DisplayTimeSeries
 #' @importFrom dsFredaClient ds.ExtractFromList
 #' @importFrom dsFredaClient ds.FilterTable
@@ -34,7 +34,16 @@
 #' @importFrom dsFredaClient gtTheme
 #' @importFrom dsFredaClient MakeBoxPlot
 #' @importFrom dsFredaClient MakeColumnPlot
+#' @importFrom magrittr %>%
+## usethis namespace: end
 NULL
+
+
+#' @export
+dsFredaClient::AddCumulativeRow
+
+#' @export
+dsFredaClient::CheckDSConnections
 
 #' @export
 dsFredaClient::DisplayTimeSeries
@@ -110,6 +119,3 @@ dsFredaClient::MakeBoxPlot
 
 #' @export
 dsFredaClient::MakeColumnPlot
-
-
-
