@@ -128,17 +128,17 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
   # 3) Get Messages object from servers (as a list of lists) and create completion check object
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  Messages <- DSI::datashield.aggregate(conns = DSConnections,
-                                        expr = call("GetReportingObjectDS",
-                                                    ObjectName.S = "Messages"))
+  AugmentationMessages <- DSI::datashield.aggregate(conns = DSConnections,
+                                                    expr = call("GetReportingObjectDS",
+                                                                ObjectName.S = "Messages"))
 
   # Create table object for output
-  AugmentationCompletionCheck <- Messages %>%
+  AugmentationCompletionCheck <- AugmentationMessages %>%
                                       map(\(ServerMessages) tibble(CheckAugmentationCompletion = ServerMessages$CheckAugmentationCompletion) ) %>%
                                       list_rbind(names_to = "ServerName")
 
   # Create vector of messages informing about Augmentation completion
-  Messages$AugmentationCompletion <- Messages %>%
+  Messages$AugmentationCompletion <- AugmentationMessages %>%
                                           imap(function(ServerMessages, servername)
                                                {
                                                   case_when(ServerMessages$CheckAugmentationCompletion == "green" ~ dsFredaClient::MakeFunctionMessage(Text = paste0("Augmentation on server '", servername, "' performed successfully!"),

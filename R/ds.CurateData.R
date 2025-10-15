@@ -92,6 +92,7 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
   #--- For Testing Purposes ---
   # RawDataSetName <- "RawDataSet"
   # OutputName <- "CurationOutput"
+  # Settings <- NULL
   # RunAssignmentChecks <- TRUE
   # UnpackCuratedDataSet <- TRUE
   # DSConnections <- CCPConnections
@@ -192,17 +193,17 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
 # 3) Get Messages object from servers (as a list of lists) and create completion check object
 #-------------------------------------------------------------------------------
 
-  Messages <- DSI::datashield.aggregate(conns = DSConnections,
+  CurationMessages <- DSI::datashield.aggregate(conns = DSConnections,
                                                 expr = call("GetReportingObjectDS",
                                                             ObjectName.S = "Messages"))
 
   # Create table object for output
-  CurationCompletionCheck <- Messages %>%
+  CurationCompletionCheck <- CurationMessages %>%
                                 map(\(ServerMessages) tibble(CheckCurationCompletion = ServerMessages$CheckCurationCompletion) ) %>%
                                 list_rbind(names_to = "ServerName")
 
   # Create vector of messages informing about curation completion
-  Messages$CurationCompletion <- Messages %>%
+  Messages$CurationCompletion <- CurationMessages %>%
                                     imap(function(ServerMessages, servername)
                                          {
                                             case_when(ServerMessages$CheckCurationCompletion == "green" ~ dsFredaClient::MakeFunctionMessage(Text = paste0("Curation on server '", servername, "' performed successfully!"),
