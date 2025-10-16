@@ -300,7 +300,7 @@ Messages <- ds.JoinTables(TableNameA = "ADS_Patient_OneDiagnosis",
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 CohortDescription <- ds.GetCohortDescription(DataSetName = "AugmentedDataSet",
-                                             CCPDataSetType = "ADS")
+                                             Stage = "Augmented")
 
 
 # Transform data into display-friendly time series tables using auxiliary function 'DisplayTimeSeries()'
@@ -340,8 +340,8 @@ Test <- ds.GetCrossTab(TableName = "ADS.Patient",
                        FeatureNames = c("Sex", "LastVitalStatus", "CountDiagnoses"),
                        RemoveNA = TRUE)
 
-ds.MutateTable(TableName = "ADS_Diagnosis",
-               MutateExpression = "UICCStageClassification = case_when(str_starts(TNM_T, '3') ~ 'III', .default = '<NA>')",
+ds.MutateTable(TableName = "ADS.Diagnosis",
+               MutateExpression = "UICCStageClassification = case_when(str_starts(TNM.T, '3') ~ 'III', .default = '<NA>')",
                OutputName = "TestUICC")
 
 

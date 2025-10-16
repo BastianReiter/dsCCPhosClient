@@ -49,6 +49,7 @@ use_data(CCPhosColors, overwrite = TRUE)
 # Meta Data transported from dsCCPhos package
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Meta.ADS <- dsCCPhos::Meta.ADS
 Meta.Tables <- dsCCPhos::Meta.Tables
 Meta.Features <- dsCCPhos::Meta.Features
 Meta.Values <- dsCCPhos::Meta.Values
@@ -62,6 +63,7 @@ Set.FuzzyStringMatching <- dsCCPhos::Set.FuzzyStringMatching
 Set.TransformativeExpressions <- dsCCPhos::Set.TransformativeExpressions
 
 
+use_data(Meta.ADS, overwrite = TRUE)
 use_data(Meta.Tables, overwrite = TRUE)
 use_data(Meta.Features, overwrite = TRUE)
 use_data(Meta.Values, overwrite = TRUE)
