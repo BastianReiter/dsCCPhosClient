@@ -1,7 +1,7 @@
 
 #' ds.DrawSample
 #'
-#' `r lifecycle::badge("stable")` \cr\cr
+#' `r lifecycle::badge("experimental")` \cr\cr
 #' Draw a random sample from Raw Data Set
 #'
 #' Linked to server-side ASSIGN method \code{DrawSampleDS()}
@@ -44,6 +44,11 @@ ds.DrawSample <- function(RawDataSetName = "RawDataSet",
   AssignmentInfo <- ds.GetObjectStatus(SampleName,
                                        DSConnections = DSConnections)
 
-#-------------------------------------------------------------------------------
-  return(AssignmentInfo)
+#--- Print and invisibly return Messages ---------------------------------------
+
+  # Print messages on console
+  dsFredaClient::PrintMessages(AssignmentInfo)
+
+  # Return Messages invisibly
+  invisible(AssignmentInfo)
 }

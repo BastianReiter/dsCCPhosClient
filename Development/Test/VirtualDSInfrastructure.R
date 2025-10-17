@@ -158,7 +158,7 @@ RDSValidationReports <- ds.GetRDSValidationReport()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ds.DrawSample(RawDataSetName = "RawDataSet",
-              SampleSize = 1000,
+              SampleSize = 2000,
               SampleName = "RDSSample")
 
 
