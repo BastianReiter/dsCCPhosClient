@@ -28,7 +28,8 @@
 #' @importFrom dsFredaClient ExploreFeature
 #' @importFrom dsFredaClient ExportPlot
 #' @importFrom dsFredaClient GetEligibleValues
-#' @importFrom dsFredaClient GetServerOpalInfo
+#' @importFrom dsFredaClient GetServerOpalDBInfo
+#' @importFrom dsFredaClient GetServerResourcesInfo
 #' @importFrom dsFredaClient GetServerWorkspaceInfo
 #' @importFrom dsFredaClient ggTheme
 #' @importFrom dsFredaClient gtTheme
@@ -99,7 +100,10 @@ dsFredaClient::ExportPlot
 dsFredaClient::GetEligibleValues
 
 #' @export
-dsFredaClient::GetServerOpalInfo
+dsFredaClient::GetServerOpalDBInfo
+
+#' @export
+dsFredaClient::GetServerResourcesInfo
 
 #' @export
 dsFredaClient::GetServerWorkspaceInfo

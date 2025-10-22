@@ -36,6 +36,7 @@ CheckServerRequirements <- function(ServerSpecifications = NULL,
   #                       assign = "AugmentDataDS",
   #                       assign = "CurateDataDS",
   #                       assign = "ExtractFromListDS")
+  # RequiredOpalTableNames = dsCCPhosClient::Meta.Tables$TableName.Raw
 
   # --- Argument Validation ---
 
@@ -226,9 +227,11 @@ CheckServerRequirements <- function(ServerSpecifications = NULL,
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # Get info on Opal table availability with dsCCPhosClient::GetServerOpalDBInfo()
-  RequiredOpalTableAvailability <- dsFredaClient::GetServerOpalInfo(ServerSpecifications,
-                                                                    RequiredTableNames = RequiredOpalTableNames,
-                                                                    DSConnections)
+  RequiredOpalTableAvailability <- dsFredaClient::GetServerOpalDBInfo(ServerSpecifications = ServerSpecifications,
+                                                                      OpalTableNames.Required = RequiredOpalTableNames,
+                                                                      OpalTableNames.Dictionary = NULL,
+                                                                      DSConnections = DSConnections) %>%
+                                        pluck("Summary")
 
   # Compile output message concerning one table each and add it to Messages
   for (i in 1:nrow(RequiredOpalTableAvailability))
@@ -251,7 +254,7 @@ CheckServerRequirements <- function(ServerSpecifications = NULL,
                                       Message)
   }
 
-  # Transform / Transpose data frame into more handy return object
+  # Transform / Transpose data.frame into more handy return object
   RequiredOpalTableAvailability <- RequiredOpalTableAvailability %>%
                                       select(-IsAvailableEverywhere,
                                              -NotAvailableAt) %>%

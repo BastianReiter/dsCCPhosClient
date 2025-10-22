@@ -6,8 +6,11 @@
 \usage{
 LoadRawDataSet(
   ServerSpecifications = NULL,
-  RawTableNames = dsCCPhosClient::Meta.Tables$TableName.Raw,
-  CuratedTableNames = dsCCPhosClient::Meta.Tables$TableName.Curated,
+  OpalTableNames.Mapping = setNames(dsCCPhosClient::Meta.Tables$TableName.Curated, nm =
+    dsCCPhosClient::Meta.Tables$TableName.Raw),
+  OpalTableNames.Dictionary = list(All =
+    setNames(dsCCPhosClient::Meta.Tables$TableName.Raw, nm =
+    dsCCPhosClient::Meta.Tables$TableName.Curated)),
   RunAssignmentChecks = TRUE,
   DSConnections = NULL
 )
@@ -15,9 +18,9 @@ LoadRawDataSet(
 \arguments{
 \item{ServerSpecifications}{\code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of server-specific project names (in case they are differing) - Default: \code{NULL} for virtual project}
 
-\item{RawTableNames}{\code{character vector} - The expected names of the Opal data base tables}
+\item{OpalTableNames.Mapping}{\code{character vector} - Usually the expected/required Opal data base table names. Can optionally be a named vector, with the names being expected names of the Opal data base tables and the vector values being the names of the imported R tables / data.frames.}
 
-\item{CuratedTableNames}{\code{character vector} - The corresponding curated table names (used for assignment in R session)}
+\item{OpalTableNames.Dictionary}{Optional \code{list} of named \code{character vectors} - To enable server-specific mapping of deviating to required Opal data base table names. Names of list elements must match server names. For rules that should be applied on all servers, choose form \code{list(All = c('LookupName' = 'RequiredName'))}.}
 
 \item{RunAssignmentChecks}{\code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}}
 
@@ -27,7 +30,7 @@ LoadRawDataSet(
 A \code{list} of messages
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \cr\cr
 Load raw data set from Opal data base into R session on servers.
 }
 \author{
