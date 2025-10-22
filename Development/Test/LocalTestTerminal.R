@@ -34,7 +34,6 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 library(dsBaseClient)
-library(dsCCPhosClient)
 library(dsFredaClient)
 library(dsTidyverseClient)
 library(resourcer)
@@ -84,37 +83,6 @@ CheckServerRequirements()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 LoadRawDataSet(ServerSpecifications = NULL)
-
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Optionally load additional data from a Resource to R sessions on servers
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# List all resources at servers
-DSI::datashield.resources(conns = CCPConnections)
-
-# Status/Accessibility of a specific resource
-DSI::datashield.resource_status(conns = CCPConnections,
-                                resource = "TestResource")
-
-# We know that there is a resource (class 'resource') on the servers pointing to a local csv-file
-# Note: Currently, if unknown, there is no way to find out from client-side what exactly a specific resource points at (CSV, DB, Computational resource...)
-# First step is to create a 'ResourceClient' on the servers to handle the resource:
-
-DSI::datashield.assign.resource(conns = CCPConnections,
-                                symbol = "TestResourceClient",
-                                resource = "TestResource")
-
-# The first step requires a suitable 'ResourceResolver' to be registered on the servers. For csv-files this is already given by loading the 'resourcer' package.
-
-# Then we can actually load the data of the resource into the server R session by calling 'as.resource.data.frame' on it
-datashield.assign.expr(conns = CCPConnections,
-                       symbol = "TestDataFrame",
-                       expr = quote(as.resource.data.frame(TestResourceClient,
-                                                           strict = 'TRUE')))
-                                                           #col_types = cols(.default = 'c'))))
-
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
