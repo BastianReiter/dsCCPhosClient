@@ -2,12 +2,12 @@
 #' ds.AugmentData
 #'
 #' `r lifecycle::badge("stable")` \cr\cr
-#' Transforms curated CCP core data set (CDM) into augmented data set (ADM)
+#' Transforms curated data set (CDS) into augmented data set (ADS)
 #'
 #' Linked to server-side ASSIGN method \code{AugmentDataDS()}
 #'
-#' @param CuratedDataSetName \code{string} - Name of the Curated Data Set object on server - Default: 'CuratedDataSet'
-#' @param OutputName \code{string} - Name of output object to be assigned on server - Default: 'AugmentationOutput'
+#' @param CuratedDataSetName \code{string} - Name of the Curated Data Set object on server - Default: 'CCP.CuratedDataSet'
+#' @param OutputName \code{string} - Name of output object to be assigned on server - Default: 'CCP.AugmentationOutput'
 #' @param RunAssignmentChecks \code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}
 #' @param UnpackAugmentedDataSet \code{logical} indicating whether the Augmented Data Set \code{list} should be unpacked so that tables \code{data.frames} are directly accessible - Default: \code{TRUE}
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
@@ -18,8 +18,8 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
-                           OutputName = "AugmentationOutput",
+ds.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
+                           OutputName = "CCP.AugmentationOutput",
                            RunAssignmentChecks = TRUE,
                            UnpackAugmentedDataSet = TRUE,
                            DSConnections = NULL)
@@ -63,33 +63,43 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
   }
 
 
+# Extract objects from list returned by AugmentDataDS() and assign them to R server sessions
+#-------------------------------------------------------------------------------
 
-  # 2) Extract objects from list returned by AugmentDataDS() and assign them to R server sessions
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Temporary (Generalize function later on)
+  Module <- "CCP"
 
-  AugmentationOutputObjects <- c("AugmentedDataSet",
+  # Named vector determining how objects inside AugmentationOutput list created on servers should be extracted
+  ObjectNames <- setNames(c(paste0(Module, ".AugmentedDataSet"),
+                            paste0(Module, ".AugmentationReport"),
+                            "Messages"),
+                          nm = c("AugmentedDataSet",
                                  "AugmentationReport",
-                                 "Messages")
+                                 "Messages"))
 
-  for(i in 1:length(AugmentationOutputObjects))
+  # Extract objects from AugmentationOutput list
+  for (i in 1:length(ObjectNames))
   {
-      # Execute server-side assign function
+      # Execute server-side list extraction
       DSI::datashield.assign(conns = DSConnections,
-                             symbol = AugmentationOutputObjects[i],
+                             symbol = ObjectNames[i],
                              value = call("ExtractFromListDS",
-                                          ListName.S = OutputName,
-                                          ObjectName.S = AugmentationOutputObjects[i]))
+                                           ListName.S = OutputName,
+                                           ObjectName.S = names(ObjectNames)[i]))
 
       if (RunAssignmentChecks == TRUE)
       {
           # Call helper function to check if object assignment succeeded
           Messages$Assignment <- c(Messages$Assignment,
-                                   ds.GetObjectStatus(ObjectName = AugmentationOutputObjects[i],
+                                   ds.GetObjectStatus(ObjectName = ObjectNames[i],
                                                       DSConnections = DSConnections))
       }
   }
 
-  # Optionally unpack (unlist) AugmentedDataSet
+
+
+# Optionally unpack (unlist) CCP.AugmentedDataSet
+#-------------------------------------------------------------------------------
   if (UnpackAugmentedDataSet == TRUE)
   {
       # Define ADS table names
@@ -99,16 +109,16 @@ ds.AugmentData <- function(CuratedDataSetName = "CuratedDataSet",
       {
           # Execute server-side assign function
           DSI::datashield.assign(conns = DSConnections,
-                                 symbol = paste0("ADS.", CCPTableNames.ADS[i]),      # E.g. 'ADS.Events'
+                                 symbol = paste0("CCP.ADS.", CCPTableNames.ADS[i]),      # E.g. 'CCP.ADS.Events'
                                  value = call("ExtractFromListDS",
-                                              ListName.S = "AugmentedDataSet",
+                                              ListName.S = "CCP.AugmentedDataSet",
                                               ObjectName.S = CCPTableNames.ADS[i]))
 
           if (RunAssignmentChecks == TRUE)
           {
               # Call helper function to check if object assignment succeeded
               Messages$Assignment <- c(Messages$Assignment,
-                                       ds.GetObjectStatus(ObjectName = paste0("ADS.", CCPTableNames.ADS[i]),
+                                       ds.GetObjectStatus(ObjectName = paste0("CCP.ADS.", CCPTableNames.ADS[i]),
                                                           DSConnections = DSConnections))
           }
       }

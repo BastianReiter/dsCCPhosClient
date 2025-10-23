@@ -5,12 +5,12 @@
 \title{ds.UnpackAugmentedDataSet}
 \usage{
 ds.UnpackAugmentedDataSet(
-  AugmentedDataSetName = "AugmentedDataSet",
+  AugmentedDataSetName = "CCP.AugmentedDataSet",
   DSConnections = NULL
 )
 }
 \arguments{
-\item{AugmentedDataSetName}{\code{string} - Name of Augmented Data Set object (\code{list}) on server - Default: 'AugmentedDataSet'}
+\item{AugmentedDataSetName}{\code{string} - Name of Augmented Data Set object (\code{list}) on server - Default: 'CCP.AugmentedDataSet'}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }

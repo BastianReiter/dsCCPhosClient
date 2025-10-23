@@ -5,18 +5,18 @@
 \title{ds.DrawSample}
 \usage{
 ds.DrawSample(
-  RawDataSetName = "RawDataSet",
+  RawDataSetName = "CCP.RawDataSet",
   SampleSize = 100,
   SampleName = "RDSSample",
   DSConnections = NULL
 )
 }
 \arguments{
-\item{RawDataSetName}{\code{string} - Name of a \code{list} object on server}
+\item{RawDataSetName}{\code{string} - Name of an RDS \code{list} object on server}
 
 \item{SampleSize}{\code{integer} - Number of patients per Server}
 
-\item{SampleName}{\code{string} - Option to assign subset of 'RawDataSet' a different object name on servers}
+\item{SampleName}{\code{string} - Option to assign subset of 'CCP.RawDataSet' a different object name on servers}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }

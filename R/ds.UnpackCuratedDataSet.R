@@ -5,7 +5,7 @@
 #'
 #' Linked to server-side \code{ASSIGN} function \code{ExtractFromListDS()}
 #'
-#' @param CuratedDataSetName \code{string} - Name of Curated Data Set object (list) on server - Default: 'CuratedDataSet'
+#' @param CuratedDataSetName \code{string} - Name of Curated Data Set object (list) on server - Default: 'CCP.CuratedDataSet'
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{list} of messages about object assignment for monitoring purposes
@@ -13,7 +13,7 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
+ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CCP.CuratedDataSet",
                                     DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
@@ -36,14 +36,14 @@ ds.UnpackCuratedDataSet <- function(CuratedDataSetName = "CuratedDataSet",
   {
       # Execute server-side assign function
       DSI::datashield.assign(conns = DSConnections,
-                             symbol = paste0("CDS.", CCPTableNames.CDS[i]),      # E.g. 'CDS.Metastasis'
+                             symbol = paste0("CCP.CDS.", CCPTableNames.CDS[i]),      # E.g. 'CCP.CDS.Metastasis'
                              value = call("ExtractFromListDS",
                                           ListName.S = CuratedDataSetName,
                                           ObjectName.S = CCPTableNames.CDS[i]))
 
       # Call helper function to check if object assignment succeeded
       Messages$Assignment <- c(Messages$Assignment,
-                               ds.GetObjectStatus(ObjectName = paste0("CDS.", CCPTableNames.CDS[i]),
+                               ds.GetObjectStatus(ObjectName = paste0("CCP.CDS.", CCPTableNames.CDS[i]),
                                                   DSConnections = DSConnections))
   }
 

@@ -89,7 +89,7 @@ LoadRawDataSet(ServerSpecifications = NULL)
 # Check RDS tables for existence and completeness
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-RDSTableCheck <- ds.GetDataSetCheck(DataSetName = "RawDataSet",
+RDSTableCheck <- ds.GetDataSetCheck(DataSetName = "CCP.RawDataSet",
                                     Stage = "Raw")
 
 View(RDSTableCheck$TableStatus)
@@ -107,7 +107,7 @@ RDSTableCheck$TableStatus
 # Validate RDS data
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-RDSValidationReports <- ds.GetRDSValidationReport()
+# RDSValidationReports <- ds.GetRDSValidationReport()
 
 # ValidationSummaries <- RDSValidationReports %>%
 #                             map(function(Server)
@@ -125,7 +125,7 @@ RDSValidationReports <- ds.GetRDSValidationReport()
 # Optionally: Draw random sample from Raw Data Set on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ds.DrawSample(RawDataSetName = "RawDataSet",
+ds.DrawSample(RawDataSetName = "CCP.RawDataSet",
               SampleSize = 2000,
               SampleName = "RDSSample")
 
@@ -135,18 +135,18 @@ ds.DrawSample(RawDataSetName = "RawDataSet",
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS) (using default settings)
-ds.CurateData(RawDataSetName = "RawDataSet",
+ds.CurateData(RawDataSetName = "CCP.RawDataSet",
               Settings = NULL,
-              OutputName = "CurationOutput")
+              OutputName = "CCP.CurationOutput")
 
-CDSTableCheck <- ds.GetDataSetCheck(DataSetName = "CuratedDataSet",
+CDSTableCheck <- ds.GetDataSetCheck(DataSetName = "CCP.CuratedDataSet",
                                     Stage = "Curated")
 
 # Integrated in ds.CuratedData: Make tables from Curated Data Set directly addressable by unpacking them into R server session
 # ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet")
 
 # Get curation reports
-CurationReport <- ds.GetCurationReport()
+CurationReport <- ds.GetCurationReport(Module = "CCP")
 
 View(CurationReport$EntryCounts$BioSampling)
 
@@ -206,11 +206,10 @@ plot_ly(data = filter(PlotData, Feature == "UICCStage")$data[[1]],
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Run ds.AugmentData
-ds.AugmentData(CuratedDataSetName = "CuratedDataSet",
-               OutputName = "AugmentationOutput")
+ds.AugmentData(CuratedDataSetName = "CCP.CuratedDataSet",
+               OutputName = "CCP.AugmentationOutput")
 
-ADSTableCheck <- ds.GetDataSetCheck(DataSetName = "AugmentedDataSet")
-
+ADSTableCheck <- ds.GetDataSetCheck(DataSetName = "CCP.AugmentedDataSet")
 
 
 

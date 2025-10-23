@@ -6,9 +6,9 @@
 #'
 #' Linked to server-side ASSIGN method \code{DrawSampleDS()}
 #'
-#' @param RawDataSetName \code{string} - Name of a \code{list} object on server
+#' @param RawDataSetName \code{string} - Name of an RDS \code{list} object on server
 #' @param SampleSize \code{integer} - Number of patients per Server
-#' @param SampleName \code{string} - Option to assign subset of 'RawDataSet' a different object name on servers
+#' @param SampleName \code{string} - Option to assign subset of 'CCP.RawDataSet' a different object name on servers
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{list} of messages about object assignment for monitoring purposes
@@ -17,7 +17,7 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ds.DrawSample <- function(RawDataSetName = "RawDataSet",
+ds.DrawSample <- function(RawDataSetName = "CCP.RawDataSet",
                           SampleSize = 100,
                           SampleName = "RDSSample",
                           DSConnections = NULL)

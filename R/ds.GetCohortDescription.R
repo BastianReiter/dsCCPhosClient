@@ -20,7 +20,7 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ds.GetCohortDescription <- function(DataSetName = "AugmentedDataSet",
+ds.GetCohortDescription <- function(DataSetName = "CCP.AugmentedDataSet",
                                     Stage = "Augmented",
                                     DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

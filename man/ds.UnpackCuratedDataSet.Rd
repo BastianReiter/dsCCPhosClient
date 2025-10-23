@@ -5,12 +5,12 @@
 \title{ds.UnpackCuratedDataSet}
 \usage{
 ds.UnpackCuratedDataSet(
-  CuratedDataSetName = "CuratedDataSet",
+  CuratedDataSetName = "CCP.CuratedDataSet",
   DSConnections = NULL
 )
 }
 \arguments{
-\item{CuratedDataSetName}{\code{string} - Name of Curated Data Set object (list) on server - Default: 'CuratedDataSet'}
+\item{CuratedDataSetName}{\code{string} - Name of Curated Data Set object (list) on server - Default: 'CCP.CuratedDataSet'}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 }

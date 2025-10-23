@@ -5,7 +5,7 @@
 #'
 #' Linked to server-side \code{ASSIGN} method \code{ExtractFromListDS()}
 #'
-#' @param AugmentedDataSetName \code{string} - Name of Augmented Data Set object (\code{list}) on server - Default: 'AugmentedDataSet'
+#' @param AugmentedDataSetName \code{string} - Name of Augmented Data Set object (\code{list}) on server - Default: 'CCP.AugmentedDataSet'
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #'
 #' @return A \code{list} of messages about object assignment for monitoring purposes
@@ -14,12 +14,12 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
+ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "CCP.AugmentedDataSet",
                                       DSConnections = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   # --- For Testing Purposes ---
-  # AugmentedDataSetName <- "AugmentedDataSet"
+  # AugmentedDataSetName <- "CCP.AugmentedDataSet"
   # DSConnections <- CCPConnections
 
   # --- Argument Validation ---
@@ -45,14 +45,14 @@ ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "AugmentedDataSet",
   {
       # Execute server-side assign function
       DSI::datashield.assign(conns = DSConnections,
-                             symbol = paste0("ADS.", CCPTableNames.ADS[i]),      # E.g. 'ADS.Events'
+                             symbol = paste0("CCP.ADS.", CCPTableNames.ADS[i]),      # E.g. 'CCP.ADS.Events'
                              value = call("ExtractFromListDS",
                                           ListName.S = AugmentedDataSetName,
                                           ObjectName.S = CCPTableNames.ADS[i]))
 
       # Call helper function to check if object assignment succeeded
       Messages$Assignment <- c(Messages$Assignment,
-                               ds.GetObjectStatus(ObjectName = paste0("ADS.", CCPTableNames.ADS[i]),
+                               ds.GetObjectStatus(ObjectName = paste0("CCP.ADS.", CCPTableNames.ADS[i]),
                                                   DSConnections = DSConnections))
   }
 

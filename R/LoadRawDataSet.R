@@ -27,7 +27,7 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   # ServerSpecifications <- NULL
   # OpalTableNames.Mapping <- setNames(dsCCPhosClient::Meta.Tables$TableName.Curated,
   #                                    nm = dsCCPhosClient::Meta.Tables$TableName.Raw)
-  # OpalTableNames.Dictionary <- NULL
+  # OpalTableNames.Dictionary <- list(All = setNames(dsCCPhosClient::Meta.Tables$TableName.Raw, nm = dsCCPhosClient::Meta.Tables$TableName.Curated))
   # RunAssignmentChecks <- TRUE
   # DSConnections <- CCPConnections
 
@@ -70,8 +70,8 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
                         filter(Server == ServerNames[i],
                                IsAvailable == TRUE,
                                IsRequired == TRUE) %>%
-                        mutate(RTableName = case_when(OpalTableName.Generic %in% names(OpalTableNames.Mapping) ~ paste0("RDS.", OpalTableNames.Mapping[OpalTableName.Generic]),
-                                                      .default = paste0("RDS.", OpalTableName.Generic)))
+                        mutate(RTableName = case_when(OpalTableName.Generic %in% names(OpalTableNames.Mapping) ~ paste0("CCP.RDS.", OpalTableNames.Mapping[OpalTableName.Generic]),
+                                                      .default = paste0("CCP.RDS.", OpalTableName.Generic)))
 
       # Loop through available Opal DB tables and assign their content to objects (data.frames) in R session
       for (j in 1:nrow(OpalDBToR))
@@ -100,7 +100,7 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
       for(tablename in OpalTableNames.Mapping)
       {
           # Make sure assignment was successful on all servers
-          ObjectStatus_Table <- dsFredaClient::ds.GetObjectStatus(ObjectName = paste0("RDS.", tablename),
+          ObjectStatus_Table <- dsFredaClient::ds.GetObjectStatus(ObjectName = paste0("CCP.RDS.", tablename),
                                                                   DSConnections = DSConnections)
 
           # Add info about table assignment to Messages
@@ -114,13 +114,12 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   }
 
 
-
 #-------------------------------------------------------------------------------
-# Assign list 'RawDataSet' on all servers
+# Assign list 'CCP.RawDataSet' on all servers
 #-------------------------------------------------------------------------------
 
   # Create list of vectors (one for each server) containing names of actually existing data.frames
-  ExistingRDSTables <- paste0("RDS.", OpalTableNames.Mapping) %>%
+  ExistingRDSTables <- paste0("CCP.RDS.", OpalTableNames.Mapping) %>%
                             map(function(tablename)
                                 {
                                     if (!is.na(tablename))
@@ -130,31 +129,41 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
                                         return(NULL)
                                     }
                                 }) %>%
-                            set_names(paste0("RDS.", OpalTableNames.Mapping)) %>%
+                            set_names(paste0("CCP.RDS.", OpalTableNames.Mapping)) %>%
                             list_transpose() %>%
                             map(\(TableNames) names(TableNames[TableNames == TRUE]))
 
-  # For every server, consolidate all existing Raw Data Set tables in one list object called "RawDataSet"
+  # For every server, consolidate all existing Raw Data Set tables in one list object called "CCP.RawDataSet"
   ExistingRDSTables %>%
       iwalk(function(RDSTableNames, servername)
             {
-                # Note: Tables within list 'RawDataSet' are named WITHOUT prefix 'RDS.'
+                # Note: Tables within list 'CCP.RawDataSet' are named WITHOUT prefix 'CCP.RDS.'
                 dsFredaClient::ds.MakeList(ObjectNames = setNames(object = RDSTableNames,
-                                                                  nm = str_remove(RDSTableNames, "RDS.")),
-                                           OutputName = "RawDataSet",
+                                                                  nm = str_remove(RDSTableNames, "CCP.RDS.")),
+                                           OutputName = "CCP.RawDataSet",
                                            DSConnections = DSConnections[servername])
            })
 
   if (RunAssignmentChecks == TRUE)
   {
-      # Make sure assignment of RawDataSet was successful on all servers
-      ObjectStatus_RawDataSet <- dsFredaClient::ds.GetObjectStatus(ObjectName = "RawDataSet",
+      # Make sure assignment of CCP.RawDataSet was successful on all servers
+      ObjectStatus_RawDataSet <- dsFredaClient::ds.GetObjectStatus(ObjectName = "CCP.RawDataSet",
                                                                    DSConnections = DSConnections)
 
-      # Add info about RawDataSet assignment to Messages
+      # Add info about CCP.RawDataSet assignment to Messages
       Messages$Assignment <- c(Messages$Assignment,
                                ObjectStatus_RawDataSet$ObjectValidity)
   }
+
+
+# Perform RDS preparation tasks
+#-------------------------------------------------------------------------------
+
+ds.PrepareRawData(RawDataSetName = "CCP.RawDataSet",
+                  Module = "CCP",
+                  RDSTableNames = dsCCPhosClient::Meta.Tables$TableName.Curated,
+                  CompleteCharacterConversion = FALSE,
+                  CurateFeatureNames = TRUE)
 
 
 #--- Print and invisibly return Messages object --------------------------------

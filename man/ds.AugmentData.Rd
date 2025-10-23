@@ -5,17 +5,17 @@
 \title{ds.AugmentData}
 \usage{
 ds.AugmentData(
-  CuratedDataSetName = "CuratedDataSet",
-  OutputName = "AugmentationOutput",
+  CuratedDataSetName = "CCP.CuratedDataSet",
+  OutputName = "CCP.AugmentationOutput",
   RunAssignmentChecks = TRUE,
   UnpackAugmentedDataSet = TRUE,
   DSConnections = NULL
 )
 }
 \arguments{
-\item{CuratedDataSetName}{\code{string} - Name of the Curated Data Set object on server - Default: 'CuratedDataSet'}
+\item{CuratedDataSetName}{\code{string} - Name of the Curated Data Set object on server - Default: 'CCP.CuratedDataSet'}
 
-\item{OutputName}{\code{string} - Name of output object to be assigned on server - Default: 'AugmentationOutput'}
+\item{OutputName}{\code{string} - Name of output object to be assigned on server - Default: 'CCP.AugmentationOutput'}
 
 \item{RunAssignmentChecks}{\code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}}
 
@@ -28,7 +28,7 @@ A \code{list} of variables containing messages about object assignment for monit
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}} \cr\cr
-Transforms curated CCP core data set (CDM) into augmented data set (ADM)
+Transforms curated data set (CDS) into augmented data set (ADS)
 }
 \details{
 Linked to server-side ASSIGN method \code{AugmentDataDS()}
