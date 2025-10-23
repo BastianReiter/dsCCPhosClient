@@ -50,17 +50,17 @@ options(datashield.errors.print = TRUE)
 TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 
 # Definition of test resource, exemplary with local csv-file
-TestResource <- resourcer::newResource(name = "TestResource",
-                                       #url = "file://./Development/Test/DummyData.csv",
-                                       url = "file://localhost/C:/Users/Basti/ARBEIT Lokal/dsCCPhosClient/Development/Test/DummyData.csv",
-                                       format = "csv")
+# TestResource <- resourcer::newResource(name = "TestResource",
+#                                        #url = "file://./Development/Test/DummyData.csv",
+#                                        url = "file://localhost/C:/Users/Basti/ARBEIT Lokal/dsCCPhosClient/Development/Test/DummyData.csv",
+#                                        format = "csv")
 
 
 CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       NumberOfServers = 3,
                                       NumberOfPatientsPerServer = 2000,
-                                      AddedDsPackages = "dsTidyverse",
-                                      Resources = list(TestResource = TestResource))
+                                      AddedDsPackages = "dsTidyverse")
+                                      #Resources = list(TestResource = TestResource))
 
 
 # QuickProcessingRun()
@@ -224,7 +224,7 @@ ADSTableCheck <- ds.GetDataSetCheck(DataSetName = "AugmentedDataSet")
 ServerWorkspaceInfo <- GetServerWorkspaceInfo()
 
 # Overview of all objects in server R sessions
-View(ServerWorkspaceInfo$Overview)
+View(ServerWorkspaceInfo$Overview$All)
 
 # Detailed meta data of a particular object (also part of ServerWorkspaceInfo)
 ObjectMetaData <- ds.GetObjectMetaData(ObjectName = "CDS_Patient")
