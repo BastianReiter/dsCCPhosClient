@@ -5,8 +5,8 @@
 \title{ds.CurateData}
 \usage{
 ds.CurateData(
-  RawDataSetName = "RawDataSet",
-  OutputName = "CurationOutput",
+  RawDataSetName = "CCP.RawDataSet",
+  OutputName = "CCP.CurationOutput",
   Settings = NULL,
   RunAssignmentChecks = TRUE,
   UnpackCuratedDataSet = TRUE,
@@ -14,7 +14,7 @@ ds.CurateData(
 )
 }
 \arguments{
-\item{RawDataSetName}{\code{character} - Name of Raw Data Set object (list) on server - Default: 'RawDataSet'}
+\item{RawDataSetName}{\code{character} - Name of Raw Data Set object (list) on server - Default: 'CCP.RawDataSet'}
 
 \item{OutputName}{\code{character} - Name of output object to be assigned on server - Default: 'CurationOutput'}
 

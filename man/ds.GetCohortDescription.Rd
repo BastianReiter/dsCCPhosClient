@@ -5,7 +5,7 @@
 \title{ds.GetCohortDescription}
 \usage{
 ds.GetCohortDescription(
-  DataSetName = "AugmentedDataSet",
+  DataSetName = "CCP.AugmentedDataSet",
   Stage = "Augmented",
   DSConnections = NULL
 )

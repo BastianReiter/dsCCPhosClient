@@ -4,7 +4,10 @@
 \alias{ds.GetRDSValidationReport}
 \title{ds.GetRDSValidationReport}
 \usage{
-ds.GetRDSValidationReport(RawDataSetName = "RawDataSet", DSConnections = NULL)
+ds.GetRDSValidationReport(
+  RawDataSetName = "CCP.RawDataSet",
+  DSConnections = NULL
+)
 }
 \arguments{
 \item{RawDataSetName}{\code{string} - Name of 'RawDataSet' object on server - Default: 'RawDataSet'}

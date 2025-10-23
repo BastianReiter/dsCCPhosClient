@@ -6,7 +6,7 @@
 #'
 #' Linked to server-side ASSIGN methods \code{CurateDataDS()} and \code{ExtractFromListDS()}
 #'
-#' @param RawDataSetName \code{character} - Name of Raw Data Set object (list) on server - Default: 'RawDataSet'
+#' @param RawDataSetName \code{character} - Name of Raw Data Set object (list) on server - Default: 'CCP.RawDataSet'
 #' @param OutputName \code{character} - Name of output object to be assigned on server - Default: 'CurationOutput'
 #' @param Settings \code{list} - Settings passed to function
 #'                   \itemize{  \item \emph{DataHarmonization} - \code{list}
@@ -74,8 +74,8 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ds.CurateData <- function(RawDataSetName = "RawDataSet",
-                          OutputName = "CurationOutput",
+ds.CurateData <- function(RawDataSetName = "CCP.RawDataSet",
+                          OutputName = "CCP.CurationOutput",
                           Settings = NULL,
                           # Settings = list(DataHarmonization = list(Run = TRUE,
                           #                                          TransformativeExpressions.Profile = "Default",
@@ -90,7 +90,7 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   #--- For Testing Purposes ---
-  # RawDataSetName <- "RawDataSet"
+  # RawDataSetName <- "CCP.RawDataSet"
   # OutputName <- "CurationOutput"
   # Settings <- NULL
   # RunAssignmentChecks <- TRUE
@@ -110,7 +110,7 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
   Messages$CurationCompletion <- list()
 
 
-# 1) Trigger dsCCPhos::CurateDataDS()
+# Trigger dsCCPhos::CurateDataDS()
 #-------------------------------------------------------------------------------
   # Execute the server-side function call
   DSI::datashield.assign(conns = DSConnections,
@@ -128,32 +128,42 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
   }
 
 
-# 2) Extract objects from list returned by CurateDataDS() and assign them to R server sessions
+# Extract objects from list returned by CurateDataDS() and assign them to R server sessions
 #-------------------------------------------------------------------------------
 
-  CurationOutputObjects <- c("CuratedDataSet",
-                             "CurationReport",
-                             "Messages")
+  # Temporary (Generalize function later on)
+  Module <- "CCP"
 
-  for(i in 1:length(CurationOutputObjects))
+  # Named vector determining how objects inside CurationOutput list created on servers should be extracted
+  ObjectNames <- setNames(c(paste0(Module, ".CuratedDataSet"),
+                            paste0(Module, ".CurationReport"),
+                            "Messages"),
+                          nm = c("CuratedDataSet",
+                                 "CurationReport",
+                                 "Messages"))
+
+  # Extract objects from CurationOutput list
+  for (i in 1:length(ObjectNames))
   {
       # Execute server-side list extraction
       DSI::datashield.assign(conns = DSConnections,
-                             symbol = CurationOutputObjects[i],
+                             symbol = ObjectNames[i],
                              value = call("ExtractFromListDS",
                                            ListName.S = OutputName,
-                                           ObjectName.S = CurationOutputObjects[i]))
+                                           ObjectName.S = names(ObjectNames)[i]))
 
       if (RunAssignmentChecks == TRUE)
       {
           # Call helper function to check if object assignment succeeded
           Messages$Assignment <- c(Messages$Assignment,
-                                   ds.GetObjectStatus(ObjectName = CurationOutputObjects[i],
+                                   ds.GetObjectStatus(ObjectName = ObjectNames[i],
                                                       DSConnections = DSConnections))
       }
   }
 
-  # Optionally unpack (unlist) CuratedDataSet
+
+# Optionally unpack (unlist) CuratedDataSet
+#-------------------------------------------------------------------------------
   if (UnpackCuratedDataSet == TRUE)
   {
       # Get curated table names
@@ -163,16 +173,16 @@ ds.CurateData <- function(RawDataSetName = "RawDataSet",
       {
           # Execute server-side assign function
           DSI::datashield.assign(conns = DSConnections,
-                                 symbol = paste0("CDS.", CCPTableNames.CDS[i]),      # E.g. 'CDS.Metastasis'
+                                 symbol = paste0("CCP.CDS.", CCPTableNames.CDS[i]),      # E.g. 'CCP.CDS.Metastasis'
                                  value = call("ExtractFromListDS",
-                                              ListName.S = "CuratedDataSet",
+                                              ListName.S = "CCP.CuratedDataSet",
                                               ObjectName.S = CCPTableNames.CDS[i]))
 
           if (RunAssignmentChecks == TRUE)
           {
               # Call helper function to check if object assignment succeeded
               Messages$Assignment <- c(Messages$Assignment,
-                                       ds.GetObjectStatus(ObjectName = paste0("CDS.", CCPTableNames.CDS[i]),
+                                       ds.GetObjectStatus(ObjectName = paste0("CCP.CDS.", CCPTableNames.CDS[i]),
                                                           DSConnections = DSConnections))
           }
       }
