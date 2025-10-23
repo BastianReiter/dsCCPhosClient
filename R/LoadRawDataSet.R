@@ -66,7 +66,7 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   for (i in 1:length(ServerNames))
   {
       # Create data.frame containing mapping from Opal DB table names to R object names
-      OpalDBToR <- OpalDBInfo$OpalTables.Available %>%
+      OpalDBToR <- OpalDBInfo$OpalTables.Required %>%
                         filter(Server == ServerNames[i],
                                IsAvailable == TRUE,
                                IsRequired == TRUE) %>%
