@@ -76,10 +76,10 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
       # Loop through available Opal DB tables and assign their content to objects (data.frames) in R session
       for (j in 1:nrow(OpalDBToR))
       {
-          DSI::datashield.assign(conns = DSConnections[[i]],
-                                 symbol = OpalDBToR$RTableName[j],
-                                 value = OpalDBToR$OpalTableName[j],
-                                 id.name = "_id")
+          DSI::datashield.assign.table(conns = DSConnections[[i]],
+                                       symbol = OpalDBToR$RTableName[j],
+                                       table = OpalDBToR$OpalTableName[j],
+                                       id.name = "_id")
 
           # Add message about Opal data base to R session mapping
           Messages$Assignment <- c(Messages$Assignment,
