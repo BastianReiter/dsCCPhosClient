@@ -78,8 +78,8 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
       {
           DSI::datashield.assign(conns = DSConnections[[i]],
                                  symbol = OpalDBToR$RTableName[j],
-                                 value = OpalDBToR$OpalTableName[j])
-                                 #id.name = "_id")
+                                 value = OpalDBToR$OpalTableName[j],
+                                 id.name = "_id")
 
           # Add message about Opal data base to R session mapping
           Messages$Assignment <- c(Messages$Assignment,
