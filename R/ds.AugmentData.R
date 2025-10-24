@@ -82,7 +82,7 @@ ds.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
   {
       # Execute server-side list extraction
       DSI::datashield.assign(conns = DSConnections,
-                             symbol = ObjectNames[i],
+                             symbol = unname(ObjectNames[i]),
                              value = call("ExtractFromListDS",
                                            ListName.S = OutputName,
                                            ObjectName.S = names(ObjectNames)[i]))
@@ -91,7 +91,7 @@ ds.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
       {
           # Call helper function to check if object assignment succeeded
           Messages$Assignment <- c(Messages$Assignment,
-                                   ds.GetObjectStatus(ObjectName = ObjectNames[i],
+                                   ds.GetObjectStatus(ObjectName = unname(ObjectNames[i]),
                                                       DSConnections = DSConnections))
       }
   }
