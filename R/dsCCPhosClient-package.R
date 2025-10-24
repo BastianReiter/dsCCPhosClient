@@ -25,9 +25,11 @@
 #' @importFrom dsFredaClient ds.JoinTables
 #' @importFrom dsFredaClient ds.MakeList
 #' @importFrom dsFredaClient ds.MutateTable
+#' @importFrom dsFredaClient ds.PrepareRawData
 #' @importFrom dsFredaClient ExploreFeature
 #' @importFrom dsFredaClient ExportPlot
 #' @importFrom dsFredaClient GetEligibleValues
+#' @importFrom dsFredaClient GetExplorationData
 #' @importFrom dsFredaClient GetServerOpalDBInfo
 #' @importFrom dsFredaClient GetServerResourcesInfo
 #' @importFrom dsFredaClient GetServerWorkspaceInfo
@@ -91,6 +93,9 @@ dsFredaClient::ds.MakeList
 dsFredaClient::ds.MutateTable
 
 #' @export
+dsFredaClient::ds.PrepareRawData
+
+#' @export
 dsFredaClient::ExploreFeature
 
 #' @export
@@ -98,6 +103,9 @@ dsFredaClient::ExportPlot
 
 #' @export
 dsFredaClient::GetEligibleValues
+
+#' @export
+dsFredaClient::GetExplorationData
 
 #' @export
 dsFredaClient::GetServerOpalDBInfo
