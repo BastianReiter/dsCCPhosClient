@@ -159,12 +159,13 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
 # Perform RDS preparation tasks
 #-------------------------------------------------------------------------------
 
-# dsFredaClient::ds.PrepareRawData(RawDataSetName = "CCP.RawDataSet",
-#                                  Module = "CCP",
-#                                  RDSTableNames = dsCCPhosClient::Meta.Tables$TableName.Curated,
-#                                  CompleteCharacterConversion = FALSE,
-#                                  CurateFeatureNames = TRUE,
-#                                  DSConnections = DSConnections)
+  dsFredaClient::ds.PrepareRawData(RawDataSetName = "CCP.RawDataSet",
+                                   Module = "CCP",
+                                   RDSTableNames = dsCCPhosClient::Meta.Tables$TableName.Curated,
+                                   RunFuzzyStringMatching = FALSE,
+                                   CompleteCharacterConversion = FALSE,
+                                   CurateFeatureNames = TRUE,
+                                   DSConnections = DSConnections)
 
 
 #--- Print and invisibly return Messages object --------------------------------
