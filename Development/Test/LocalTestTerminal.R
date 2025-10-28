@@ -90,6 +90,7 @@ LoadRawDataSet(ServerSpecifications = NULL)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 RDSTableCheck <- ds.GetDataSetCheck(DataSetName = "CCP.RawDataSet",
+                                    Module = "CCP",
                                     Stage = "Raw")
 
 View(RDSTableCheck$TableStatus)
@@ -209,7 +210,9 @@ plot_ly(data = filter(PlotData, Feature == "UICCStage")$data[[1]],
 ds.AugmentData(CuratedDataSetName = "CCP.CuratedDataSet",
                OutputName = "CCP.AugmentationOutput")
 
-ADSTableCheck <- ds.GetDataSetCheck(DataSetName = "CCP.AugmentedDataSet")
+ADSTableCheck <- ds.GetDataSetCheck(DataSetName = "CCP.AugmentedDataSet",
+                                    Module = "CCP",
+                                    Stage = "Augmented")
 
 
 
@@ -235,53 +238,49 @@ View(ObjectMetaData$ServerA$Structure)
 ObjectMetaData$FirstEligible$DataTypes["PatientID"]
 
 
+
+Test <- dsFredaClient::GetExplorationData(InputWorkspaceInfo = ServerWorkspaceInfo,
+                                          TableSelection <- c("CCP.ADS.Diagnosis",
+                                                              "CCP.ADS.DiseaseCourse",
+                                                              "CCP.ADS.Events",
+                                                              "CCP.ADS.Patient",
+                                                              "CCP.ADS.Therapy"))
+
+TestA <- ExploreFeature(TableName = "CCP.ADS.Patient",
+                        FeatureName = "Sex")
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Process ADS tables
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-# dsTidyverse
-# ds.filter(df.name = "ADS_Patient",
-#           tidy_expr = list(CountDiagnoses == 1),
-#           newobj = "ADS_Patient_OneDiagnosis")
-#
-#
-# ds.filter(df.name = "ADS_Patient",
-#           tidy_expr = list(Gender == "Female"),
-#           newobj = "ADS_Patient_OneDiagnosis")
-
-
-
-
-
-
-Messages <- ds.JoinTables(TableNameA = "ADS_Patient_OneDiagnosis",
-                          TableNameB = "ADS_Diagnosis",
+Messages <- ds.JoinTables(TableNameA = "CCP.ADS.Patient",
+                          TableNameB = "CCP.ADS.Diagnosis",
                           ByStatement = "PatientID",
                           OutputName = "AnalysisDataSet")
-
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Data Exploration
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-CohortDescription <- ds.GetCohortDescription(DataSetName = "AugmentedDataSet",
+CohortDescription <- ds.GetCohortDescription(DataSetName = "CCP.AugmentedDataSet",
                                              Stage = "Augmented")
 
 
 # Transform data into display-friendly time series tables using auxiliary function 'DisplayTimeSeries()'
-PatientCount_TimeSeries <- DisplayTimeSeries(TimeSeriesData = CohortDescription$CohortSize_OverTime,
+PatientCount.TimeSeries <- DisplayTimeSeries(TimeSeriesData = CohortDescription$CohortSize_OverTime,
                                              TimePointFeature = "DiagnosisYear",
                                              ValueFeature = "PatientCount",
                                              GroupingFeature = "Server",
                                              IncludeMissingTimePoints = TRUE)
 
+
 Plot <- CohortDescription$CohortSize_OverTime %>%
-            filter(Server != "All") %>%
+            filter(Server == "All") %>%
             MakeColumnPlot(XFeature = DiagnosisYear,
                            YFeature = PatientCount,
-                           GroupingFeature = Server)
+                           GroupingFeature = "Server")
 
 
 Plot <- CohortDescription$GenderDistribution %>%
@@ -303,7 +302,7 @@ Plot <- CohortDescription$AgeDistribution %>%
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Test <- ds.GetCrossTab(TableName = "ADS.Patient",
+Test <- ds.GetCrossTab(TableName = "CCP.ADS.Patient",
                        FeatureNames = c("Sex", "LastVitalStatus", "CountDiagnoses"),
                        RemoveNA = TRUE)
 
