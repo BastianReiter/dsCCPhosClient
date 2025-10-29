@@ -200,7 +200,7 @@ ds.CurateData <- function(RawDataSetName = "CCP.RawDataSet",
 
 
 
-# 3) Get Messages object from servers (as a list of lists) and create completion check object
+# Get Messages object from servers (as a list of lists) and create completion check object
 #-------------------------------------------------------------------------------
 
   CurationMessages <- DSI::datashield.aggregate(conns = DSConnections,

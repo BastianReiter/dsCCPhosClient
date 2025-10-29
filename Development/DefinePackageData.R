@@ -63,6 +63,29 @@ Set.FuzzyStringMatching <- dsCCPhos::Set.FuzzyStringMatching
 Set.TransformativeExpressions <- dsCCPhos::Set.TransformativeExpressions
 
 
+# Add feature to 'Meta.ADS' indicating if a feature should be part of an "order list" that can be passed to dsFredaClient::GetExplorationData()
+Meta.ADS <- Meta.ADS %>%
+                mutate(ExploreRoutinely = case_when(TableName == "Events" & FeatureName %in% c("EventClass",
+                                                                                               "EventSubclass") ~ TRUE,
+                                                    TableName == "Diagnosis" & FeatureName %in% c("ICD10Code",
+                                                                                                  "ICDOTopographyCode",
+                                                                                                  "LocalizationSide",
+                                                                                                  "ICDOMorphologyCode",
+                                                                                                  "Grading",
+                                                                                                  "UICCStage",
+                                                                                                  "UICCStageCategory",
+                                                                                                  "TNM.T",
+                                                                                                  "TNM.N",
+                                                                                                  "TNM.M",
+                                                                                                  "PatientAgeAtDiagnosis",
+                                                                                                  "TimeDiagnosisToDeath",
+                                                                                                  "TimeFollowUp") ~ TRUE,
+                                                    TableName == "Patient" & FeatureName %in% c("Sex",
+                                                                                                "LastVitalStatus",
+                                                                                                "CausesOfDeath",
+                                                                                                "CountDiagnoses") ~ TRUE,
+                                                    .default = FALSE))
+
 use_data(Meta.ADS, overwrite = TRUE)
 use_data(Meta.Tables, overwrite = TRUE)
 use_data(Meta.Features, overwrite = TRUE)
