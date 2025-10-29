@@ -156,12 +156,17 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   }
 
 
+#-------------------------------------------------------------------------------
 # Perform RDS preparation tasks
 #-------------------------------------------------------------------------------
 
   dsFredaClient::ds.PrepareRawData(RawDataSetName = "CCP.RawDataSet",
                                    Module = "CCP",
                                    RDSTableNames = dsCCPhosClient::Meta.Tables$TableName.Curated,
+                                   FeatureNameDictionary = list(GeneralCondition = c("_id" = "GeneralConditionID"),
+                                                                OtherClassification = c("_id" = "OtherClassificationID"),
+                                                                Surgery = c("OPS-Version" = "OPSVersion"),
+                                                                TherapyRecommendation = c("_id" = "TherapyRecommendationID")),
                                    RunFuzzyStringMatching = FALSE,
                                    CompleteCharacterConversion = FALSE,
                                    CurateFeatureNames = TRUE,

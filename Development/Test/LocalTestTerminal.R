@@ -239,15 +239,31 @@ ObjectMetaData$FirstEligible$DataTypes["PatientID"]
 
 
 
-Test <- dsFredaClient::GetExplorationData(InputWorkspaceInfo = ServerWorkspaceInfo,
-                                          TableSelection <- c("CCP.ADS.Diagnosis",
-                                                              "CCP.ADS.DiseaseCourse",
-                                                              "CCP.ADS.Events",
-                                                              "CCP.ADS.Patient",
-                                                              "CCP.ADS.Therapy"))
+Exploration <-dsFredaClient::GetExplorationData(OrderList = list(CCP.ADS.Diagnosis = c("ICD10Code",
+                                                                                       "ICDOTopographyCode",
+                                                                                       "LocalizationSide",
+                                                                                       "ICDOMorphologyCode",
+                                                                                       "Grading",
+                                                                                       "UICCStage",
+                                                                                       "UICCStageCategory",
+                                                                                       "TNM.T",
+                                                                                       "TNM.N",
+                                                                                       "TNM.M",
+                                                                                       "PatientAgeAtDiagnosis",
+                                                                                       "TimeDiagnosisToDeath",
+                                                                                       "TimeFollowUp"),
+                                                                 CCP.ADS.Patient = c("Sex",
+                                                                                     "LastVitalStatus",
+                                                                                     "CausesOfDeath",
+                                                                                     "CountDiagnoses")))
 
-TestA <- ExploreFeature(TableName = "CCP.ADS.Patient",
-                        FeatureName = "Sex")
+
+Proc <- Widget.ServerExplorer(ServerWorkspaceInfo = ServerWorkspaceInfo,
+                              ExplorationData = Exploration,
+                              EnableLiveConnection = TRUE,
+                              RunAutonomously = TRUE,
+                              UseVirtualConnections = FALSE)
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
