@@ -3,6 +3,7 @@
 export(CheckServerRequirements)
 export(ConnectToCCP)
 export(ConnectToVirtualCCP)
+export(DisplayCrossTable)
 export(DisplayTimeSeries)
 export(ExploreFeature)
 export(ExportPlot)
