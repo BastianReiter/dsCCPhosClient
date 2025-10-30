@@ -63,7 +63,7 @@ CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
                                       #Resources = list(TestResource = TestResource))
 
 
-# QuickProcessingRun()
+QuickProcessingRun()
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -318,9 +318,17 @@ Plot <- CohortDescription$AgeDistribution %>%
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Test <- ds.GetCrossTab(TableName = "CCP.ADS.Patient",
-                       FeatureNames = c("Sex", "LastVitalStatus", "CountDiagnoses"),
+TestCrossTab <- ds.GetCrossTab(TableName = "CCP.ADS.Patient",
+                       FeatureNames = c("Sex", "LastVitalStatus"),
                        RemoveNA = TRUE)
+
+
+
+
+
+
+
+
 
 ds.MutateTable(TableName = "ADS.Diagnosis",
                MutateExpression = "UICCStageClassification = case_when(str_starts(TNM.T, '3') ~ 'III', .default = '<NA>')",
