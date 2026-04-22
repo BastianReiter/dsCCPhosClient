@@ -9,7 +9,8 @@ ds.AugmentData(
   OutputName = "CCP.AugmentationOutput",
   RunAssignmentChecks = TRUE,
   UnpackAugmentedDataSet = TRUE,
-  DSConnections = NULL
+  DSConnections = NULL,
+  DS.async = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ ds.AugmentData(
 \item{UnpackAugmentedDataSet}{\code{logical} indicating whether the Augmented Data Set \code{list} should be unpacked so that tables \code{data.frames} are directly accessible - Default: \code{TRUE}}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
+
+\item{DS.async}{\code{logical} - Value of argument 'async' in \code{DSI::datashield.assign()} / \code{DSI::datashield.aggregate()} - Default: \code{FALSE}}
 }
 \value{
 A \code{list} of variables containing messages about object assignment for monitoring purposes.

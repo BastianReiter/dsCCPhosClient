@@ -6,6 +6,7 @@
 #' @param ServerSpecifications \code{data.frame} - Login data of CCP sites
 #'
 #' @return A list of \code{DSConnection}-objects
+#'
 #' @export
 #'
 #' @author Bastian Reiter

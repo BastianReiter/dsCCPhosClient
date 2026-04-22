@@ -7,6 +7,7 @@
 #'
 #' @param AugmentedDataSetName \code{string} - Name of Augmented Data Set object (\code{list}) on server - Default: 'CCP.AugmentedDataSet'
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
+#' @param DS.async \code{logical} - Value of argument 'async' in \code{DSI::datashield.assign()} / \code{DSI::datashield.aggregate()} - Default: \code{FALSE}
 #'
 #' @return A \code{list} of messages about object assignment for monitoring purposes
 #'
@@ -15,15 +16,18 @@
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "CCP.AugmentedDataSet",
-                                      DSConnections = NULL)
+                                      DSConnections = NULL,
+                                      DS.async = FALSE)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   # --- For Testing Purposes ---
   # AugmentedDataSetName <- "CCP.AugmentedDataSet"
   # DSConnections <- CCPConnections
+  # DS.async <- FALSE
 
   # --- Argument Validation ---
-  assert_that(is.string(AugmentedDataSetName))
+  assert_that(is.string(AugmentedDataSetName),
+              is.flag(DS.async))
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
@@ -48,12 +52,14 @@ ds.UnpackAugmentedDataSet <- function(AugmentedDataSetName = "CCP.AugmentedDataS
                              symbol = paste0("CCP.ADS.", CCPTableNames.ADS[i]),      # E.g. 'CCP.ADS.Events'
                              value = call("ExtractFromListDS",
                                           ListName.S = AugmentedDataSetName,
-                                          ObjectName.S = CCPTableNames.ADS[i]))
+                                          ObjectName.S = CCPTableNames.ADS[i]),
+                             async = DS.async)
 
       # Call helper function to check if object assignment succeeded
       Messages$Assignment <- c(Messages$Assignment,
                                ds.GetObjectStatus(ObjectName = paste0("CCP.ADS.", CCPTableNames.ADS[i]),
-                                                  DSConnections = DSConnections))
+                                                  DSConnections = DSConnections,
+                                                  DS.async = DS.async))
   }
 
   # Turn list into (named) vector
