@@ -1,8 +1,8 @@
 
-#' QuickProcessingRun
+#' CCP.QuickProcessingRun
 #'
 #' `r lifecycle::badge("experimental")` \cr\cr
-#' Perform a complete run of CCPhos funtionality with default settings.
+#' Perform a complete run of CCPhos functionality with default settings.
 #'
 #' @param ServerSpecifications \code{data.frame} - Same \code{data.frame} used for login. Used here only for acquisition of server-specific project names (in case they are differing) - Default: \code{NULL} for virtual project
 #' @param RunAssignmentChecks \code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}
@@ -15,10 +15,10 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-QuickProcessingRun <- function(ServerSpecifications = NULL,
-                               RunAssignmentChecks = FALSE,
-                               DSConnections = NULL,
-                               DS.async = FALSE)
+CCP.QuickProcessingRun <- function(ServerSpecifications = NULL,
+                                   RunAssignmentChecks = FALSE,
+                                   DSConnections = NULL,
+                                   DS.async = FALSE)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   assert_that(is.flag(RunAssignmentChecks),

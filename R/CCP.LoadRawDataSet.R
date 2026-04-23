@@ -1,5 +1,5 @@
 
-#' LoadRawDataSet
+#' CCP.LoadRawDataSet
 #'
 #' `r lifecycle::badge("experimental")` \cr\cr
 #' Load raw data set from Opal data base into R session on servers.
@@ -17,12 +17,12 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-LoadRawDataSet <- function(ServerSpecifications = NULL,
-                           OpalTableNames.Mapping = setNames(dsCCPhosClient::Meta.Tables$TableName.Curated, nm = dsCCPhosClient::Meta.Tables$TableName.Raw),
-                           OpalTableNames.Dictionary = list(All = setNames(dsCCPhosClient::Meta.Tables$TableName.Raw, nm = dsCCPhosClient::Meta.Tables$TableName.Curated)),      # Include a dictionary mapping curated to raw Opal table names, because some servers might already have adopted 'curated' table names, while others have not.
-                           RunAssignmentChecks = TRUE,
-                           DSConnections = NULL,
-                           DS.async = FALSE)
+CCP.LoadRawDataSet <- function(ServerSpecifications = NULL,
+                               OpalTableNames.Mapping = setNames(dsCCPhosClient::Meta.Tables$TableName.Curated, nm = dsCCPhosClient::Meta.Tables$TableName.Raw),
+                               OpalTableNames.Dictionary = list(All = setNames(dsCCPhosClient::Meta.Tables$TableName.Raw, nm = dsCCPhosClient::Meta.Tables$TableName.Curated)),      # Include a dictionary mapping curated to raw Opal table names, because some servers might already have adopted 'curated' table names, while others have not.
+                               RunAssignmentChecks = TRUE,
+                               DSConnections = NULL,
+                               DS.async = FALSE)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   # --- For Testing Purposes ---

@@ -1,5 +1,5 @@
 
-#' ds.DrawSample
+#' ds.CCP.DrawSample
 #'
 #' `r lifecycle::badge("experimental")` \cr\cr
 #' Draw a random sample from Raw Data Set
@@ -18,7 +18,7 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ds.DrawSample <- function(RawDataSetName = "CCP.RawDataSet",
+ds.CCP.DrawSample <- function(RawDataSetName = "CCP.RawDataSet",
                           SampleSize = 100,
                           SampleName = "RDSSample",
                           DSConnections = NULL,

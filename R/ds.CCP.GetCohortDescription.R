@@ -1,5 +1,5 @@
 
-#' ds.GetCohortDescription
+#' ds.CCP.GetCohortDescription
 #'
 #' `r lifecycle::badge("stable")` \cr\cr
 #' Obtain Server-specific and aggregated descriptive characteristics about the patient cohort to be analyzed.
@@ -21,10 +21,10 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ds.GetCohortDescription <- function(DataSetName = "CCP.AugmentedDataSet",
-                                    Stage = "Augmented",
-                                    DSConnections = NULL,
-                                    DS.async = FALSE)
+ds.CCP.GetCohortDescription <- function(DataSetName = "CCP.AugmentedDataSet",
+                                        Stage = "Augmented",
+                                        DSConnections = NULL,
+                                        DS.async = FALSE)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   # --- For Testing Purposes ---
