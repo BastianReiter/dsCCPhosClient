@@ -19,10 +19,10 @@
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.CCP.DrawSample <- function(RawDataSetName = "CCP.RawDataSet",
-                          SampleSize = 100,
-                          SampleName = "RDSSample",
-                          DSConnections = NULL,
-                          DS.async = FALSE)
+                              SampleSize = 100,
+                              SampleName = "RDSSample",
+                              DSConnections = NULL,
+                              DS.async = FALSE)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   # --- Argument Validation ---
@@ -39,7 +39,7 @@ ds.CCP.DrawSample <- function(RawDataSetName = "CCP.RawDataSet",
   # Execute server-side assign function
   DSI::datashield.assign(conns = DSConnections,
                          symbol = SampleName,
-                         value = call("DrawSampleDS",
+                         value = call("CCP.DrawSampleDS",
                                       RawDataSetName.S = RawDataSetName,
                                       SampleSize.S = SampleSize),
                          async = DS.async)

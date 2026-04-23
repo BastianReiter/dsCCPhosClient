@@ -49,7 +49,7 @@ ds.CCP.GetCohortDescription <- function(DataSetName = "CCP.AugmentedDataSet",
 
   # ServerReturns: Obtain descriptive data for each server calling dsCCPhos::GetCohortDescriptionDS()
   ServerReturns <- DSI::datashield.aggregate(conns = DSConnections,
-                                             expr = call("GetCohortDescriptionDS",
+                                             expr = call("CCP.GetCohortDescriptionDS",
                                                          DataSetName.S = DataSetName,
                                                          Stage.S = Stage),
                                              async = DS.async)

@@ -1,5 +1,5 @@
 
-#' ds.AugmentData
+#' ds.CCP.AugmentData
 #'
 #' `r lifecycle::badge("stable")` \cr\cr
 #' Transforms curated data set (CDS) into augmented data set (ADS)
@@ -19,12 +19,12 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ds.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
-                           OutputName = "CCP.AugmentationOutput",
-                           RunAssignmentChecks = TRUE,
-                           UnpackAugmentedDataSet = TRUE,
-                           DSConnections = NULL,
-                           DS.async = FALSE)
+ds.CCP.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
+                               OutputName = "CCP.AugmentationOutput",
+                               RunAssignmentChecks = TRUE,
+                               UnpackAugmentedDataSet = TRUE,
+                               DSConnections = NULL,
+                               DS.async = FALSE)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   #--- For Testing Purposes ---
@@ -59,7 +59,7 @@ ds.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
   # Execute the server-side function call
   DSI::datashield.assign(conns = DSConnections,
                          symbol = OutputName,
-                         value = call("AugmentDataDS",
+                         value = call("CCP.AugmentDataDS",
                                       CuratedDataSetName.S = CuratedDataSetName),
                          async = DS.async)
 
