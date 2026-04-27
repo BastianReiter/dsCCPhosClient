@@ -1,5 +1,5 @@
 
-#' LoadRawDataSet
+#' CCP.LoadRawDataSet
 #'
 #' `r lifecycle::badge("experimental")` \cr\cr
 #' Load raw data set from Opal data base into R session on servers.
@@ -9,6 +9,7 @@
 #' @param OpalTableNames.Dictionary Optional \code{list} of named \code{character vectors} - To enable server-specific mapping of deviating to required Opal data base table names. Names of list elements must match server names. For rules that should be applied on all servers, choose form \code{list(All = c('LookupName' = 'RequiredName'))}.
 #' @param RunAssignmentChecks \code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
+#' @param DS.async \code{logical} - Value of argument 'async' in \code{DSI::datashield.assign()} / \code{DSI::datashield.aggregate()} - Default: \code{FALSE}
 #'
 #' @return A \code{list} of messages
 #'
@@ -16,11 +17,12 @@
 #'
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-LoadRawDataSet <- function(ServerSpecifications = NULL,
-                           OpalTableNames.Mapping = setNames(dsCCPhosClient::Meta.Tables$TableName.Curated, nm = dsCCPhosClient::Meta.Tables$TableName.Raw),
-                           OpalTableNames.Dictionary = list(All = setNames(dsCCPhosClient::Meta.Tables$TableName.Raw, nm = dsCCPhosClient::Meta.Tables$TableName.Curated)),      # Include a dictionary mapping curated to raw Opal table names, because some servers might already have adopted 'curated' table names, while others have not.
-                           RunAssignmentChecks = TRUE,
-                           DSConnections = NULL)
+CCP.LoadRawDataSet <- function(ServerSpecifications = NULL,
+                               OpalTableNames.Mapping = setNames(dsCCPhosClient::Meta.Tables$TableName.Curated, nm = dsCCPhosClient::Meta.Tables$TableName.Raw),
+                               OpalTableNames.Dictionary = list(All = setNames(dsCCPhosClient::Meta.Tables$TableName.Raw, nm = dsCCPhosClient::Meta.Tables$TableName.Curated)),      # Include a dictionary mapping curated to raw Opal table names, because some servers might already have adopted 'curated' table names, while others have not.
+                               RunAssignmentChecks = TRUE,
+                               DSConnections = NULL,
+                               DS.async = FALSE)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   # --- For Testing Purposes ---
@@ -30,10 +32,12 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
   # OpalTableNames.Dictionary <- list(All = setNames(dsCCPhosClient::Meta.Tables$TableName.Raw, nm = dsCCPhosClient::Meta.Tables$TableName.Curated))
   # RunAssignmentChecks <- TRUE
   # DSConnections <- CCPConnections
+  # DS.async <- FALSE
 
   # --- Argument Validation ---
   assert_that(is.character(OpalTableNames.Mapping),
-              is.flag(RunAssignmentChecks))
+              is.flag(RunAssignmentChecks),
+              is.flag(DS.async))
   if (!is.null(ServerSpecifications)) { is.data.frame(ServerSpecifications) }
   if (!is.null(OpalTableNames.Dictionary)) { is.list(OpalTableNames.Dictionary) }
 
@@ -79,7 +83,8 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
           DSI::datashield.assign.table(conns = DSConnections[[i]],
                                        symbol = OpalDBToR$RTableName[j],
                                        table = OpalDBToR$OpalTableName[j],
-                                       id.name = "_id")
+                                       id.name = "_id",
+                                       async = DS.async)
 
           # Add message about Opal data base to R session mapping
           Messages$Assignment <- c(Messages$Assignment,
@@ -101,7 +106,8 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
       {
           # Make sure assignment was successful on all servers
           ObjectStatus_Table <- dsFredaClient::ds.GetObjectStatus(ObjectName = paste0("CCP.RDS.", tablename),
-                                                                  DSConnections = DSConnections)
+                                                                  DSConnections = DSConnections,
+                                                                  DS.async = DS.async)
 
           # Add info about table assignment to Messages
           BundledMessages <- c(BundledMessages,
@@ -141,14 +147,16 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
                 dsFredaClient::ds.MakeList(ObjectNames = setNames(object = RDSTableNames,
                                                                   nm = str_remove(RDSTableNames, "CCP.RDS.")),
                                            OutputName = "CCP.RawDataSet",
-                                           DSConnections = DSConnections[servername])
+                                           DSConnections = DSConnections[servername],
+                                           DS.async = DS.async)
            })
 
   if (RunAssignmentChecks == TRUE)
   {
       # Make sure assignment of CCP.RawDataSet was successful on all servers
       ObjectStatus_RawDataSet <- dsFredaClient::ds.GetObjectStatus(ObjectName = "CCP.RawDataSet",
-                                                                   DSConnections = DSConnections)
+                                                                   DSConnections = DSConnections,
+                                                                   DS.async = DS.async)
 
       # Add info about CCP.RawDataSet assignment to Messages
       Messages$Assignment <- c(Messages$Assignment,
@@ -160,17 +168,29 @@ LoadRawDataSet <- function(ServerSpecifications = NULL,
 # Perform RDS preparation tasks
 #-------------------------------------------------------------------------------
 
-  dsFredaClient::ds.PrepareRawData(RawDataSetName = "CCP.RawDataSet",
-                                   Module = "CCP",
-                                   RDSTableNames = dsCCPhosClient::Meta.Tables$TableName.Curated,
-                                   FeatureNameDictionary = list(),#GeneralCondition = c("_id" = "GeneralConditionID")),
-                                                                #OtherClassification = c("_id" = "OtherClassificationID")),
-                                                                #Surgery = c("OPS-Version" = "OPSVersion")),
-                                                                #TherapyRecommendation = c("_id" = "TherapyRecommendationID")),
-                                   RunFuzzyStringMatching = FALSE,
-                                   CompleteCharacterConversion = FALSE,
-                                   CurateFeatureNames = TRUE,
-                                   DSConnections = DSConnections)
+  RDSPreparation <- dsFredaClient::ds.PrepareRawData(RawDataSetName = "CCP.RawDataSet",
+                                                     Module = "CCP",
+                                                     RDSTableNames = dsCCPhosClient::Meta.Tables$TableName.Curated,
+                                                     FeatureNameDictionary = list(),#GeneralCondition = c("_id" = "GeneralConditionID")),
+                                                                                  #OtherClassification = c("_id" = "OtherClassificationID")),
+                                                                                  #Surgery = c("OPS-Version" = "OPSVersion")),
+                                                                                  #TherapyRecommendation = c("_id" = "TherapyRecommendationID")),
+                                                     RunFuzzyStringMatching = FALSE,
+                                                     TotalCharacterConversion = FALSE,
+                                                     CurateFeatureNames = TRUE,
+                                                     PrintMessages = FALSE,
+                                                     DSConnections = DSConnections,
+                                                     DS.async = DS.async)
+
+  Messages$RDSPreparation <- c(Topic = "Initial preparation of CCP RawDataSet")
+
+  for (i in 1:length(RDSPreparation))
+  {
+      Messages$RDSPreparation <- c(Messages$RDSPreparation,
+                                   Subtopic = names(RDSPreparation[i]),
+                                   RDSPreparation[[i]])
+  }
+
 
 
 #--- Print and invisibly return Messages object --------------------------------

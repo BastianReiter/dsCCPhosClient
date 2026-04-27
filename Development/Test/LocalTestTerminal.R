@@ -56,14 +56,15 @@ TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 #                                        format = "csv")
 
 
-CCPConnections <- ConnectToVirtualCCP(CCPTestData = TestData,
-                                      NumberOfServers = 3,
-                                      NumberOfPatientsPerServer = 2000,
-                                      AddedDsPackages = "dsTidyverse")
+CCPConnections <- dsCCPhosClient::ConnectToVirtualCCP(CCPTestData = TestData,
+                                                      NumberOfServers = 3,
+                                                      NumberOfPatientsPerServer = 2000,
+                                                      AddedDsPackages = c("dsFreda",
+                                                                          "dsTidyverse"))
                                       #Resources = list(TestResource = TestResource))
 
 
-QuickProcessingRun()
+dsCCPhosClient::QuickProcessingRun()
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -137,7 +138,6 @@ ds.DrawSample(RawDataSetName = "CCP.RawDataSet",
 
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS) (using default settings)
 ds.CurateData(RawDataSetName = "CCP.RawDataSet",
-              Settings = NULL,
               OutputName = "CCP.CurationOutput")
 
 CDSTableCheck <- ds.GetDataSetCheck(DataSetName = "CCP.CuratedDataSet",
@@ -264,6 +264,7 @@ Proc <- Widget.ServerExplorer(ServerWorkspaceInfo = ServerWorkspaceInfo,
                               RunAutonomously = TRUE,
                               UseVirtualConnections = FALSE)
 
+CCPhosApp::Widget.ServerExplorer()
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -273,7 +274,7 @@ Proc <- Widget.ServerExplorer(ServerWorkspaceInfo = ServerWorkspaceInfo,
 Messages <- ds.JoinTables(TableNameA = "CCP.ADS.Patient",
                           TableNameB = "CCP.ADS.Diagnosis",
                           ByStatement = "PatientID",
-                          OutputName = "AnalysisDataSet")
+                          OutputName = "AnalysisData")
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -282,6 +283,25 @@ Messages <- ds.JoinTables(TableNameA = "CCP.ADS.Patient",
 
 CohortDescription <- ds.GetCohortDescription(DataSetName = "CCP.AugmentedDataSet",
                                              Stage = "Augmented")
+
+
+
+
+
+ICD10 <- dsFredaClient::ds.GetFrequencyTable(TableName = "CCP.ADS.Diagnosis",
+                              FeatureName = "ICD10Code",
+                              MaxNumberCategories = 100)
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Transform data into display-friendly time series tables using auxiliary function 'DisplayTimeSeries()'
@@ -444,6 +464,112 @@ TestPlot
 #
 # dsSurvivalClient::ds.survfit(formula = 'TestSurv',
 #                              object = "TestSurvfit")
+
+
+#===============================================================================
+# TEST dsSurvival (Xavier Escriba)
+#===============================================================================
+
+
+# perform conversion of data
+ds.asNumeric(x.name = "AnalysisData$IsDocumentedDeceased",
+             newobj = "EVENT",
+             datasources = CCPConnections)
+
+ds.asNumeric(x.name = "AnalysisData$TimeFollowUp",
+             newobj = "SURVTIME",
+             datasources = CCPConnections)
+
+
+# ds.asFactor(input.var.name = "D$time.id",
+#             newobj = "TID",
+#             datasources = CCPConnections)
+
+ds.log(x = "AnalysisData$TimeFollowUp",
+       newobj = "log.surv",
+       datasources = CCPConnections)
+
+
+# ds.asNumeric(x.name = "D$starttime",
+#              newobj = "STARTTIME",
+#              datasources = CCPConnections)
+#
+# ds.asNumeric(x.name = "D$endtime",
+#              newobj = "ENDTIME",
+#              datasources = CCPConnections)
+
+
+
+Test <- ds.GetTTEModel(TableName = "AnalysisDataSet",
+                       TimeFeature = "TimeFollowUp",
+                       EventFeature = "IsDocumentedDeceased",
+                       ModelType = "survfit",
+                       CovariateA = "UICCStageCategory",
+                       #CovariateB = "UICCStageCategory",
+                       MinFollowUpTime = 20)
+
+
+# Not working! Can not find object 'EVENT' (-> Evaluation bug?)
+dsSurvivalClient::ds.Surv(time='EVENT',
+                          event = 'SURVTIME',
+                          objectname='TestSurv',
+                          type='right')
+
+# Using own function as workaround to create Surv() object on servers
+ds.CreateSurvObject(TableName = "AnalysisData",
+                    TimeFeature = "TimeFollowUp",
+                    EventFeature = "IsDocumentedDeceased",
+                    MinFollowUpTime = 20,
+                    OutputName = "SurvObject")
+
+CCPhosApp::Widget.ServerExplorer()
+
+# build Cox model
+coxph_model_full <- dsSurvivalClient::ds.coxph.SLMA(formula = 'SurvObject~AnalysisData$UICCStageCategory')
+
+
+
+dsSurvivalClient::ds.coxphSLMAassign(formula = 'surv_object~D$age+D$female',
+                                     objectname = 'coxph_serverside')
+
+dsSurvivalClient::ds.cox.zphSLMA(fit = 'coxph_serverside')
+
+dsSurvivalClient::ds.coxphSummary(x = 'coxph_serverside')
+
+
+# meta-analyze hazard ratios
+input_logHR = c(coxph_model_full$server1$coefficients[1,2],
+                coxph_model_full$server2$coefficients[1,2],
+                coxph_model_full$server3$coefficients[1,2])
+
+input_se    = c(coxph_model_full$server1$coefficients[1,3],
+                coxph_model_full$server2$coefficients[1,3],
+                coxph_model_full$server3$coefficients[1,3])
+
+meta_model <- metafor::rma(input_logHR, sei = input_se, method = 'REML')
+
+
+# forest plot
+metafor::forest.rma(x = meta_model, digits = 4)
+
+
+# plot survival curves
+dsSurvivalClient::ds.survfit(formula='surv_object~1', objectname='survfit_object')
+dsSurvivalClient::ds.plotsurvfit(formula = 'survfit_object')
+
+# better looking survival curves using ggplot (courtesy Xavier Escriba Montagut)
+res <- dsSurvivalClient::ds.plotsurvfit(formula = 'survfit_object', ggplot = TRUE)
+(res[[1]] | res[[2]] | res[[3]])
+
+########################
+# get life table
+res <- dsSurvivalClient::ds.life.table("survfit_object")
+# plot life table
+plot_life.table(res)
+# stratified example
+res_2 <- dsSurvivalClient::ds.life.table("coxph_serverside")
+plot_life.table(res_2, "strata")
+
 
 
 

@@ -6,13 +6,16 @@
 \usage{
 ds.GetRDSValidationReport(
   RawDataSetName = "CCP.RawDataSet",
-  DSConnections = NULL
+  DSConnections = NULL,
+  DS.async = FALSE
 )
 }
 \arguments{
 \item{RawDataSetName}{\code{string} - Name of 'RawDataSet' object on server - Default: 'RawDataSet'}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
+
+\item{DS.async}{\code{logical} - Value of argument 'async' in \code{DSI::datashield.assign()} / \code{DSI::datashield.aggregate()} - Default: \code{FALSE}}
 }
 \value{
 A \code{list} of \code{tibbles} containing output of validation

@@ -53,13 +53,17 @@ Meta.ADS <- dsCCPhos::Meta.ADS
 Meta.Tables <- dsCCPhos::Meta.Tables
 Meta.Features <- dsCCPhos::Meta.Features
 Meta.Values <- dsCCPhos::Meta.Values
-Set.DataHarmonization <- dsCCPhos::Set.DataHarmonization
+Set.CurationProcess <- dsCCPhos::Set.CurationProcess
+Set.DataRemediation <- dsCCPhos::Set.DataRemediation
 Set.DiagnosisAssociation <- dsCCPhos::Set.DiagnosisAssociation
 Set.DiagnosisRedundancy <- dsCCPhos::Set.DiagnosisRedundancy
 Set.Dictionary <- dsCCPhos::Set.Dictionary
-Set.FeatureObligations <- dsCCPhos::Set.FeatureObligations
+Set.FeatureRequirements <- dsCCPhos::Set.FeatureRequirements
 Set.FeatureTracking <- dsCCPhos::Set.FeatureTracking
 Set.FuzzyStringMatching <- dsCCPhos::Set.FuzzyStringMatching
+Set.PrimaryTableCleaning <- dsCCPhos::Set.PrimaryTableCleaning
+Set.RecordSubsumption <- dsCCPhos::Set.RecordSubsumption
+Set.SecondaryTableCleaning <- dsCCPhos::Set.SecondaryTableCleaning
 Set.TransformativeExpressions <- dsCCPhos::Set.TransformativeExpressions
 
 
@@ -90,13 +94,17 @@ use_data(Meta.ADS, overwrite = TRUE)
 use_data(Meta.Tables, overwrite = TRUE)
 use_data(Meta.Features, overwrite = TRUE)
 use_data(Meta.Values, overwrite = TRUE)
-use_data(Set.DataHarmonization, overwrite = TRUE)
+use_data(Set.CurationProcess, overwrite = TRUE)
+use_data(Set.DataRemediation, overwrite = TRUE)
 use_data(Set.DiagnosisAssociation, overwrite = TRUE)
 use_data(Set.DiagnosisRedundancy, overwrite = TRUE)
 use_data(Set.Dictionary, overwrite = TRUE)
-use_data(Set.FeatureObligations, overwrite = TRUE)
+use_data(Set.FeatureRequirements, overwrite = TRUE)
 use_data(Set.FeatureTracking, overwrite = TRUE)
 use_data(Set.FuzzyStringMatching, overwrite = TRUE)
+use_data(Set.PrimaryTableCleaning, overwrite = TRUE)
+use_data(Set.RecordSubsumption, overwrite = TRUE)
+use_data(Set.SecondaryTableCleaning, overwrite = TRUE)
 use_data(Set.TransformativeExpressions, overwrite = TRUE)
 
 
