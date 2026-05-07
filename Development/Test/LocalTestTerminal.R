@@ -132,6 +132,9 @@ ds.CCP.DrawSample(RawDataSetName = "CCP.RawDataSet",
                   SampleName = "RDSSample")
 
 
+Test <- DSLite::getDSLiteData(CCPConnections, "CCP.RawDataSet")
+View(Test$ServerA$BioSampling)
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
