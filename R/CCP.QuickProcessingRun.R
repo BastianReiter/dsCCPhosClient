@@ -21,8 +21,16 @@ CCP.QuickProcessingRun <- function(ServerSpecifications = NULL,
                                    DS.async = FALSE)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
+  # --- For Testing Purposes ---
+  # ServerSpecifications <- NULL
+  # RunAssignmentChecks <- TRUE
+  # DSConnections <- CCPConnections
+  # DS.async <- FALSE
+
+  # --- Argument Validation ---
   assert_that(is.flag(RunAssignmentChecks),
               is.flag(DS.async))
+  if (!is.null(ServerSpecifications)) { is.data.frame(ServerSpecifications) }
 
   # Check validity of 'DSConnections' or find them programmatically if none are passed
   DSConnections <- CheckDSConnections(DSConnections)
@@ -30,19 +38,20 @@ CCP.QuickProcessingRun <- function(ServerSpecifications = NULL,
 #-------------------------------------------------------------------------------
 
   # Load RDS
-  LoadRawDataSet(ServerSpecifications = ServerSpecifications,
-                 RunAssignmentChecks = RunAssignmentChecks,
-                 DSConnections = DSConnections,
-                 DS.async = DS.async)
+  CCP.LoadRawDataSet(ServerSpecifications = ServerSpecifications,
+                     RunAssignmentChecks = RunAssignmentChecks,
+                     DSConnections = DSConnections,
+                     DS.async = DS.async)
 
-  # Perform Curation Step
-  ds.CurateData(RunAssignmentChecks = RunAssignmentChecks,
-                DSConnections = DSConnections,
-                DS.async = DS.async)
+  # Perform Data Curation
+  dsFredaClient::ds.CurateData(RawDataSetName = "CCP.RawDataSet",
+                               Module = "CCP",
+                               OutputName = "CCP.CurationOutput",
+                               DS.async = DS.async)
 
-  # Perform Augmentation Step
-  ds.AugmentData(RunAssignmentChecks = RunAssignmentChecks,
-                 DSConnections = DSConnections,
-                 DS.async = DS.async)
+  # Perform Data Augmentation
+  ds.CCP.AugmentData(RunAssignmentChecks = RunAssignmentChecks,
+                     DSConnections = DSConnections,
+                     DS.async = DS.async)
 
 }

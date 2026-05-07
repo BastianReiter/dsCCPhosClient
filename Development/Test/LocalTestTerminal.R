@@ -58,13 +58,13 @@ TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 
 CCPConnections <- dsCCPhosClient::ConnectToVirtualCCP(CCPTestData = TestData,
                                                       NumberOfServers = 3,
-                                                      NumberOfPatientsPerServer = 2000,
+                                                      NumberOfPatientsPerServer = 1000,
                                                       AddedDsPackages = c("dsFreda",
                                                                           "dsTidyverse"))
                                       #Resources = list(TestResource = TestResource))
 
 
-dsCCPhosClient::QuickProcessingRun()
+dsCCPhosClient::CCP.QuickProcessingRun()
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -83,7 +83,7 @@ CheckServerRequirements()
 # Load Raw Data Set (RDS) from Opal data base to R sessions on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-LoadRawDataSet(ServerSpecifications = NULL)
+CCP.LoadRawDataSet(ServerSpecifications = NULL)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -127,9 +127,9 @@ RDSTableCheck$TableStatus
 # Optionally: Draw random sample from Raw Data Set on servers
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ds.DrawSample(RawDataSetName = "CCP.RawDataSet",
-              SampleSize = 2000,
-              SampleName = "RDSSample")
+ds.CCP.DrawSample(RawDataSetName = "CCP.RawDataSet",
+                  SampleSize = 2000,
+                  SampleName = "RDSSample")
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -137,69 +137,19 @@ ds.DrawSample(RawDataSetName = "CCP.RawDataSet",
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS) (using default settings)
-ds.CurateData(RawDataSetName = "CCP.RawDataSet",
-              OutputName = "CCP.CurationOutput")
+dsFredaClient::ds.CurateData(RawDataSetName = "CCP.RawDataSet",
+                             Module = "CCP",
+                             OutputName = "CCP.CurationOutput")
 
 CDSTableCheck <- ds.GetDataSetCheck(DataSetName = "CCP.CuratedDataSet",
                                     Stage = "Curated")
 
-# Integrated in ds.CuratedData: Make tables from Curated Data Set directly addressable by unpacking them into R server session
-# ds.UnpackCuratedDataSet(CuratedDataSetName = "CuratedDataSet")
-
-# Get curation reports
+# Get curation report
 CurationReport <- ds.GetCurationReport(Module = "CCP")
 
-View(CurationReport$EntryCounts$BioSampling)
 
-# Exemplary look at a curation report table
-#View(CurationReport$Transformation$All$Monitors$Staging)
-#View(CurationReport$Transformation$All$EligibilityOverviews$Staging)
-#View(CurationReport$Transformation$All$ValueSetOverviews$Raw)
-
-# Get validation report of Curated Data Set (CDS)
-# ValidationReportCDS <- ds.GetValidationReport_CDS(Name_CurationOutput = "CurationOutput",
-#                                                   DataSources = CCPConnections)
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Plot data on value eligibility for exemplary table in CDS
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# - Restructure eligibility overview table to meet requirements of plot function
-# - Create separate data frames for each 'Feature' value
-# - Columns in final object:
-#   - 'Feature': contains names of features
-#   - 'data': plot data for feature-specific plot
-#-------------------------------------------------------------------------------
-
-PlotData <- CurationReports$All$Transformation$EligibilityOverviews$Staging %>%
-                select(-ends_with("_Proportional")) %>%
-                pivot_longer(cols = c(Raw, Harmonized, Recoded, Final),
-                             names_to = "Stage",
-                             values_to = "Count") %>%
-                pivot_wider(names_from = "Eligibility",
-                            values_from = "Count") %>%
-                nest(.by = Feature)      # 'Split' the whole table into smaller data frames for each 'Feature' value
-
-
-library(plotly)
-
-plot_ly(data = filter(PlotData, Feature == "UICCStage")$data[[1]],
-        x = ~Stage,
-        y = ~Eligible,
-        type = "bar",
-        name = "Eligible",
-        color = I(dsCCPhosClient::CCPhosColors$Green)) %>%
-    add_trace(y = ~Ineligible,
-              name = "Ineligible",
-              color = I(dsCCPhosClient::CCPhosColors$Red)) %>%
-    add_trace(y = ~Missing,
-              name = "Missing",
-              color = I(dsCCPhosClient::CCPhosColors$MediumGrey)) %>%
-    layout(xaxis = list(categoryorder = "array",
-                        categoryarray = c("Raw", "Harmonized", "Recoded", "Final")),
-           yaxis = list(title = "Count"),
-           barmode = "stack")
-
+FredaGUI::Widget.CurationReport(Module = "CCP",
+                                CurationReport = CurationReport)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
