@@ -25,10 +25,12 @@ ConnectToVirtualCCP <- function(CCPTestData,
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   # --- For Testing Purposes ---
-  # CCPTestData <- TestData
+  # CCPTestData <- TestDataReal
   # NumberOfServers <- 3
-  # NumberOfPatientsPerServer <- 2000
+  # NumberOfPatientsPerServer <- 30
   # AddedDsPackages <- NULL
+  # Resources <- NULL
+  # WorkingDirectory <- file.path(tempdir(), ".dslite")
   # Resources <- list(TestResource = resourcer::newResource(name = "TestResource",
   #                                                         url = "file:///Development/Test/TestResource.csv",
   #                                                         format = "csv"))
@@ -74,20 +76,46 @@ ConnectToVirtualCCP <- function(CCPTestData,
                                  size = PatientsPerServer)
 
       # Get data subsets that relate to sampled PatientIDs
-      ServerTestData <- list(sample = as.data.frame(filter(CCPTestData$sample, CCPTestData$sample$"patient-id" %in% ServerPatientIDs)),
-                             diagnosis = as.data.frame(filter(CCPTestData$diagnosis, CCPTestData$diagnosis$"patient-id" %in% ServerPatientIDs)),
-                             GeneralPerformance = NULL,
-                             histology = as.data.frame(filter(CCPTestData$histology, CCPTestData$histology$"patient-id" %in% ServerPatientIDs)),
-                             metastasis = as.data.frame(filter(CCPTestData$metastasis, CCPTestData$metastasis$"patient-id" %in% ServerPatientIDs)),
-                             "molecular-marker" = NULL,
-                             OtherClassification = NULL,
-                             patient = as.data.frame(filter(CCPTestData$patient, CCPTestData$patient$"_id" %in% ServerPatientIDs)),
-                             progress = as.data.frame(filter(CCPTestData$progress, CCPTestData$progress$"patient-id" %in% ServerPatientIDs)),
-                             "radiation-therapy" = as.data.frame(filter(CCPTestData$"radiation-therapy", CCPTestData$"radiation-therapy"$"patient-id" %in% ServerPatientIDs)),
-                             tnm = as.data.frame(filter(CCPTestData$tnm, CCPTestData$tnm$"patient-id" %in% ServerPatientIDs)),
-                             surgery = as.data.frame(filter(CCPTestData$surgery, CCPTestData$surgery$"patient-id" %in% ServerPatientIDs)),
-                             "system-therapy" = as.data.frame(filter(CCPTestData$"system-therapy", CCPTestData$"system-therapy"$"patient-id" %in% ServerPatientIDs)),
-                             TherapyRecommendation = NULL)
+      ServerTestData <- CCPTestData %>%
+                            map(function(Table)
+                            {
+                                if (length(Table) == 0)
+                                {
+                                    return(NULL)
+
+                                } else {
+
+                                    if ("patient-id" %in% names(Table))
+                                    {
+                                        return(Table %>% filter(.data[["patient-id"]] %in% ServerPatientIDs) %>% as.data.frame())
+
+                                    } else if ("PatientID" %in% names(Table)) {
+
+                                        return(Table %>% filter(.data[["PatientID"]] %in% ServerPatientIDs) %>% as.data.frame())
+
+                                    } else if ("_id" %in% names(Table)) {
+
+                                        return(Table %>% filter(.data[["_id"]] %in% ServerPatientIDs) %>% as.data.frame())
+
+                                    } else { return(Table) }
+                                }
+                            })
+
+      # Get data subsets that relate to sampled PatientIDs
+      # ServerTestData <- list(sample = as.data.frame(filter(CCPTestData$sample, CCPTestData$sample$"patient-id" %in% ServerPatientIDs)),
+      #                        diagnosis = as.data.frame(filter(CCPTestData$diagnosis, CCPTestData$diagnosis$"patient-id" %in% ServerPatientIDs)),
+      #                        GeneralPerformance = NULL,
+      #                        histology = as.data.frame(filter(CCPTestData$histology, CCPTestData$histology$"patient-id" %in% ServerPatientIDs)),
+      #                        metastasis = as.data.frame(filter(CCPTestData$metastasis, CCPTestData$metastasis$"patient-id" %in% ServerPatientIDs)),
+      #                        "molecular-marker" = NULL,
+      #                        OtherClassification = NULL,
+      #                        patient = as.data.frame(filter(CCPTestData$patient, CCPTestData$patient$"_id" %in% ServerPatientIDs)),
+      #                        progress = as.data.frame(filter(CCPTestData$progress, CCPTestData$progress$"patient-id" %in% ServerPatientIDs)),
+      #                        "radiation-therapy" = as.data.frame(filter(CCPTestData$"radiation-therapy", CCPTestData$"radiation-therapy"$"patient-id" %in% ServerPatientIDs)),
+      #                        tnm = as.data.frame(filter(CCPTestData$tnm, CCPTestData$tnm$"patient-id" %in% ServerPatientIDs)),
+      #                        surgery = as.data.frame(filter(CCPTestData$surgery, CCPTestData$surgery$"patient-id" %in% ServerPatientIDs)),
+      #                        "system-therapy" = as.data.frame(filter(CCPTestData$"system-therapy", CCPTestData$"system-therapy"$"patient-id" %in% ServerPatientIDs)),
+      #                        TherapyRecommendation = NULL)
 
       # # Get data subsets that relate to sampled PatientIDs
       # ServerTestData <- list(BioSampling = NULL,
