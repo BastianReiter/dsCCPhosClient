@@ -56,6 +56,36 @@ TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 #                                        format = "csv")
 
 
+# Using test data from servers
+# TestDataReal <- readRDS("../dsFreda/Development/Test/ServersTestData.rds") %>% purrr::pluck("Berlin")
+# TableNameLookup <- dsCCPhos::Meta.Tables %>% select(TableName.Curated, TableName.Raw) %>% tibble::deframe()
+# names(TestDataReal) <- TableNameLookup[names(TestDataReal)]
+#
+# TestDataReal <- TestDataReal %>%
+#                     imap(function(Table, tablename)
+#                          {
+#                             # Create named vector to look up matching feature names in meta data ('OldName' = 'NewName')
+#                             Lookup <- dsCCPhos::Meta.Features %>% filter(TableName.Raw == tablename) %>% pull(FeatureName.Curated)
+#                             names(Lookup) <- dsCCPhos::Meta.Features %>% filter(TableName.Raw == tablename) %>% pull(FeatureName.Raw)
+#
+#                             if (length(Table) > 0)
+#                             {
+#                                 # Rename feature names according to look-up vector
+#                                 return(Table %>% rename(any_of(Lookup)))      # Returns a tibble
+#
+#                             } else {
+#
+#                                 # Create empty data.frame with pre-defined column names
+#                                 EmptyTable <- data.frame(matrix(nrow = 0,
+#                                                                 ncol = length(names(Lookup)))) %>%
+#                                                   setNames(names(Lookup)) %>%
+#                                                   mutate(across(everything(), ~ as.character(.x)))
+#
+#                                 return(EmptyTable)
+#                             }
+#                          })
+
+
 CCPConnections <- dsCCPhosClient::ConnectToVirtualCCP(CCPTestData = TestData,
                                                       NumberOfServers = 3,
                                                       NumberOfPatientsPerServer = 1000,
