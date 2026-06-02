@@ -86,7 +86,7 @@ TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
 #                          })
 
 
-CCPConnections <- dsCCPhosClient::ConnectToVirtualCCP(CCPTestData = TestData,
+CCPConnections <- dsCCPhosClient::ConnectToVirtualCCP(CCPData = TestData,
                                                       NumberOfServers = 3,
                                                       NumberOfPatientsPerServer = 1000,
                                                       AddedDsPackages = c("dsFreda",
