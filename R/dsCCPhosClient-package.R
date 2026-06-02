@@ -4,6 +4,7 @@
 ## usethis namespace: start
 #' @import assertthat
 #' @import dplyr
+#' @import DSOpal
 #' @import purrr
 #' @import stringr
 #' @import tidyr

@@ -27,6 +27,11 @@ ConnectToCCP <- function(ServerSpecifications,
   httr::set_config(httr::use_proxy(url = proxyurl, port = 8062))
   httr::set_config(httr::config(ssl_verifyhost = 0L, ssl_verifypeer = 0L))
 
+  # Opal settings form Client-side
+  options(opal.opts = httr::config(timeout = 1800),
+          opal.retry.times = 5,
+          opal.retry.quiet = FALSE)
+
   # Create an environment
   LoginBuilder <- DSI::newDSLoginBuilder(.silent = FALSE)
 

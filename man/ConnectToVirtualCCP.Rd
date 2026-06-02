@@ -5,7 +5,8 @@
 \title{ConnectToVirtualCCP}
 \usage{
 ConnectToVirtualCCP(
-  CCPTestData,
+  CCPData,
+  CCPData.Mode = "Auto",
   NumberOfServers = 1,
   NumberOfPatientsPerServer = NULL,
   AddedDsPackages = NULL,
@@ -14,7 +15,12 @@ ConnectToVirtualCCP(
 )
 }
 \arguments{
-\item{CCPTestData}{\code{Named list} of \code{data.frames} - CCP test data}
+\item{CCPData}{\code{Named list} of \code{data.frames} - CCP test data}
+
+\item{CCPData.Mode}{\code{string} - One of:
+\itemize{ \item 'Single' - Data in 'CCPData' contains data from a single site (or test data) that can be distributed randomly between virtual servers
+\item 'Multi' - Data in 'CCPData' contains a list with multi-site data
+\item 'Auto' - Functions tries to determine from structure of 'CCPData' which mode should be used (Default) }}
 
 \item{NumberOfServers}{\code{integer} - The number of virtual servers to install}
 
