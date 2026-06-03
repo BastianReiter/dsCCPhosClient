@@ -27,11 +27,6 @@ ConnectToCCP <- function(ServerSpecifications,
   httr::set_config(httr::use_proxy(url = proxyurl, port = 8062))
   httr::set_config(httr::config(ssl_verifyhost = 0L, ssl_verifypeer = 0L))
 
-  # Opal settings form Client-side
-  options(opal.opts = httr::config(timeout = 1800),
-          opal.retry.times = 5,
-          opal.retry.quiet = FALSE)
-
   # Create an environment
   LoginBuilder <- DSI::newDSLoginBuilder(.silent = FALSE)
 
@@ -46,10 +41,11 @@ ConnectToCCP <- function(ServerSpecifications,
   # Returns a data frame of login data to CCP Sites
   LoginData <- LoginBuilder$build()
 
+  opts <- list(ssl_verifypeer = FALSE, low_speed_time = 0, low_speed_limit = 0)
   # Perform login process and get list of DSConnection objects of all servers
   CCPConnections <- DSI::datashield.login(logins = LoginData,
                                           assign = TRUE,
-                                          opts = list(ssl_verifypeer = FALSE),
+                                          opts = opts,
                                           failSafe = TRUE)
 
 #--- Return DSConnection objects -----------------------------------------------
