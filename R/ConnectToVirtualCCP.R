@@ -180,14 +180,10 @@ ConnectToVirtualCCP <- function(CCPData,
   # Returns a data.frame of login data
   LoginData <- LoginBuilder$build()
 
-  # Set the timeout to 30 minutes (1800 seconds)
-  options(opal.opts = httr::config(timeout = 1800),
-          opal.retry.times = 5,
-          opal.retry.quiet = FALSE)
-
   # Get list of DSConnection objects of all servers
   CCPConnections <- DSI::datashield.login(logins = LoginData,
-                                          assign = TRUE)
+                                          assign = TRUE,
+                                          opts = list(low_speed_time = 0, low_speed_limit = 0))
 
 #-------------------------------------------------------------------------------
   return(CCPConnections)
