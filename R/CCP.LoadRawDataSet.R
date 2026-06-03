@@ -83,7 +83,7 @@ CCP.LoadRawDataSet <- function(ServerSpecifications = NULL,
           DSI::datashield.assign.table(conns = DSConnections[[i]],
                                        symbol = OpalDBToR$RTableName[j],
                                        table = OpalDBToR$OpalTableName[j],
-                                       #id.name = "_id",
+                                       id.name = "_id",
                                        async = DS.async)
 
           # Add message about Opal data base to R session mapping
