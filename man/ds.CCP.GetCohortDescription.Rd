@@ -8,7 +8,7 @@ ds.CCP.GetCohortDescription(
   DataSetName = "CCP.AugmentedDataSet",
   Stage = "Augmented",
   DSConnections = NULL,
-  DS.async = FALSE
+  DS.async = dsFredaClient::Set.DSSettings$DS.async
 )
 }
 \arguments{
@@ -18,7 +18,7 @@ ds.CCP.GetCohortDescription(
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 
-\item{DS.async}{\code{logical} - Value of argument 'async' in \code{DSI::datashield.assign()} / \code{DSI::datashield.aggregate()} - Default: \code{FALSE}}
+\item{DS.async}{\code{logical} - Value of argument 'async' in \code{DSI::datashield.assign()} / \code{DSI::datashield.aggregate()} - Default: \code{dsFredaClient::Set.DSSettings$DS.async}}
 }
 \value{
 A \code{list} containing descriptive statistics characterizing patient cohort:
