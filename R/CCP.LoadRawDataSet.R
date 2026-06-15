@@ -29,7 +29,8 @@ CCP.LoadRawDataSet <- function(ServerSpecifications = NULL,
   # ServerSpecifications <- NULL
   # OpalTableNames.Mapping <- setNames(dsCCPhosClient::Meta.Tables$TableName.Curated,
   #                                    nm = dsCCPhosClient::Meta.Tables$TableName.Raw)
-  # OpalTableNames.Dictionary <- list(All = setNames(dsCCPhosClient::Meta.Tables$TableName.Raw, nm = dsCCPhosClient::Meta.Tables$TableName.Curated))
+  # OpalTableNames.Dictionary <- list(All = setNames(dsCCPhosClient::Meta.Tables$TableName.Raw,
+  #                                                  nm = dsCCPhosClient::Meta.Tables$TableName.Curated))
   # RunAssignmentChecks <- TRUE
   # DSConnections <- CCPConnections
   # DS.async <- FALSE
@@ -83,7 +84,7 @@ CCP.LoadRawDataSet <- function(ServerSpecifications = NULL,
           DSI::datashield.assign.table(conns = DSConnections[[i]],
                                        symbol = OpalDBToR$RTableName[j],
                                        table = OpalDBToR$OpalTableName[j],
-                                       id.name = "_id",
+                                       id.name = ".DummyID",
                                        async = DS.async)
 
           # Add message about Opal data base to R session mapping

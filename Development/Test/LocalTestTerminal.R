@@ -33,9 +33,9 @@
 # Load required packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-library(dsBaseClient)
 library(dsFredaClient)
 library(dsTidyverseClient)
+library(dsBaseClient)
 library(resourcer)
 
 # Print DataSHIELD errors right away
@@ -47,7 +47,7 @@ options(datashield.errors.print = TRUE)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #TestData <- readRDS("../dsCCPhos/Development/Data/RealData/CCPRealData_Frankfurt.rds")
-TestData <- readRDS("../dsCCPhos/Development/Data/TestData/CCPTestData.rds")
+TestData <- readRDS("../Data/CCP/CCPTestData2026.rds")
 
 # Definition of test resource, exemplary with local csv-file
 # TestResource <- resourcer::newResource(name = "TestResource",
@@ -94,7 +94,7 @@ CCPConnections <- dsCCPhosClient::ConnectToVirtualCCP(CCPData = TestData,
                                       #Resources = list(TestResource = TestResource))
 
 
-dsCCPhosClient::CCP.QuickProcessingRun()
+Preprocessing <- dsCCPhosClient::CCP.PreprocessingQuickRun()
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -162,9 +162,6 @@ ds.CCP.DrawSample(RawDataSetName = "CCP.RawDataSet",
                   SampleName = "RDSSample")
 
 
-Test <- DSLite::getDSLiteData(CCPConnections, "CCP.RawDataSet")
-View(Test$ServerA$BioSampling)
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Transform Raw Data Set (RDS) into Curated Data Set (CDS)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -190,8 +187,8 @@ FredaGUI::Widget.CurationReport(Module = "CCP",
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Run ds.AugmentData
-ds.AugmentData(CuratedDataSetName = "CCP.CuratedDataSet",
-               OutputName = "CCP.AugmentationOutput")
+ds.CCP.AugmentData(CuratedDataSetName = "CCP.CuratedDataSet",
+                   OutputName = "CCP.AugmentationOutput")
 
 ADSTableCheck <- ds.GetDataSetCheck(DataSetName = "CCP.AugmentedDataSet",
                                     Module = "CCP",
