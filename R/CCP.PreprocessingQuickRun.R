@@ -8,6 +8,8 @@
 #' @param GetReports \code{logical} - Indicating whether reporting objects should be obtained from the servers. Can be set to \code{FALSE} to save time. - Default: \code{TRUE}
 #' @param RunAssignmentChecks \code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}
 #' @param RunSeparately \code{logical} - Indicating whether time-consuming functions should be run separately for each server. This can be done for testing purposes or if timeout issues arise. - Default: \code{FALSE}
+#' @param SaveWorkspace \code{logical} - Whether server-side R session workspaces should be saved after preprocessing. Default - \code{FALSE}
+#' @param SaveWorkspace.Name \code{string} - The name of server-side R session workspaces saves - Default: 'Workspace_(Timestamp)'
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #' @param DS.async \code{logical} - Value of argument 'async' in \code{DSI::datashield.assign()} / \code{DSI::datashield.aggregate()} - Default: \code{dsFredaClient::Set.DSSettings$DS.async}
 #'
@@ -21,6 +23,8 @@ CCP.PreprocessingQuickRun <- function(ServerSpecifications = NULL,
                                       GetReports = TRUE,
                                       RunAssignmentChecks = FALSE,
                                       RunSeparately = FALSE,
+                                      SaveWorkspace = FALSE,
+                                      SaveWorkspace.Name = paste0("Workspace_", format(Sys.time(), "%Y%m%d%H%M")),
                                       DSConnections = NULL,
                                       DS.async = dsFredaClient::Set.DSSettings$DS.async)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -29,11 +33,17 @@ CCP.PreprocessingQuickRun <- function(ServerSpecifications = NULL,
   # ServerSpecifications <- NULL
   # RunAssignmentChecks <- TRUE
   # RunSeparately <- FALSE
+  # SaveWorkspace <- TRUE
+  # SaveWorkspace.Name <- "Test"
   # DSConnections <- CCPConnections
   # DS.async <- FALSE
 
   # --- Argument Validation ---
-  assert_that(is.flag(RunAssignmentChecks),
+  assert_that(is.flag(GetReports),
+              is.flag(RunAssignmentChecks),
+              is.flag(RunSeparately),
+              is.flag(SaveWorkspace),
+              is.string(SaveWorkspace.Name),
               is.flag(DS.async))
   if (!is.null(ServerSpecifications)) { is.data.frame(ServerSpecifications) }
 
@@ -74,9 +84,10 @@ CCP.PreprocessingQuickRun <- function(ServerSpecifications = NULL,
                      RunSeparately = RunSeparately)
 
   Time.AfterAugmentation <- Sys.time()
-  Time.AfterReportAkquisition <- Time.AfterAugmentation
 
 #-------------------------------------------------------------------------------
+
+  Time.AfterReportAkquisition <- Time.AfterAugmentation
 
   if (GetReports == TRUE)
   {
@@ -104,12 +115,25 @@ CCP.PreprocessingQuickRun <- function(ServerSpecifications = NULL,
       Time.AfterReportAkquisition <- Sys.time()
   }
 
+  Time.AfterWorkspaceSaving <- Time.AfterAugmentation
+
+  if (SaveWorkspaces == TRUE)
+  {
+      # Save workspaces on servers
+      DSI::datashield.workspace_save(conns = CCPConnections, ws = SaveWorkspace.Name)
+
+      dsFredaClient::PrintSoloMessage(c(Success = paste0("Workspace of server-side R sessions saved under the name '", SaveWorkspace.Name, "'.")))
+
+      Time.AfterWorkspaceSaving <- Sys.time()
+  }
+
   # Create table of timed durations
   PerformanceMonitor <- tibble(Time.Initialization = Time.Initial,
                                Duration.Loading = as.double(lubridate::as.duration(Time.AfterLoading - Time.Initial)),
                                Duration.Curation = as.double(lubridate::as.duration(Time.AfterCuration - Time.AfterLoading)),
                                Duration.Augmentation = as.double(lubridate::as.duration(Time.AfterAugmentation - Time.AfterCuration)),
-                               Duration.ReportAkquisition = as.double(lubridate::as.duration(Time.AfterReportAkquisition - Time.AfterAugmentation)))
+                               Duration.ReportAkquisition = as.double(lubridate::as.duration(Time.AfterReportAkquisition - Time.AfterAugmentation)),
+                               Duration.WorkspaceSaving = as.double(lubridate::as.duration(Time.AfterWorkspaceSaving - Time.AfterReportAkquisition)))
 
 #-------------------------------------------------------------------------------
   return(list(Reports = Reports,
