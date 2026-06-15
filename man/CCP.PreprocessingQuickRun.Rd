@@ -9,6 +9,8 @@ CCP.PreprocessingQuickRun(
   GetReports = TRUE,
   RunAssignmentChecks = FALSE,
   RunSeparately = FALSE,
+  SaveWorkspace = FALSE,
+  SaveWorkspace.Name = paste0("Workspace_", format(Sys.time(), "\%Y\%m\%d\%H\%M")),
   DSConnections = NULL,
   DS.async = dsFredaClient::Set.DSSettings$DS.async
 )
@@ -21,6 +23,10 @@ CCP.PreprocessingQuickRun(
 \item{RunAssignmentChecks}{\code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}}
 
 \item{RunSeparately}{\code{logical} - Indicating whether time-consuming functions should be run separately for each server. This can be done for testing purposes or if timeout issues arise. - Default: \code{FALSE}}
+
+\item{SaveWorkspace}{\code{logical} - Whether server-side R session workspaces should be saved after preprocessing. Default - \code{FALSE}}
+
+\item{SaveWorkspace.Name}{\code{string} - The name of server-side R session workspaces saves - Default: 'Workspace_(Timestamp)'}
 
 \item{DSConnections}{\code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.}
 
