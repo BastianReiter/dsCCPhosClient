@@ -10,6 +10,7 @@
 #' @param OutputName \code{string} - Name of output object to be assigned on server - Default: 'CCP.AugmentationOutput'
 #' @param RunAssignmentChecks \code{logical} Indicating whether assignment checks should be performed or omitted for reduced execution time - Default: \code{TRUE}
 #' @param UnpackAugmentedDataSet \code{logical} indicating whether the Augmented Data Set \code{list} should be unpacked so that tables \code{data.frames} are directly accessible - Default: \code{TRUE}
+#' @param RunSeparately \code{logical} - Indicating whether \code{CurateDataDS()} should be run separately for each server. This can be done for testing purposes or if timeout issues arise. - Default: \code{FALSE}
 #' @param DSConnections \code{list} of \code{DSConnection} objects. This argument may be omitted if such an object is already uniquely specified in the global environment.
 #' @param DS.async \code{logical} - Value of argument 'async' in \code{DSI::datashield.assign()} / \code{DSI::datashield.aggregate()} - Default: \code{dsFredaClient::Set.DSSettings$DS.async}
 #'
@@ -23,6 +24,7 @@ ds.CCP.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
                                OutputName = "CCP.AugmentationOutput",
                                RunAssignmentChecks = TRUE,
                                UnpackAugmentedDataSet = TRUE,
+                               RunSeparately = FALSE,
                                DSConnections = NULL,
                                DS.async = dsFredaClient::Set.DSSettings$DS.async)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,6 +34,7 @@ ds.CCP.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
   # OutputName <- "AugmentationOutput"
   # RunAssignmentChecks <- TRUE
   # UnpackAugmentedDataSet <- TRUE
+  # RunSeparately <- FALSE
   # DSConnections <- CCPConnections
   # DS.async <- FALSE
 
@@ -56,12 +59,33 @@ ds.CCP.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
   # 1) Trigger dsCCPhos::AugmentDataDS()
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # Execute the server-side function call
-  DSI::datashield.assign(conns = DSConnections,
-                         symbol = OutputName,
-                         value = call("CCP.AugmentDataDS",
-                                      CuratedDataSetName.S = CuratedDataSetName),
-                         async = DS.async)
+  # Auxiliary function to wrap triggering of server-side function call
+  TriggerAugmentDataDS <- function(SelectedConnections)
+  {
+      DSI::datashield.assign(conns = SelectedConnections,
+                             symbol = OutputName,
+                             value = call("CCP.AugmentDataDS",
+                                          CuratedDataSetName.S = CuratedDataSetName),
+                             async = DS.async)
+  }
+
+  # Trigger server-side function call separately...
+  if (RunSeparately == TRUE)
+  {
+      for (i in 1:length(DSConnections))
+      {
+          # First, use dsBaseClient::ds.exists("PING") to ping ALL servers and effectively keep them idle before triggering heavy work at ONE server. This may reduce risk of running into a server timeout issue.
+          .Ping <- dsBaseClient::ds.exists("PING")
+          # Then trigger heavy work at ONE server
+          TriggerAugmentDataDS(DSConnections[i])
+      }
+
+  # ... or trigger normal DSI call with complete list of connections (default)
+  } else {
+
+      TriggerAugmentDataDS(DSConnections)
+  }
+
 
   if (RunAssignmentChecks == TRUE)
   {

@@ -41,11 +41,10 @@ ConnectToCCP <- function(ServerSpecifications,
   # Returns a data frame of login data to CCP Sites
   LoginData <- LoginBuilder$build()
 
-  opts <- list(ssl_verifypeer = FALSE, low_speed_time = 0, low_speed_limit = 0)
   # Perform login process and get list of DSConnection objects of all servers
   CCPConnections <- DSI::datashield.login(logins = LoginData,
                                           assign = TRUE,
-                                          opts = opts,
+                                          opts = list(ssl_verifypeer = FALSE, low_speed_time = 0, low_speed_limit = 0),   # These default settings overrides are important to make sure server do not retry requests after a certain time, interrupting server processes and causing 502 errors
                                           failSafe = TRUE)
 
 #--- Return DSConnection objects -----------------------------------------------
