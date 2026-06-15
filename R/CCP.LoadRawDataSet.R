@@ -84,7 +84,7 @@ CCP.LoadRawDataSet <- function(ServerSpecifications = NULL,
           DSI::datashield.assign.table(conns = DSConnections[[i]],
                                        symbol = OpalDBToR$RTableName[j],
                                        table = OpalDBToR$OpalTableName[j],
-                                       id.name = ".DummyID",
+                                       id.name = ifelse(!is.null(ServerSpecifications), "_id", ".DummyID"),      # In virtual infrastructure (then ServerSpecifications is NULL) this argument should not be '_id' with current test data
                                        async = DS.async)
 
           # Add message about Opal data base to R session mapping
