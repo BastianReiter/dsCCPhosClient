@@ -117,7 +117,7 @@ CCP.PreprocessingQuickRun <- function(ServerSpecifications = NULL,
 
   Time.AfterWorkspaceSaving <- Time.AfterAugmentation
 
-  if (SaveWorkspaces == TRUE)
+  if (SaveWorkspace == TRUE)
   {
       # Save workspaces on servers
       DSI::datashield.workspace_save(conns = CCPConnections, ws = SaveWorkspace.Name)
