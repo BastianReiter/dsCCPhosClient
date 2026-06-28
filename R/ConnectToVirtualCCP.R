@@ -64,12 +64,12 @@ ConnectToVirtualCCP <- function(CCPData,
       if (all(names(CCPData) %in% dsCCPhosClient::Meta.Tables$TableName.Raw) | all(names(CCPData) %in% dsCCPhosClient::Meta.Tables$TableName.Curated))
       {
           CCPData.Mode <- "Single"
-          dsFredaClient::PrintSoloMessage(c(Info = "Set data mode to 'Single', assuming single-site CCP data."))
+          dsFredaClient::PrintSoloMessage(c(Info = "Set data mode to 'Single', assuming CCP data from a single site, to be randomly distributed between virtual servers."))
 
       } else if (all(names(CCPData[[1]]) %in% dsCCPhosClient::Meta.Tables$TableName.Raw) | all(names(CCPData[[1]]) %in% dsCCPhosClient::Meta.Tables$TableName.Curated)) {
 
           CCPData.Mode <- "Multi"
-          dsFredaClient::PrintSoloMessage(c(Info = "Set data mode to 'Multi', assuming multi-site CCP data."))
+          dsFredaClient::PrintSoloMessage(c(Info = "Set data mode to 'Multi', assuming multi-site CCP data. Each virtual server will be assigned data from one site."))
 
       } else {
 

@@ -88,7 +88,7 @@ TestData <- readRDS("../Data/CCP/CCPTestData2026.rds")
 
 CCPConnections <- dsCCPhosClient::ConnectToVirtualCCP(CCPData = TestData,
                                                       NumberOfServers = 3,
-                                                      NumberOfPatientsPerServer = 1000,
+                                                      NumberOfPatientsPerServer = 2500,
                                                       AddedDsPackages = c("dsFreda",
                                                                           "dsTidyverse"))
                                       #Resources = list(TestResource = TestResource))
@@ -176,6 +176,9 @@ CDSTableCheck <- ds.GetDataSetCheck(DataSetName = "CCP.CuratedDataSet",
 
 # Get curation report
 CurationReport <- ds.GetCurationReport(Module = "CCP")
+
+# CurationReport <- readRDS("PreprocessingReports_20260616.rds") %>%
+#                       purrr::pluck("Reports", "CurationReport")
 
 
 FredaGUI::Widget.CurationReport(Module = "CCP",
