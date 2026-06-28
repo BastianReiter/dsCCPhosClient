@@ -52,7 +52,7 @@ CCP.PreprocessingQuickRun <- function(ServerSpecifications = NULL,
 
 #-------------------------------------------------------------------------------
 
-  Reports <- NULL
+  Report <- list()
 
   Time.Initial <- Sys.time()
 
@@ -107,10 +107,10 @@ CCP.PreprocessingQuickRun <- function(ServerSpecifications = NULL,
                                           Module = "CCP",
                                           Stage = "Augmented")
 
-      Reports <- list(RDSCheckData = RDSTableCheck,
-                      CDSCheckData = CDSTableCheck,
-                      ADSCheckData = ADSTableCheck,
-                      CurationReport = CurationReport)
+      Report <- list(RDSCheckData = RDSTableCheck,
+                     CDSCheckData = CDSTableCheck,
+                     ADSCheckData = ADSTableCheck,
+                     CurationReport = CurationReport)
 
       Time.AfterReportAkquisition <- Sys.time()
   }
@@ -135,7 +135,10 @@ CCP.PreprocessingQuickRun <- function(ServerSpecifications = NULL,
                                Duration.ReportAkquisition = as.double(lubridate::as.duration(Time.AfterReportAkquisition - Time.AfterAugmentation)),
                                Duration.WorkspaceSaving = as.double(lubridate::as.duration(Time.AfterWorkspaceSaving - Time.AfterReportAkquisition)))
 
+  # Add PerformanceMonitor to 'Report' list
+  Report <- c(Report,
+              list(PerformanceMonitor))
+
 #-------------------------------------------------------------------------------
-  return(list(Reports = Reports,
-              PerformanceMonitor = PerformanceMonitor))
+  return(Report)
 }
