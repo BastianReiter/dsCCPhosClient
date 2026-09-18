@@ -24,7 +24,7 @@ ds.CCP.AugmentData(
   TimeToEvent.ReferenceEvent.EventSubclass = "InitialDiagnosis",
   TimeToEvent.TargetEvent.EventClass = "VitalStatus",
   TimeToEvent.TargetEvent.EventSubclass = "Deceased",
-  .MetaDataKey = NULL,
+  MetaDataKey = NULL,
   OutputName = "CCP.AugmentationOutput",
   RunAssignmentChecks = TRUE,
   UnpackAugmentedDataSet = TRUE,

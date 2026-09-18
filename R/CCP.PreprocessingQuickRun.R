@@ -20,6 +20,7 @@
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 CCP.PreprocessingQuickRun <- function(ServerSpecifications = NULL,
+                                      MetaDataKey = NULL,
                                       GetReports = TRUE,
                                       RunAssignmentChecks = FALSE,
                                       RunSeparately = FALSE,
@@ -79,6 +80,7 @@ CCP.PreprocessingQuickRun <- function(ServerSpecifications = NULL,
 
   # Run ds.AugmentData
   ds.CCP.AugmentData(CuratedDataSetName = "CCP.CuratedDataSet",
+                     MetaDataKey = MetaDataKey,
                      OutputName = "CCP.AugmentationOutput",
                      RunAssignmentChecks = FALSE,
                      RunSeparately = RunSeparately)
