@@ -6,6 +6,7 @@
 \usage{
 CCP.PreprocessingQuickRun(
   ServerSpecifications = NULL,
+  MetaDataKey = NULL,
   GetReports = TRUE,
   RunAssignmentChecks = FALSE,
   RunSeparately = FALSE,
