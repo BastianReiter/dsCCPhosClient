@@ -94,7 +94,7 @@ CCPConnections <- dsCCPhosClient::ConnectToVirtualCCP(CCPData = TestData,
                                       #Resources = list(TestResource = TestResource))
 
 
-Preprocessing <- dsCCPhosClient::CCP.PreprocessingQuickRun()
+#Preprocessing <- dsCCPhosClient::CCP.PreprocessingQuickRun()
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -191,7 +191,8 @@ FredaGUI::Widget.CurationReport(Module = "CCP",
 
 # Run ds.AugmentData
 ds.CCP.AugmentData(CuratedDataSetName = "CCP.CuratedDataSet",
-                   OutputName = "CCP.AugmentationOutput")
+                   OutputName = "CCP.AugmentationOutput",
+                   MetaDataKey = "26e007815c68f4b3dbb5f9c0c218eb505a3ea1c485e96659")
 
 ADSTableCheck <- ds.GetDataSetCheck(DataSetName = "CCP.AugmentedDataSet",
                                     Module = "CCP",
