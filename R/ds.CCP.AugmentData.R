@@ -21,6 +21,28 @@
 #' @author Bastian Reiter
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ds.CCP.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
+                               CutoffValues.DaysDiagnosisToInitialStaging = 30,
+                               DiagnosisAssociation.Check = TRUE,
+                               #DiagnosisAssociation.RuleSet = dsCCPhos::Set.DiagnosisAssociation,
+                               DiagnosisAssociation.Profile = "Default",
+                               #EventFeatures.RuleSet = dsCCPhos::Proc.EventFeatures,
+                               EventFeatures.Profile = "Default",
+                               Imputation.SystemicTherapyRegimen.Run = TRUE,
+                               Imputation.SystemicTherapyRegimen.AcceptableSubstanceCongruence = 1,
+                               Imputation.SystemicTherapyRegimen.RunAccuracyTest = TRUE,
+                               Imputation.UICCStage.Run = TRUE,
+                               Imputation.UICCStage.AcceptableTNMCongruence = 0.8,
+                               Imputation.UICCStage.RunAccuracyTest = TRUE,
+                               OverallSurvival.ReferenceEvent.EventClass = "Diagnosis",
+                               OverallSurvival.ReferenceEvent.EventSubclass = "InitialDiagnosis",
+                               TherapyOfInterest.EventSubclass = "Surgery",
+                               TherapyOfInterest.EventSubclassRank = 1,
+                               TimeToEvent.ReferenceEvent.EventClass = "Diagnosis",
+                               TimeToEvent.ReferenceEvent.EventSubclass = "InitialDiagnosis",
+                               TimeToEvent.TargetEvent.EventClass = "VitalStatus",
+                               TimeToEvent.TargetEvent.EventSubclass = "Deceased",
+                               MetaDataKey = NULL,
+                               #------------------------------------------------
                                OutputName = "CCP.AugmentationOutput",
                                RunAssignmentChecks = TRUE,
                                UnpackAugmentedDataSet = TRUE,
@@ -30,8 +52,29 @@ ds.CCP.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   #--- For Testing Purposes ---
-  # CuratedDataSetName <- "CuratedDataSet"
-  # OutputName <- "AugmentationOutput"
+  # CuratedDataSetName <- "CCP.CuratedDataSet"
+  # CutoffValues.DaysDiagnosisToInitialStaging <- 30
+  # DiagnosisAssociation.Check <- TRUE
+  # #DiagnosisAssociation.RuleSet <- dsCCPhos::Set.DiagnosisAssociation
+  # DiagnosisAssociation.Profile <- "Default"
+  # #EventFeatures.RuleSet <- dsCCPhos::Proc.EventFeatures
+  # EventFeatures.Profile <- "Default"
+  # Imputation.SystemicTherapyRegimen.Run <- TRUE
+  # Imputation.SystemicTherapyRegimen.AcceptableSubstanceCongruence <- 1
+  # Imputation.SystemicTherapyRegimen.RunAccuracyTest <- TRUE
+  # Imputation.UICCStage.Run <- TRUE
+  # Imputation.UICCStage.AcceptableTNMCongruence <- 0.8
+  # Imputation.UICCStage.RunAccuracyTest <- TRUE
+  # OverallSurvival.ReferenceEvent.EventClass <- "Diagnosis"
+  # OverallSurvival.ReferenceEvent.EventSubclass <- "InitialDiagnosis"
+  # TherapyOfInterest.EventSubclass <- "Surgery"
+  # TherapyOfInterest.EventSubclassRank <- 1
+  # TimeToEvent.ReferenceEvent.EventClass <- "Diagnosis"
+  # TimeToEvent.ReferenceEvent.EventSubclass <- "InitialDiagnosis"
+  # TimeToEvent.TargetEvent.EventClass <- "VitalStatus"
+  # TimeToEvent.TargetEvent.EventSubclass <- "Deceased"
+  # MetaDataKey <- "26e007815c68f4b3dbb5f9c0c218eb505a3ea1c485e96659"
+  # OutputName <- "CCP.AugmentationOutput"
   # RunAssignmentChecks <- TRUE
   # UnpackAugmentedDataSet <- TRUE
   # RunSeparately <- FALSE
@@ -65,7 +108,28 @@ ds.CCP.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
       DSI::datashield.assign(conns = SelectedConnections,
                              symbol = OutputName,
                              value = call("CCP.AugmentDataDS",
-                                          CuratedDataSetName.S = CuratedDataSetName),
+                                          CuratedDataSetName.S = CuratedDataSetName,
+                                          CutoffValues.DaysDiagnosisToInitialStaging.S = CutoffValues.DaysDiagnosisToInitialStaging,
+                                          DiagnosisAssociation.Check.S = DiagnosisAssociation.Check,
+                                          #--- DiagnosisAssociation.RuleSet.S = DiagnosisAssociation.RuleSet,
+                                          DiagnosisAssociation.Profile.S = DiagnosisAssociation.Profile,
+                                          #--- EventFeatures.RuleSet.S = EventFeatures.RuleSet,
+                                          EventFeatures.Profile.S = EventFeatures.Profile,
+                                          Imputation.SystemicTherapyRegimen.Run.S = Imputation.SystemicTherapyRegimen.Run,
+                                          Imputation.SystemicTherapyRegimen.AcceptableSubstanceCongruence.S = Imputation.SystemicTherapyRegimen.AcceptableSubstanceCongruence,
+                                          Imputation.SystemicTherapyRegimen.RunAccuracyTest.S = Imputation.SystemicTherapyRegimen.RunAccuracyTest,
+                                          Imputation.UICCStage.Run.S = Imputation.UICCStage.Run,
+                                          Imputation.UICCStage.AcceptableTNMCongruence.S = Imputation.UICCStage.AcceptableTNMCongruence,
+                                          Imputation.UICCStage.RunAccuracyTest.S = Imputation.UICCStage.RunAccuracyTest,
+                                          OverallSurvival.ReferenceEvent.EventClass.S = OverallSurvival.ReferenceEvent.EventClass,
+                                          OverallSurvival.ReferenceEvent.EventSubclass.S = OverallSurvival.ReferenceEvent.EventSubclass,
+                                          TherapyOfInterest.EventSubclass.S = TherapyOfInterest.EventSubclass,
+                                          TherapyOfInterest.EventSubclassRank.S = TherapyOfInterest.EventSubclassRank,
+                                          TimeToEvent.ReferenceEvent.EventClass.S = TimeToEvent.ReferenceEvent.EventClass,
+                                          TimeToEvent.ReferenceEvent.EventSubclass.S = TimeToEvent.ReferenceEvent.EventSubclass,
+                                          TimeToEvent.TargetEvent.EventClass.S = TimeToEvent.TargetEvent.EventClass,
+                                          TimeToEvent.TargetEvent.EventSubclass.S = TimeToEvent.TargetEvent.EventSubclass,
+                                          MetaDataKey.S = MetaDataKey),
                              async = DS.async)
   }
 
