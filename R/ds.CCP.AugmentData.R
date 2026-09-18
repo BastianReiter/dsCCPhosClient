@@ -172,7 +172,7 @@ ds.CCP.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
                             paste0(Module, ".AugmentationReport"),
                             "Messages"),
                           nm = c("AugmentedDataSet",
-                                 "AugmentationReport",
+                                 "Report",
                                  "Messages"))
 
   # Extract objects from AugmentationOutput list

@@ -191,8 +191,8 @@ FredaGUI::Widget.CurationReport(Module = "CCP",
 
 # Run ds.AugmentData
 ds.CCP.AugmentData(CuratedDataSetName = "CCP.CuratedDataSet",
-                   OutputName = "CCP.AugmentationOutput",
-                   MetaDataKey = "26e007815c68f4b3dbb5f9c0c218eb505a3ea1c485e96659")
+                   MetaDataKey = "26e007815c68f4b3dbb5f9c0c218eb505a3ea1c485e96659",
+                   OutputName = "CCP.AugmentationOutput")
 
 ADSTableCheck <- ds.GetDataSetCheck(DataSetName = "CCP.AugmentedDataSet",
                                     Module = "CCP",
