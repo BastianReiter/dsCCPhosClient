@@ -28,11 +28,13 @@ ds.CCP.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
                                #EventFeatures.RuleSet = dsCCPhos::Proc.EventFeatures,
                                EventFeatures.Profile = "Default",
                                Imputation.SystemicTherapyRegimen.Run = TRUE,
-                               Imputation.SystemicTherapyRegimen.AcceptableSubstanceCongruence = 1,
-                               Imputation.SystemicTherapyRegimen.RunAccuracyTest = TRUE,
+                               Imputation.SystemicTherapyRegimen.Substances.MinimumCongruence = 0.6,
+                               Imputation.SystemicTherapyRegimen.Substances.AllowedCountDifferenceRange = c(0, 2),
+                               Imputation.SystemicTherapyRegimen.Substances.AllowAdditionals = FALSE,
+                               Imputation.SystemicTherapyRegimen.RunValidation = TRUE,
                                Imputation.UICCStage.Run = TRUE,
                                Imputation.UICCStage.AcceptableTNMCongruence = 0.8,
-                               Imputation.UICCStage.RunAccuracyTest = TRUE,
+                               Imputation.UICCStage.RunValidation = TRUE,
                                OverallSurvival.ReferenceEvent.EventClass = "Diagnosis",
                                OverallSurvival.ReferenceEvent.EventSubclass = "InitialDiagnosis",
                                TherapyOfInterest.EventSubclass = "Surgery",
@@ -61,10 +63,10 @@ ds.CCP.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
   # EventFeatures.Profile <- "Default"
   # Imputation.SystemicTherapyRegimen.Run <- TRUE
   # Imputation.SystemicTherapyRegimen.AcceptableSubstanceCongruence <- 1
-  # Imputation.SystemicTherapyRegimen.RunAccuracyTest <- TRUE
+  # Imputation.SystemicTherapyRegimen.RunValidation <- TRUE
   # Imputation.UICCStage.Run <- TRUE
   # Imputation.UICCStage.AcceptableTNMCongruence <- 0.8
-  # Imputation.UICCStage.RunAccuracyTest <- TRUE
+  # Imputation.UICCStage.RunValidation <- TRUE
   # OverallSurvival.ReferenceEvent.EventClass <- "Diagnosis"
   # OverallSurvival.ReferenceEvent.EventSubclass <- "InitialDiagnosis"
   # TherapyOfInterest.EventSubclass <- "Surgery"
@@ -116,11 +118,13 @@ ds.CCP.AugmentData <- function(CuratedDataSetName = "CCP.CuratedDataSet",
                                           #--- EventFeatures.RuleSet.S = EventFeatures.RuleSet,
                                           EventFeatures.Profile.S = EventFeatures.Profile,
                                           Imputation.SystemicTherapyRegimen.Run.S = Imputation.SystemicTherapyRegimen.Run,
-                                          Imputation.SystemicTherapyRegimen.AcceptableSubstanceCongruence.S = Imputation.SystemicTherapyRegimen.AcceptableSubstanceCongruence,
-                                          Imputation.SystemicTherapyRegimen.RunAccuracyTest.S = Imputation.SystemicTherapyRegimen.RunAccuracyTest,
+                                          Imputation.SystemicTherapyRegimen.Substances.MinimumCongruence.S = Imputation.SystemicTherapyRegimen.Substances.MinimumCongruence,
+                                          Imputation.SystemicTherapyRegimen.Substances.AllowedCountDifferenceRange.S = Imputation.SystemicTherapyRegimen.Substances.AllowedCountDifferenceRange,
+                                          Imputation.SystemicTherapyRegimen.Substances.AllowAdditionals.S = Imputation.SystemicTherapyRegimen.Substances.AllowAdditionals,
+                                          Imputation.SystemicTherapyRegimen.RunValidation.S = Imputation.SystemicTherapyRegimen.RunValidation,
                                           Imputation.UICCStage.Run.S = Imputation.UICCStage.Run,
                                           Imputation.UICCStage.AcceptableTNMCongruence.S = Imputation.UICCStage.AcceptableTNMCongruence,
-                                          Imputation.UICCStage.RunAccuracyTest.S = Imputation.UICCStage.RunAccuracyTest,
+                                          Imputation.UICCStage.RunValidation.S = Imputation.UICCStage.RunValidation,
                                           OverallSurvival.ReferenceEvent.EventClass.S = OverallSurvival.ReferenceEvent.EventClass,
                                           OverallSurvival.ReferenceEvent.EventSubclass.S = OverallSurvival.ReferenceEvent.EventSubclass,
                                           TherapyOfInterest.EventSubclass.S = TherapyOfInterest.EventSubclass,
